@@ -108,11 +108,29 @@ void move() {}
 
 void turn() {}
 
-void movrFrontLift() {}
+void liftFront() {
+	frontLift.move(127);
+}
 
-void moveLever() {}
+void lowerFront() {
+	frontLift.move(-127);
+}
 
-void moveBackLift() {}
+void liftLever() {
+	lever.move(127);
+}
+
+void lowerLever() {
+	lever.move(-127);
+}
+
+void liftBack() {
+	backLift.move(127);
+}
+
+void lowerBack() {
+	backLift.move(-127);
+}
 
 // fifteen second autonomous
 
