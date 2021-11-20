@@ -9,7 +9,9 @@ Motor br(, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back right
 Motor bl(, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back left
 
 Motor frontLift(, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-Motor backLift(, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+Motor backLift(, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+
+Motor lever(, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
 Controller master(E_CONTROLLER_MASTER); // base, Srihith
 Controller partner(E_CONTROLLER_PARTNER); // lifts, Kriya
@@ -67,6 +69,14 @@ void driveFrontLift() {
     frontLift.move(-127);
 }
 
+void driveLever() {
+	if(partner.get_digital(DIGITAL_A)==1) {
+		lever.move(127);
+	}
+	else if(partner.get_digital(DIGITAL_B))
+		lever.move(-127);
+}
+
 void driveBackLift() {
   if(partner.get_digital(DIGITAL_L1)==1) {
     backLift.move(127);
@@ -86,6 +96,7 @@ void opcontrol() {
 	while (true) {
 		drive();
 		driveFrontLift();
+		driveLever();
 		driveBackLift();
 		delay(20);
 	}
@@ -97,9 +108,11 @@ void move() {}
 
 void turn() {}
 
-void liftFront() {}
+void movrFrontLift() {}
 
-void liftBack() {}
+void moveLever() {}
+
+void moveBackLift() {}
 
 // fifteen second autonomous
 
