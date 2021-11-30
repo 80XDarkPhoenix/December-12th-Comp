@@ -3,25 +3,33 @@
 
 using namespace pros;
 
-Motor fr(, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // front right
-Motor fl(, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front left
-Motor br(, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back right
-Motor bl(, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back left
+Motor fr(2, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // front right
+Motor fl(1, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front left
+Motor br(21, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back right
+Motor bl(3, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back left
 
-Motor frontLift(, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-Motor backLift(, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor frontLift(10, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+Motor backLift(13, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
-Motor lever(, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+Motor lever(15, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
-Controller master(E_CONTROLLER_MASTER); // base, Srihith
-Controller partner(E_CONTROLLER_PARTNER); // lifts, Kriya
+/* Instead of having one person control the whole robot, we use partner
+controls. The master controller is used by Srihith and controls the robot's
+base. The partner controller is used by Kriya and controls the robot's front and back
+lift's and lever. */
+Controller master(E_CONTROLLER_MASTER); // base - Srihith
+Controller partner(E_CONTROLLER_PARTNER); // lifts, lever - Kriya
+
+/* The inertial sensor is a 3-axis accelerometer and gyroscope. The
+accelerometer measures linear acceleration of the robot, while the gyroscope
+measures the rate of rotation about the inertial sensor 3-axis.*/
+Imu inertial();
 
 /* Runs initialization code. This occurs as soon as the program is started. All
-other competition modes are blocked by initialize; it is recommended to keep
-execution time for this mode under a few seconds. */
+other competition modes are blocked by initialize. */
 void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
+	lcd::initialize();
+	lcd::set_text(1, "Hello PROS User!");
 }
 
 /* Runs while the robot is in the disabled state of Field Management System or
@@ -104,9 +112,28 @@ void opcontrol() {
 
 // autonomous functions
 
-void move() {}
+// encoders
+/*
+const double encoderPerInch = ;
+const double encoderPerDegreeTurn = ;
+*/
+// speed
+const double default_speed = 127;
+const double default_turn_speed = 127;
 
-void turn() {}
+double min_speed = 35;
+double max_speed = 127;
+
+// timeout
+
+
+void move(double distance_in_inches, double speed_limit) {
+
+}
+
+void turn() {
+
+}
 
 void liftFront() {
 	frontLift.move(127);
