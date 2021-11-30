@@ -15,8 +15,8 @@ Motor lever(15, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
 /* Instead of having one person control the whole robot, we use partner
 controls. The master controller is used by Srihith and controls the robot's
-base. The partner controller is used by Kriya and controls the robot's front and back
-lift's and lever. */
+base. The partner controller is used by Kriya and controls the robot's front and
+back lift's and lever. */
 Controller master(E_CONTROLLER_MASTER); // base - Srihith
 Controller partner(E_CONTROLLER_PARTNER); // lifts, lever - Kriya
 
@@ -113,22 +113,79 @@ void opcontrol() {
 // autonomous functions
 
 // encoders
-/*
 const double encoderPerInch = ;
 const double encoderPerDegreeTurn = ;
-*/
+
 // speed
-const double default_speed = 127;
-const double default_turn_speed = 127;
+const double defaultSpeed = 127;
+const double defaultTurnSpeed = 127;
 
-double min_speed = 35;
-double max_speed = 127;
+double minSpeed = 35;
+double maxSpeed = 127;
 
-// timeout
+// accelerator
+double accelerator =;
 
+void move(double distanceInInches, double speedLimit) {
+	 // reset base motors
+   fl.tare_position();
+   fr.tare_position();
+   bl.tare_position();
+   br.tare_position();
 
-void move(double distance_in_inches, double speed_limit) {
+   int startTime = millis();
+   int maxTime = startTime + 100 + 70*fabs(distanceInInches);
 
+   int directMultiplier = 1;
+   if (distanceInInches < 0)
+   directMultiplier = -1;
+
+   double distanceInEncoders = distanceInInches * encoderPerInch;
+
+   double current = 0;
+   double error = distanceInEncoders - current;
+   double progress = current;
+   double speed;
+
+   while ((fabs(error) > 10 ) && (millis() < maxTime))
+   {
+     current = (fl.get_position() + bl.get_position() + fr.get_position() +
+		 br.get_position())/4;
+
+     error = distanceInEncoders - current;
+     progress = current;
+     speed = minSpeed + accelerator * progress * error;
+
+     double currentVelocity = fabs((fl.get_actual_velocity() +
+		 fr.get_actual_velocity() + bl.get_actual_velocity() +
+		 br.get_actual_velocity()) / 4);
+
+     	if (speed > speedLimit) {
+     		speed = speedLimit;
+	 		}
+
+     // deacceleration code
+     double maxDeaccelerationSpeed = 3.5 * sqrt(error);
+     if (currentVelocity > maxDeaccelerationSpeed)
+     speed = maxDeaccelerationSpeed;
+
+     speed = speed * directMultiplier;
+
+     fl.move(speed);
+     fr.move(speed);
+     bl.move(speed);
+     br.move(speed);
+
+     delay(10);
+   }
+
+   // stop base motors
+   fl.move(0);
+   fr.move(0);
+   bl.move(0);
+   br.move(0);
+
+   delay(10); // let motors fully stop
 }
 
 void turn() {
