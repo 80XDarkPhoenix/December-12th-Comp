@@ -13,9 +13,7 @@ Motor backLift(13, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
 Motor lever(15, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
-Imu inertial();
-
-/* Instead of having one person control the wholuye robot, we use partner
+/* Instead of having one person control the whole robot, we use partner
 controls. The master controller is used by Srihith and controls the robot's
 base. The partner controller is used by Kriya and controls the robot's front and
 back lift's and lever. */
@@ -25,7 +23,7 @@ Controller partner(E_CONTROLLER_PARTNER); // lifts, lever - Kriya
 /* The inertial sensor is a 3-axis accelerometer and gyroscope. The
 accelerometer measures linear acceleration of the robot, while the gyroscope
 measures the rate of rotation about the inertial sensor 3-axis.*/
-Imu inertial();
+Imu inertial(0);
 
 /* Runs initialization code. This occurs as soon as the program is started. All
 other competition modes are blocked by initialize. */
@@ -62,21 +60,21 @@ the base. The Y axis controls forward and backward motion and the X axis
 controls turning motion. Function gets analog of joystick and "sends" them to
 the base motors.*/
 void drive() {
-float drives = master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y);
-float turns = master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X);
+	float drives = master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y);
+	float turns = master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X);
 
-  fr.move(drives - turns);
-  fl.move(drives + turns);
-  br.move(drives - turns);
-  bl.move(drives + turns);
+	fr.move(drives - turns);
+	fl.move(drives + turns);
+	br.move(drives - turns);
+	bl.move(drives + turns);
 }
 
 void driveFrontLift() {
-  if(partner.get_digital(DIGITAL_R1)==1) {
-    frontLift.move(127);
-  }
-  else if(partner.get_digital(DIGITAL_R2))
-    frontLift.move(-127);
+	if(partner.get_digital(DIGITAL_R1)==1) {
+		frontLift.move(127);
+	}
+	else if(partner.get_digital(DIGITAL_R2))
+	frontLift.move(-127);
 }
 
 void driveLever() {
@@ -84,15 +82,15 @@ void driveLever() {
 		lever.move(127);
 	}
 	else if(partner.get_digital(DIGITAL_B))
-		lever.move(-127);
+	lever.move(-127);
 }
 
 void driveBackLift() {
-  if(partner.get_digital(DIGITAL_L1)==1) {
-    backLift.move(127);
-  }
-  else if(partner.get_digital(DIGITAL_L2))
-    backLift.move(-127);
+	if(partner.get_digital(DIGITAL_L1)==1) {
+		backLift.move(127);
+	}
+	else if(partner.get_digital(DIGITAL_L2))
+	backLift.move(-127);
 }
 
 /* Runs the operator control code. This function will be started in its own task
@@ -114,9 +112,11 @@ void opcontrol() {
 
 // autonomous functions
 
+// MOVE
+
 // encoders
-// const double encoderPerInch = ;
-// const double encoderPerDegreeTurn = ;
+const double encoderPerInch = ;
+const double encoderPerDegreeTurn = ;
 
 // speed
 const double defaultSpeed = 127;
@@ -126,148 +126,153 @@ double minSpeed = 35;
 double maxSpeed = 127;
 
 // accelerator
-// double accelerator =;
+double accelerator =;
 
 void move(double distanceInInches, double speedLimit) {
-	 // reset base motors
-   fl.tare_position();
-   fr.tare_position();
-   bl.tare_position();
-   br.tare_position();
+	// reset base motors
+	fl.tare_position();
+	fr.tare_position();
+	bl.tare_position();
+	br.tare_position();
 
-   int startTime = millis();
-   int maxTime = startTime + 100 + 70*fabs(distanceInInches);
+	int startTime = millis();
+	int maxTime = startTime + 100 + 70 * fabs(distanceInInches);
 
-   int directMultiplier = 1;
-   if (distanceInInches < 0)
-   directMultiplier = -1;
+	int directMultiplier = 1;
+	if (distanceInInches < 0)
+	directMultiplier = -1;
 
-   // double distanceInEncoders = distanceInInches * encoderPerInch;
+	double distanceInEncoders = distanceInInches * encoderPerInch;
 
-   double current = 0;
-   // double error = distanceInEncoders - current;
-   double progress = current;
-   double speed;
+	double current = 0;
+	double error = distanceInEncoders - current;
+	double progress = current;
+	double speed;
 
-   // while ((fabs(error) > 10 ) && (millis() < maxTime))
-   {
-     current = (fl.get_position() + bl.get_position() + fr.get_position() +
-		 br.get_position())/4;
+	while ((fabs(error) > 10 ) && (millis() < maxTime)) {
+		current = (fl.get_position() + bl.get_position() + fr.get_position() +
+		br.get_position())/4;
 
-     // error = distanceInEncodernbs - current;
-     progress = current;
-     // speed = minSpeed + accelerator * progress * error;
+		// error = distanceInEncodernbs - current;
+		progress = current;
+		// speed = minSpeed + accelerator * progress * error;
 
-     double currentVelocity = fabs((fl.get_actual_velocity() +
-		 fr.get_actual_velocity() + bl.get_actual_velocity() +
-		 br.get_actual_velocity()) / 4);
+		double currentVelocity = fabs((fl.get_actual_velocity() +
+		fr.get_actual_velocity() + bl.get_actual_velocity() +
+		br.get_actual_velocity()) / 4);
 
-     	if (speed > speedLimit) {
-     		speed = speedLimit;
-	 		}
+		if (speed > speedLimit) {
+			speed = speedLimit;
+		}
 
-     // deacceleration code
-     // double maxDeaccelerationSpeed = 3.5 * sqrt(error);
-//     if (currentVelocity > maxDeaccelerationSpeed)
-  //   speed = maxDeaccelerationSpeed;
+		//   deacceleration code
+		double maxDeaccelerationSpeed = 3.5 * sqrt(error);
+		if (currentVelocity > maxDeaccelerationSpeed)
+		speed = maxDeaccelerationSpeed;
 
-     speed = speed * directMultiplier;
+		speed = speed * directMultiplier;
 
-     fl.move(speed);
-     fr.move(speed);
-     bl.move(speed);
-     br.move(speed);
+		fl.move(speed);
+		fr.move(speed);
+		bl.move(speed);
+		br.move(speed);
 
-     delay(10);
-   }
+		delay(10);
+	}
 
-   // stop base motors
-   fl.move(0);
-   fr.move(0);
-   bl.move(0);
-   br.move(0);
+	// stop base motors
+	fl.move(0);
+	fr.move(0);
+	bl.move(0);
+	br.move(0);
 
-   delay(10); // let motors fully stop
+	delay(10); // let motors fully stop
 }
 
+// TURN
+
+/* We use the inertial sensor to get the angle of the robot. This is used in
+our turn funtion. */
 double get_angle() {
-  /* We use the inertial sensor to get the angle of the robot. This is used in
-  our turn funtion. */
-//  double angle = inertial.get_heading();
+  double angle = inertial.get_heading();
 
-  	// if (angle > 180) {
-  	// 	angle = angle - 360;
-  	// 	else if (angle <= -180)
-  	// 	angle = 360 + angle;
-  	// 	return angle;
+  if (angle > 180)
+  angle = angle - 360;
+  else if (angle <= -180)
+  angle = 360 + angle;
+  return angle;
 }
 
-/* void turn (double angle, int speed_limit) {
-  bool not_at_target = true;
+void turn (double angle, int speedLimit) {
+	bool notAtTarget = true;
 
-  // reset motors
-  fl.tare_position();
-  fr.tare_position();
-  bl.tare_position();
-  br.tare_position();
+	// reset motors
+	fl.tare_position();
+	fr.tare_position();
+	bl.tare_position();
+	br.tare_position();
 
-  double start_angle = get_angle();
-  double target_angle = start_angle + angle;
-  double start = 0;
-  //double target = angle * encoder_per_degree_turn;
-  double current = 0;
-  double direction_multiplier = 1;
-  int start_time = millis();
-  int max_time = start_time + 20 * fabs(angle);
+	double startAngle = get_angle();
+	double targetAngle = startAngle + angle;
+	double start = 0;
+	//double target = angle * encoder_per_degree_turn;
+	double current = 0;
+	double directionMultiplier = 1;
+	int startTime = millis();
+	int maxTime = startTime + 20 * fabs(angle);
 
-//  if (target < start)
-  direction_multiplier = -1;
-  while(not_at_target) {
+	//  if (target < start)
+	directionMultiplier = -1;
+	while(notAtTarget) {
 
-    double current = (fl.get_position() - fr.get_position() - br.get_position() + bl.get_position())/4;
-//    double error = (target - current);
-    double progress = current - start;
-    double speed = min_speed + 20 + fabs(accelerator * progress * error);
-    double max_dec_speed = 4 * sqrt(error);
+		double current = (fl.get_position() - fr.get_position() - br.get_position() \
+		+ bl.get_position())/4;
 
-    double current_velocity = fabs((fl.get_actual_velocity() + fr.get_actual_velocity() + bl.get_actual_velocity() + br.get_actual_velocity()) / 4);
+		double error = (target - current);
+		double progress = current - start;
+		double speed = minSpeed + 20 + fabs(accelerator * progress * error);
 
-    if (current_velocity >max_dec_speed)
-    speed = max_dec_speed;
-    if (speed > speed_limit)
-    speed = speed_limit;
+		double current_velocity = fabs((fl.get_actual_velocity() +
+		fr.get_actual_velocity() + bl.get_actual_velocity() +
+		br.get_actual_velocity()) / 4);
 
-    speed = speed*direction_multiplier;
+		if (current_velocity > maxDecSpeed)
+		speed = maxDecSpeed;
+		if (speed > speed_limit)
+		speed = speed_limit;
 
-    fl.move(speed);
-    fr.move(-speed);
-    bl.move( speed);
-    br.move(-speed);
+		speed = speed * directionMultiplier;
 
-    double current_angle = get_angle();
-    double error_angle = target_angle - current_angle;
+		fl.move(speed);
+		fr.move(- speed);
+		bl.move( speed);
+		br.move(- speed);
 
-    if (error_angle > 180)
-    error_angle = error_angle - 360;
-    else if (error_angle <= -180)
-    error_angle = 360 + error_angle;
-    if ( (fabs (error) < 10) || (fabs(error_angle) < 0.75) || (millis() > max_time) ) {
+		double current_angle = get_angle();
+		double error_angle = targetAngle - current_angle;
 
-      fl.move(0);
-      fr.move(0);
-      bl.move(0);
-      br.move(0);
+		if (error_angle > 180)
+		error_angle = error_angle - 360;
+		else if (error_angle <= -180)
+		error_angle = 360 + error_angle;
+		if ( (fabs (error) < 10) || (fabs(error_angle) < 0.75) || (millis() >
+		maxTime) ) {
 
-      not_at_target = false;
+			fl.move(0);
+			fr.move(0);
+			bl.move(0);
+			br.move(0);
 
-      lcd::print(8, "error: %f", error);
-      //  lcd::print(8, "error_angle: %f", error_angle);
-    }
-    delay (5);
-  }
-  delay(70); // let motors stop
+			notAtTarget = false;
+
+			lcd::print(8, "error: %f", error);
+			//  lcd::print(8, "error_angle: %f", error_angle);
+		}
+		delay (5);
+	}
+	delay(70); // let motors stop
 }
-*/
+
 
 void liftFront() {
 	frontLift.move(127);
@@ -294,5 +299,9 @@ void lowerBack() {
 }
 
 // fifteen second autonomous
+
+void fifteenSecondAutonomous() {
+
+}
 
 // skills autonomous
