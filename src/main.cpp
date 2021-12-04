@@ -30,6 +30,19 @@ other competition modes are blocked by initialize. */
 void initialize() {
 	lcd::initialize();
 	lcd::set_text(1, "Hello PROS User!");
+
+
+  lcd::set_text(0, "81X Autonomous Selector");
+	// AUTONOMOUS SELECTOR
+	isRightSelected = false;
+	isLeftSelected  = false;
+	pros::lcd::set_text(5,  "Left Not Selected");
+	pros::lcd::set_text(7,  "Right Not Selected");
+
+	pros::lcd::register_btn0_cb(left_button);
+	pros::lcd::register_btn1_cb(middle_button);
+	pros::lcd::register_btn2_cb(right_button);
+
 }
 
 /* Runs while the robot is in the disabled state of Field Management System or
@@ -51,7 +64,9 @@ Alternatively, this function may be called in initialize or opcontrol for
 non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
-void autonomous() {}
+void autonomous() {
+	calibrate_motor();
+}
 
 // opcontrol functions
 
@@ -305,3 +320,17 @@ void fifteenSecondAutonomous() {
 }
 
 // skills autonomous
+
+void calibrate_motor() {
+  inertial.get_heading();
+  turn(90, 60);
+  delay(100);
+  pros::lcd::print(2, "fl: %f", fl.get_position() );
+  pros::lcd::print(3, "bl: %f", bl.get_position() );
+  pros::lcd::print(4, "fr: %f", fr.get_position() );
+  pros::lcd::print(5, "br: %f", br.get_position() );
+  pros::lcd::print(6, "avg: %f", (fl.get_position() + bl.get_position() +
+	fr.get_position()+br.get_position() )/4 );
+  pros::lcd::print(7, "angle: %f", inertial.get_heading() );
+  delay(10000);
+}
