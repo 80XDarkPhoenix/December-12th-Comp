@@ -1,3 +1,16 @@
+// set "motor" pnuematics
+// initizalize pnuematics
+// driver penumatics
+// auton function pnuematics
+// fifteen second pnuematics
+// tune driver code
+// move Function
+// turn Function - add inertial sensor to robot
+// fifteen second autons
+// skills auton
+// comment code
+// put code in notebook
+
 #include "main.h"
 #include "math.h"
 
@@ -11,7 +24,7 @@ Motor bl(3, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back left
 Motor frontLift(10, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 Motor backLift(13, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
-Motor lever(15, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+Motor claw(15, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // CHANGE THIS
 
 /* Instead of having one person control the whole robot, we use partner
 controls. The master controller is used by Srihith and controls the robot's
@@ -28,21 +41,37 @@ Imu inertial(0);
 /* Runs initialization code. This occurs as soon as the program is started. All
 other competition modes are blocked by initialize. */
 void initialize() {
-	lcd::initialize();
-	lcd::set_text(1, "Hello PROS User!");
+inertial.reset();
+delay(5000);
+lcd::initialize();
 
+lcd::set_text(0, "81X");
+lcd::print(3, "IMU heading: %3f", getAngle()); // WHY ERROR
 
-  lcd::set_text(0, "81X Autonomous Selector");
-	// AUTONOMOUS SELECTOR
-	isRightSelected = false;
-	isLeftSelected  = false;
-	pros::lcd::set_text(5,  "Left Not Selected");
-	pros::lcd::set_text(7,  "Right Not Selected");
+// INITIALIZE MOTORS
 
-	pros::lcd::register_btn0_cb(left_button);
-	pros::lcd::register_btn1_cb(middle_button);
-	pros::lcd::register_btn2_cb(right_button);
+// Base
+fl.set_brake_mode(MOTOR_BRAKE_COAST);
+fr.set_brake_mode(MOTOR_BRAKE_COAST);
+bl.set_brake_mode(MOTOR_BRAKE_COAST);
+br.set_brake_mode(MOTOR_BRAKE_COAST);
 
+fl.set_current_limit(11500);
+fr.set_current_limit(11500);
+bl.set_current_limit(11500);
+br.set_current_limit(11500);
+
+fl.set_voltage_limit(11500);
+fr.set_voltage_limit(11500);
+bl.set_voltage_limit(11500);
+br.set_voltage_limit(11500);
+
+// Lifts
+frontLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
+backLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
+
+// Claw
+// CHANGE THIS
 }
 
 /* Runs while the robot is in the disabled state of Field Management System or
@@ -65,10 +94,10 @@ non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
 void autonomous() {
-	calibrate_motor();
+	calibrateMotor();
 }
 
-// opcontrol functions
+// OPCONTROL FUNCTIONS
 
 /* Master driver's "arcade" control for base. One joystick is used to control
 the base. The Y axis controls forward and backward motion and the X axis
@@ -92,12 +121,12 @@ void driveFrontLift() {
 	frontLift.move(-127);
 }
 
-void driveLever() {
+void driveClaw() {
 	if(partner.get_digital(DIGITAL_A)==1) {
-		lever.move(127);
+		claw.move(127);
 	}
 	else if(partner.get_digital(DIGITAL_B))
-	lever.move(-127);
+		claw.move(-127);
 }
 
 void driveBackLift() {
@@ -119,19 +148,19 @@ void opcontrol() {
 	while (true) {
 		drive();
 		driveFrontLift();
-		driveLever();
+		driveClaw();
 		driveBackLift();
 		delay(20);
 	}
 }
 
-// autonomous functions
+// AUTONOMOUS FUNCTIONS
 
 // MOVE
 
 // encoders
-const double encoderPerInch = ;
-const double encoderPerDegreeTurn = ;
+const double encoderPerInch = 18.65;
+const double encoderPerDegreeTurn = 3.63;
 
 // speed
 const double defaultSpeed = 127;
@@ -141,7 +170,7 @@ double minSpeed = 35;
 double maxSpeed = 127;
 
 // accelerator
-double accelerator =;
+double accelerator = 0.00095;
 
 void move(double distanceInInches, double speedLimit) {
 	// reset base motors
@@ -168,9 +197,9 @@ void move(double distanceInInches, double speedLimit) {
 		current = (fl.get_position() + bl.get_position() + fr.get_position() +
 		br.get_position())/4;
 
-		// error = distanceInEncodernbs - current;
+		error = distanceInEncoders - current;
 		progress = current;
-		// speed = minSpeed + accelerator * progress * error;
+		speed = minSpeed + accelerator * progress * error;
 
 		double currentVelocity = fabs((fl.get_actual_velocity() +
 		fr.get_actual_velocity() + bl.get_actual_velocity() +
@@ -180,7 +209,7 @@ void move(double distanceInInches, double speedLimit) {
 			speed = speedLimit;
 		}
 
-		//   deacceleration code
+		// deacceleration code
 		double maxDeaccelerationSpeed = 3.5 * sqrt(error);
 		if (currentVelocity > maxDeaccelerationSpeed)
 		speed = maxDeaccelerationSpeed;
@@ -208,7 +237,7 @@ void move(double distanceInInches, double speedLimit) {
 
 /* We use the inertial sensor to get the angle of the robot. This is used in
 our turn funtion. */
-double get_angle() {
+double getAngle() {
   double angle = inertial.get_heading();
 
   if (angle > 180)
@@ -227,16 +256,16 @@ void turn (double angle, int speedLimit) {
 	bl.tare_position();
 	br.tare_position();
 
-	double startAngle = get_angle();
+	double startAngle = getAngle();
 	double targetAngle = startAngle + angle;
 	double start = 0;
-	//double target = angle * encoder_per_degree_turn;
+	double target = angle * encoderPerDegreeTurn;
 	double current = 0;
 	double directionMultiplier = 1;
 	int startTime = millis();
 	int maxTime = startTime + 20 * fabs(angle);
 
-	//  if (target < start)
+	if (target < start)
 	directionMultiplier = -1;
 	while(notAtTarget) {
 
@@ -244,17 +273,18 @@ void turn (double angle, int speedLimit) {
 		+ bl.get_position())/4;
 
 		double error = (target - current);
-		double progress = current - start;
-		double speed = minSpeed + 20 + fabs(accelerator * progress * error);
+	  double progress = current - start;
+	  double speed = minSpeed + 20 + fabs(accelerator * progress * error);
+	  double maxDeaccelerationSpeed = 4 * sqrt(error);
 
 		double current_velocity = fabs((fl.get_actual_velocity() +
 		fr.get_actual_velocity() + bl.get_actual_velocity() +
 		br.get_actual_velocity()) / 4);
 
-		if (current_velocity > maxDecSpeed)
-		speed = maxDecSpeed;
-		if (speed > speed_limit)
-		speed = speed_limit;
+		if (current_velocity > maxDeaccelerationSpeed)
+		speed = maxDeaccelerationSpeed;
+		if (speed > speedLimit)
+		speed = speedLimit;
 
 		speed = speed * directionMultiplier;
 
@@ -263,7 +293,7 @@ void turn (double angle, int speedLimit) {
 		bl.move( speed);
 		br.move(- speed);
 
-		double current_angle = get_angle();
+		double current_angle = getAngle();
 		double error_angle = targetAngle - current_angle;
 
 		if (error_angle > 180)
@@ -297,12 +327,12 @@ void lowerFront() {
 	frontLift.move(-127);
 }
 
-void liftLever() {
-	lever.move(127);
+void liftClaw() {
+	claw.move(127);
 }
 
-void lowerLever() {
-	lever.move(-127);
+void lowerClaw() {
+	claw.move(-127);
 }
 
 void liftBack() {
@@ -321,7 +351,7 @@ void fifteenSecondAutonomous() {
 
 // skills autonomous
 
-void calibrate_motor() {
+void calibrateMotor() {
   inertial.get_heading();
   turn(90, 60);
   delay(100);
