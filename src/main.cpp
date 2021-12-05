@@ -1,30 +1,24 @@
-// set "motor" pnuematics
-// initizalize pnuematics
-// driver penumatics
-// auton function pnuematics
-// fifteen second pnuematics
-// tune driver code
-// move Function
-// turn Function - add inertial sensor to robot
-// fifteen second autons
-// skills auton
-// comment code
-// put code in notebook
-
 #include "main.h"
 #include "math.h"
 
 using namespace pros;
 
+// DECLARING MOTORS, SENSOR, and CONTROLLERS
+
+// Base
 Motor fr(2, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // front right
 Motor fl(1, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front left
 Motor br(21, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back right
 Motor bl(3, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back left
 
+// Lifts
 Motor frontLift(10, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 Motor backLift(13, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
+// Claw
 Motor claw(15, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // CHANGE THIS
+
+// Controllers
 
 /* Instead of having one person control the whole robot, we use partner
 controls. The master controller is used by Srihith and controls the robot's
@@ -33,10 +27,14 @@ back lift's and lever. */
 Controller master(E_CONTROLLER_MASTER); // base - Srihith
 Controller partner(E_CONTROLLER_PARTNER); // lifts, lever - Kriya
 
+// Sensor
+
 /* The inertial sensor is a 3-axis accelerometer and gyroscope. The
 accelerometer measures linear acceleration of the robot, while the gyroscope
 measures the rate of rotation about the inertial sensor 3-axis.*/
 Imu inertial(0);
+
+// INITIALIZATION
 
 /* Runs initialization code. This occurs as soon as the program is started. All
 other competition modes are blocked by initialize. */
@@ -71,7 +69,6 @@ void initialize() {
 	backLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
 	// Claw
-	// CHANGE THIS
 }
 
 /* Runs while the robot is in the disabled state of Field Management System or
@@ -241,13 +238,13 @@ void move(double distanceInInches, double speedLimit) {
 /* We use the inertial sensor to get the angle of the robot. This is used in
 our turn funtion. */
 double getAngle() {
-  double angle = inertial.get_heading();
+	double angle = inertial.get_heading();
 
-  if (angle > 180)
-  angle = angle - 360;
-  else if (angle <= -180)
-  angle = 360 + angle;
-  return angle;
+	if (angle > 180)
+	angle = angle - 360;
+	else if (angle <= -180)
+	angle = 360 + angle;
+	return angle;
 }
 
 void turn (double angle, int speedLimit) {
@@ -276,9 +273,9 @@ void turn (double angle, int speedLimit) {
 		+ bl.get_position())/4;
 
 		double error = (target - current);
-	  double progress = current - start;
-	  double speed = minSpeed + 20 + fabs(accelerator * progress * error);
-	  double maxDeaccelerationSpeed = 4 * sqrt(error);
+		double progress = current - start;
+		double speed = minSpeed + 20 + fabs(accelerator * progress * error);
+		double maxDeaccelerationSpeed = 4 * sqrt(error);
 
 		double currentVelocity = fabs((fl.get_actual_velocity() +
 		fr.get_actual_velocity() + bl.get_actual_velocity() +
@@ -359,15 +356,15 @@ void fifteenSecondAutonomousLeftSide() {
 // skills autonomous
 
 void calibrateMotor() {
-  inertial.get_heading();
-  turn(90, 100);
-  delay(100);
-  pros::lcd::print(2, "fl: %f", fl.get_position() );
-  pros::lcd::print(3, "bl: %f", bl.get_position() );
-  pros::lcd::print(4, "fr: %f", fr.get_position() );
-  pros::lcd::print(5, "br: %f", br.get_position() );
-  pros::lcd::print(6, "avg: %f", (fl.get_position() + bl.get_position() +
+	inertial.get_heading();
+	turn(90, 100);
+	delay(100);
+	pros::lcd::print(2, "fl: %f", fl.get_position() );
+	pros::lcd::print(3, "bl: %f", bl.get_position() );
+	pros::lcd::print(4, "fr: %f", fr.get_position() );
+	pros::lcd::print(5, "br: %f", br.get_position() );
+	pros::lcd::print(6, "avg: %f", (fl.get_position() + bl.get_position() +
 	fr.get_position()+br.get_position() )/4 );
-  pros::lcd::print(7, "angle: %f", inertial.get_heading() );
-  delay(10000);
+	pros::lcd::print(7, "angle: %f", inertial.get_heading() );
+	delay(10000);
 }
