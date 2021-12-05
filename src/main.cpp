@@ -41,37 +41,37 @@ Imu inertial(0);
 /* Runs initialization code. This occurs as soon as the program is started. All
 other competition modes are blocked by initialize. */
 void initialize() {
-inertial.reset();
-delay(5000);
-lcd::initialize();
+	inertial.reset();
+	delay(5000);
+	lcd::initialize();
 
-lcd::set_text(0, "81X");
-lcd::print(3, "IMU heading: %3f", getAngle()); // WHY ERROR
+	lcd::set_text(0, "81X");
+	lcd::print(3, "IMU heading: %3f", getAngle()); // WHY ERROR
 
-// INITIALIZE MOTORS
+	// INITIALIZE MOTORS
 
-// Base
-fl.set_brake_mode(MOTOR_BRAKE_COAST);
-fr.set_brake_mode(MOTOR_BRAKE_COAST);
-bl.set_brake_mode(MOTOR_BRAKE_COAST);
-br.set_brake_mode(MOTOR_BRAKE_COAST);
+	// Base
+	fl.set_brake_mode(MOTOR_BRAKE_COAST);
+	fr.set_brake_mode(MOTOR_BRAKE_COAST);
+	bl.set_brake_mode(MOTOR_BRAKE_COAST);
+	br.set_brake_mode(MOTOR_BRAKE_COAST);
 
-fl.set_current_limit(11500);
-fr.set_current_limit(11500);
-bl.set_current_limit(11500);
-br.set_current_limit(11500);
+	fl.set_current_limit(11500);
+	fr.set_current_limit(11500);
+	bl.set_current_limit(11500);
+	br.set_current_limit(11500);
 
-fl.set_voltage_limit(11500);
-fr.set_voltage_limit(11500);
-bl.set_voltage_limit(11500);
-br.set_voltage_limit(11500);
+	fl.set_voltage_limit(11500);
+	fr.set_voltage_limit(11500);
+	bl.set_voltage_limit(11500);
+	br.set_voltage_limit(11500);
 
-// Lifts
-frontLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
-backLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	// Lifts
+	frontLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	backLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
-// Claw
-// CHANGE THIS
+	// Claw
+	// CHANGE THIS
 }
 
 /* Runs while the robot is in the disabled state of Field Management System or
@@ -113,6 +113,7 @@ void drive() {
 	bl.move(drives + turns);
 }
 
+// Moves the front lift up and down - partner controller.
 void driveFrontLift() {
 	if(partner.get_digital(DIGITAL_R1)==1) {
 		frontLift.move(127);
@@ -121,20 +122,20 @@ void driveFrontLift() {
 	frontLift.move(-127);
 }
 
-void driveClaw() {
-	if(partner.get_digital(DIGITAL_A)==1) {
-		claw.move(127);
-	}
-	else if(partner.get_digital(DIGITAL_B))
-		claw.move(-127);
-}
-
+// Moves the back lift up and down - partner controller.
 void driveBackLift() {
 	if(partner.get_digital(DIGITAL_L1)==1) {
 		backLift.move(127);
 	}
 	else if(partner.get_digital(DIGITAL_L2))
 	backLift.move(-127);
+}
+
+// Moves the claw up and down - partner controller.
+void driveClaw() {
+	if(partner.get_digital(DIGITAL_A)==1) {
+	}
+	else if(partner.get_digital(DIGITAL_B))
 }
 
 /* Runs the operator control code. This function will be started in its own task
@@ -156,21 +157,23 @@ void opcontrol() {
 
 // AUTONOMOUS FUNCTIONS
 
-// MOVE
+// MOVE and TURN
 
-// encoders
+// Encoders
 const double encoderPerInch = 18.65;
 const double encoderPerDegreeTurn = 3.63;
 
-// speed
+// Speed
 const double defaultSpeed = 127;
 const double defaultTurnSpeed = 127;
 
 double minSpeed = 35;
 double maxSpeed = 127;
 
-// accelerator
+// Accelerator
 double accelerator = 0.00095;
+
+// MOVE
 
 void move(double distanceInInches, double speedLimit) {
 	// reset base motors
@@ -277,11 +280,11 @@ void turn (double angle, int speedLimit) {
 	  double speed = minSpeed + 20 + fabs(accelerator * progress * error);
 	  double maxDeaccelerationSpeed = 4 * sqrt(error);
 
-		double current_velocity = fabs((fl.get_actual_velocity() +
+		double currentVelocity = fabs((fl.get_actual_velocity() +
 		fr.get_actual_velocity() + bl.get_actual_velocity() +
 		br.get_actual_velocity()) / 4);
 
-		if (current_velocity > maxDeaccelerationSpeed)
+		if (currentVelocity > maxDeaccelerationSpeed)
 		speed = maxDeaccelerationSpeed;
 		if (speed > speedLimit)
 		speed = speedLimit;
@@ -293,14 +296,14 @@ void turn (double angle, int speedLimit) {
 		bl.move( speed);
 		br.move(- speed);
 
-		double current_angle = getAngle();
-		double error_angle = targetAngle - current_angle;
+		double currentAngle = getAngle();
+		double errorAngle = targetAngle - currentAngle;
 
-		if (error_angle > 180)
-		error_angle = error_angle - 360;
-		else if (error_angle <= -180)
-		error_angle = 360 + error_angle;
-		if ( (fabs (error) < 10) || (fabs(error_angle) < 0.75) || (millis() >
+		if (errorAngle > 180)
+		errorAngle = errorAngle - 360;
+		else if (errorAngle <= -180)
+		errorAngle = 360 + errorAngle;
+		if ( (fabs (error) < 10) || (fabs(errorAngle) < 0.75) || (millis() >
 		maxTime) ) {
 
 			fl.move(0);
@@ -311,41 +314,45 @@ void turn (double angle, int speedLimit) {
 			notAtTarget = false;
 
 			lcd::print(8, "error: %f", error);
-			//  lcd::print(8, "error_angle: %f", error_angle);
+			//  lcd::print(8, "errorAngle: %f", errorAngle);
 		}
 		delay (5);
 	}
 	delay(70); // let motors stop
 }
 
-
-void liftFront() {
+// LIFTS
+void liftFrontLift() {
 	frontLift.move(127);
 }
 
-void lowerFront() {
+void lowerFrontLift() {
 	frontLift.move(-127);
 }
 
-void liftClaw() {
-	claw.move(127);
-}
-
-void lowerClaw() {
-	claw.move(-127);
-}
-
-void liftBack() {
+void liftBackLift() {
 	backLift.move(127);
 }
 
-void lowerBack() {
+void lowerBackLift() {
 	backLift.move(-127);
+}
+
+// CLAW
+
+void liftClaw() {
+}
+
+void lowerClaw() {
 }
 
 // fifteen second autonomous
 
-void fifteenSecondAutonomous() {
+void fifteenSecondAutonomousRightSide() {
+
+}
+
+void fifteenSecondAutonomousLeftSide() {
 
 }
 
@@ -353,7 +360,7 @@ void fifteenSecondAutonomous() {
 
 void calibrateMotor() {
   inertial.get_heading();
-  turn(90, 60);
+  turn(90, 100);
   delay(100);
   pros::lcd::print(2, "fl: %f", fl.get_position() );
   pros::lcd::print(3, "bl: %f", bl.get_position() );
