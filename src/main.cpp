@@ -1,3 +1,4 @@
+// test move, turn, lift functions, claw functions, 15 second auton mayb distance
 /* main.h, is intended for declaring functions and variables shared between the
 user code files. main.h offers a variety of configurable options for
 tailoring PROS to our needs. */
@@ -6,7 +7,7 @@ tailoring PROS to our needs. */
 // math.h, is designed for basic mathematical operations.
 #include "math.h"
 
-// "using namespace pros" reduces the length of declarations.
+// using namespace pros reduces the length of declarations.
 using namespace pros;
 
 // DECLARING MOTORS, SENSOR, and CONTROLLERS
@@ -31,9 +32,9 @@ ADIDigitalOut claw(1, 0); // change
 /* Instead of having one person control the whole robot, we use partner
 controls. The master controller is used by Srihith and controls the robot's
 base. The partner controller is used by Kriya and controls the robot's front and
-back lift's and lever. */
+back lift's and claw. */
 Controller master(E_CONTROLLER_MASTER); // base - Srihith
-Controller partner(E_CONTROLLER_PARTNER); // lifts, lever - Kriya
+Controller partner(E_CONTROLLER_PARTNER); // lifts and claw - Kriya
 
 // Sensor
 /* The inertial sensor is a 3-axis accelerometer and gyroscope. The
@@ -97,8 +98,7 @@ non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
 void autonomous() {
-	hookClaw();
-	unhookClaw();
+	calibrateMotor();
 }
 
 // OPCONTROL FUNCTIONS
@@ -343,21 +343,29 @@ void turn (double angle, int speedLimit) {
 // fix
 void liftFrontLift() {
 	frontLift.move(127);
+	delay(500);
+	frontLift.move(0);
 }
 
 // fix
 void lowerFrontLift() {
 	frontLift.move(-127);
+	delay(500);
+	frontLift.move(0);
 }
 
 // fix
 void liftBackLift() {
 	backLift.move(127);
+	delay(500);
+	backLift.move(0);
 }
 
 // fix
 void lowerBackLift() {
 	backLift.move(-127);
+	delay(500);
+	backLift.move(0);
 }
 
 // CLAW
@@ -373,14 +381,12 @@ void unhookClaw() {
 // fifteen second autonomous
 
 void fifteenSecondAutonomousRightSide() {
-	// move();
-	// lowerClaw();
-	// liftFrontLift();
-	// move();
-	// turn(-45);
-	// lowerFrontLift();
-	// liftClaw();
-
+	move(52, 127); // move to the
+	hookClaw();
+	liftFrontLift();
+	move(-28, 127);
+	turn(-135, 127);
+	unhookClaw();
 }
 
 void fifteenSecondAutonomousLeftSide() {
@@ -391,7 +397,7 @@ void fifteenSecondAutonomousLeftSide() {
 
 void calibrateMotor() {
 	inertial.get_heading();
-	move(24, 127);
+	turn(90, 127);
 	delay(100);
 	pros::lcd::print(2, "fl: %f", fl.get_position() );
 	pros::lcd::print(3, "bl: %f", bl.get_position() );
