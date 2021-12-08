@@ -6,15 +6,107 @@
 #define PROS_USE_LITERALS
 
 #include "api.h"
+using namespace pros;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void autonomous(void);
-  void initialize(void);
-  void disabled(void);
-  void competition_initialize(void);
-  void opcontrol(void);
+  extern Motor fr;
+  extern Motor fl;
+  extern Motor br;
+  extern Motor bl;
+
+  extern Motor frontLift;
+  extern Motor backLift;
+
+  extern ADIDigitalOut claw;
+
+  extern Controller master;
+  extern Controller partner;
+
+  extern Imu inertial;
+
+  void autonomous();
+  void initialize();
+  void disabled();
+  void competition_initialize();
+  void opcontrol();
+
+  extern void drive();
+  extern void driveFrontLift();
+  extern void driveBackLift();
+  extern void driveClaw();
+
+  extern const double encoderPerInch;
+  extern const double encoderPerDegreeTurn;
+
+  extern const double defaultSpeed;
+  extern const double defaultTurnSpeed;
+
+  extern double minSpeed;
+  extern double maxSpeed;
+
+  extern double accelerator;
+
+  extern void move(double distanceInInches, double speedLimit);
+
+  extern int startTime;
+  extern int maxTime;
+
+  extern int directMultiplier;
+
+  extern double distanceInEncoders;
+
+  extern double current;
+  extern double error;
+  extern double progress;
+  extern double speed;
+
+	extern double currentVelocity;
+
+  extern double maxDeaccelerationSpeed;
+
+  extern double getAngle();
+  extern double angle;
+
+  extern void turn(double angle, int speedLimit);
+
+  extern bool notAtTarget;
+
+  extern double startAngle;
+  extern double targetAngle;
+  extern double start;
+  extern double target;
+  extern double current;
+  extern double directionMultiplier;
+  extern int startTime;
+  extern int maxTime;
+
+  extern double current;
+
+  extern double error;
+	extern double progress;
+  extern double speed;
+  extern double maxDeaccelerationSpeed;
+
+	extern double currentVelocity;
+
+	extern double currentAngle;
+  extern double errorAngle;
+
+  extern void liftFrontLift();
+  extern void lowerFrontLift();
+
+  extern void liftBackLift();
+  extern void lowerBackLift();
+
+  extern void liftClaw();
+  extern void lowerClaw();
+
+  extern void fifteenSecondAutonomousRightSide();
+  extern void fifteenSecondAutonomousLeftSide();
+
+  extern void calibrateMotor();
 
 #ifdef __cplusplus
 }

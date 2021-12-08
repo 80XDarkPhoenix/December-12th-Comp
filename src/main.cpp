@@ -1,25 +1,33 @@
+/* main.h, is intended for declaring functions and variables shared between the
+user code files. main.h offers a variety of configurable options for
+tailoring PROS to our needs. */
 #include "main.h"
+
+// math.h, is designed for basic mathematical operations.
 #include "math.h"
 
+// "using namespace pros" reduces the length of declarations.
 using namespace pros;
 
 // DECLARING MOTORS, SENSOR, and CONTROLLERS
 
 // Base
-Motor fr(2, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // front right
-Motor fl(1, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front left
-Motor br(21, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back right
-Motor bl(3, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back left
+Motor fr(8, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front right
+Motor fl(1, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // front left
+Motor br(21, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back right
+Motor bl(2, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back left
 
 // Lifts
-Motor frontLift(10, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-Motor backLift(13, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor frontLift(10, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor backLift(11, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
 // Claw
-Motor claw(15, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // CHANGE THIS
+/* The claw uses pnuematics, so it is connected to the brain using the ADI ports
+, therefore it is declared as an "ADIDIgitalOut". The second number, 0, states
+the state of the pnuematics. 0 is no air, and 1 is air. */
+ADIDigitalOut claw(1, 0); // change
 
 // Controllers
-
 /* Instead of having one person control the whole robot, we use partner
 controls. The master controller is used by Srihith and controls the robot's
 base. The partner controller is used by Kriya and controls the robot's front and
@@ -28,11 +36,10 @@ Controller master(E_CONTROLLER_MASTER); // base - Srihith
 Controller partner(E_CONTROLLER_PARTNER); // lifts, lever - Kriya
 
 // Sensor
-
 /* The inertial sensor is a 3-axis accelerometer and gyroscope. The
 accelerometer measures linear acceleration of the robot, while the gyroscope
 measures the rate of rotation about the inertial sensor 3-axis.*/
-Imu inertial(0);
+Imu inertial(4);
 
 // INITIALIZATION
 
@@ -40,19 +47,18 @@ Imu inertial(0);
 other competition modes are blocked by initialize. */
 void initialize() {
 	inertial.reset();
-	delay(5000);
+	delay(5000); // allows for inertial sensor to reset
 	lcd::initialize();
 
-	lcd::set_text(0, "81X");
-	lcd::print(3, "IMU heading: %3f", getAngle()); // WHY ERROR
+	lcd::print(1, "IMU heading: %3f", getAngle); // shows angle on LCD screen
 
 	// INITIALIZE MOTORS
 
 	// Base
-	fl.set_brake_mode(MOTOR_BRAKE_COAST);
-	fr.set_brake_mode(MOTOR_BRAKE_COAST);
-	bl.set_brake_mode(MOTOR_BRAKE_COAST);
-	br.set_brake_mode(MOTOR_BRAKE_COAST);
+	fl.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	fr.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	bl.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	br.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
 	fl.set_current_limit(11500);
 	fr.set_current_limit(11500);
@@ -68,7 +74,7 @@ void initialize() {
 	frontLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	backLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
-	// Claw
+	// INITIALIZE pnuematics
 }
 
 /* Runs while the robot is in the disabled state of Field Management System or
@@ -115,8 +121,13 @@ void driveFrontLift() {
 	if(partner.get_digital(DIGITAL_R1)==1) {
 		frontLift.move(127);
 	}
-	else if(partner.get_digital(DIGITAL_R2))
-	frontLift.move(-127);
+	else if(partner.get_digital(DIGITAL_R2)) {
+		frontLift.move(-127);
+	}
+	else
+	{
+		frontLift.move(0);
+	}
 }
 
 // Moves the back lift up and down - partner controller.
@@ -124,15 +135,22 @@ void driveBackLift() {
 	if(partner.get_digital(DIGITAL_L1)==1) {
 		backLift.move(127);
 	}
-	else if(partner.get_digital(DIGITAL_L2))
-	backLift.move(-127);
+	else if(partner.get_digital(DIGITAL_L2)) {
+		backLift.move(-127);
+	}
+	else
+	{
+		backLift.move(0);
+	}
 }
 
 // Moves the claw up and down - partner controller.
 void driveClaw() {
 	if(partner.get_digital(DIGITAL_A)==1) {
+		claw.set_value(0);
 	}
 	else if(partner.get_digital(DIGITAL_B))
+	claw.set_value(1);
 }
 
 /* Runs the operator control code. This function will be started in its own task
@@ -157,8 +175,8 @@ void opcontrol() {
 // MOVE and TURN
 
 // Encoders
-const double encoderPerInch = 18.65;
-const double encoderPerDegreeTurn = 3.63;
+const double encoderPerInch = 35;
+const double encoderPerDegreeTurn = 3.94;
 
 // Speed
 const double defaultSpeed = 127;
@@ -168,7 +186,7 @@ double minSpeed = 35;
 double maxSpeed = 127;
 
 // Accelerator
-double accelerator = 0.00095;
+double accelerator = 0.009;
 
 // MOVE
 
@@ -235,9 +253,9 @@ void move(double distanceInInches, double speedLimit) {
 
 // TURN
 
-/* We use the inertial sensor to get the angle of the robot. This is used in
-our turn funtion. */
 double getAngle() {
+	/* We use the inertial sensor to get the angle of the robot. This is used in
+	our turn funtion. */
 	double angle = inertial.get_heading();
 
 	if (angle > 180)
@@ -256,7 +274,7 @@ void turn (double angle, int speedLimit) {
 	bl.tare_position();
 	br.tare_position();
 
-	double startAngle = getAngle();
+	double startAngle = getAngle(); // startAngle is the current angle of robot
 	double targetAngle = startAngle + angle;
 	double start = 0;
 	double target = angle * encoderPerDegreeTurn;
@@ -315,7 +333,7 @@ void turn (double angle, int speedLimit) {
 		}
 		delay (5);
 	}
-	delay(70); // let motors stop
+	delay(50); // let motors stop
 }
 
 // LIFTS
@@ -338,14 +356,23 @@ void lowerBackLift() {
 // CLAW
 
 void liftClaw() {
+	claw.set_value(1);
 }
 
 void lowerClaw() {
+	claw.set_value(0);
 }
 
 // fifteen second autonomous
 
 void fifteenSecondAutonomousRightSide() {
+	// move();
+	// lowerClaw();
+	// liftFrontLift();
+	// move();
+	// turn(-45);
+	// lowerFrontLift();
+	// liftClaw();
 
 }
 
@@ -357,14 +384,14 @@ void fifteenSecondAutonomousLeftSide() {
 
 void calibrateMotor() {
 	inertial.get_heading();
-	turn(90, 100);
+	turn(90, 127);
 	delay(100);
 	pros::lcd::print(2, "fl: %f", fl.get_position() );
 	pros::lcd::print(3, "bl: %f", bl.get_position() );
 	pros::lcd::print(4, "fr: %f", fr.get_position() );
 	pros::lcd::print(5, "br: %f", br.get_position() );
 	pros::lcd::print(6, "avg: %f", (fl.get_position() + bl.get_position() +
-	fr.get_position()+br.get_position() )/4 );
+	fr.get_position() + br.get_position() )/4 );
 	pros::lcd::print(7, "angle: %f", inertial.get_heading() );
 	delay(10000);
 }
