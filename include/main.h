@@ -100,8 +100,8 @@ extern "C" {
   extern void liftBackLift();
   extern void lowerBackLift();
 
-  extern void liftClaw();
-  extern void lowerClaw();
+  extern void unhookClaw();
+  extern void hookClaw();
 
   extern void fifteenSecondAutonomousRightSide();
   extern void fifteenSecondAutonomousLeftSide();

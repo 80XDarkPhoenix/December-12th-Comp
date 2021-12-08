@@ -97,7 +97,8 @@ non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
 void autonomous() {
-	calibrateMotor();
+	hookClaw();
+	unhookClaw();
 }
 
 // OPCONTROL FUNCTIONS
@@ -186,7 +187,8 @@ double minSpeed = 35;
 double maxSpeed = 127;
 
 // Accelerator
-double accelerator = 0.009;
+double accelerator = 0.0095;
+double turnAccelerator = 0.00095;
 
 // MOVE
 
@@ -292,7 +294,7 @@ void turn (double angle, int speedLimit) {
 
 		double error = (target - current);
 		double progress = current - start;
-		double speed = minSpeed + 20 + fabs(accelerator * progress * error);
+		double speed = minSpeed + 20 + fabs(turnAccelerator * progress * error);
 		double maxDeaccelerationSpeed = 4 * sqrt(error);
 
 		double currentVelocity = fabs((fl.get_actual_velocity() +
@@ -337,29 +339,34 @@ void turn (double angle, int speedLimit) {
 }
 
 // LIFTS
+
+// fix
 void liftFrontLift() {
 	frontLift.move(127);
 }
 
+// fix
 void lowerFrontLift() {
 	frontLift.move(-127);
 }
 
+// fix
 void liftBackLift() {
 	backLift.move(127);
 }
 
+// fix
 void lowerBackLift() {
 	backLift.move(-127);
 }
 
 // CLAW
 
-void liftClaw() {
+void hookClaw() {
 	claw.set_value(1);
 }
 
-void lowerClaw() {
+void unhookClaw() {
 	claw.set_value(0);
 }
 
@@ -384,7 +391,7 @@ void fifteenSecondAutonomousLeftSide() {
 
 void calibrateMotor() {
 	inertial.get_heading();
-	turn(90, 127);
+	move(24, 127);
 	delay(100);
 	pros::lcd::print(2, "fl: %f", fl.get_position() );
 	pros::lcd::print(3, "bl: %f", bl.get_position() );
