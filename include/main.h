@@ -105,7 +105,8 @@ extern "C" {
 
   extern void fifteenSecondAutonomousRightSideTwoTowers();
   extern void fifteenSecondAutonomousRightSideCenterTower();
-  extern void fifteenSecondAutonomousLeftSide();
+  extern void fifteenSecondAutonomousLeftSideTwoTowers();
+  extern void fifteenSecondAutonomousLeftSideCenterTower();
 
   extern void calibrateMotor();
 

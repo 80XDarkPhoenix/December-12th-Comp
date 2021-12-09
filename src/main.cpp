@@ -341,28 +341,24 @@ void turn (double angle, int speedLimit) {
 
 // LIFTS
 
-// fix
 void liftFrontLift() {
 	frontLift.move(127);
 	delay(1200);
 	frontLift.move(0);
 }
 
-// fix
 void lowerFrontLift() {
 	frontLift.move(-127);
 	delay(1200);
 	frontLift.move(0);
 }
 
-// fix
 void liftBackLift() {
 	backLift.move(127);
 	delay(700);
 	backLift.move(0);
 }
 
-// fix
 void lowerBackLift() {
 	backLift.move(-127);
 	delay(700);
@@ -414,8 +410,12 @@ void fifteenSecondAutonomousRightSideCenterTower() {
 }
 
 
-void fifteenSecondAutonomousLeftSide() {
+void fifteenSecondAutonomousLeftSideTwoTowers() {
 
+}
+
+void fifteenSecondAutonomousLeftSideCenterTower() {
+	
 }
 
 // skills autonomous
