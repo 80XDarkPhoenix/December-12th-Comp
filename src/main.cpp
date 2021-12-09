@@ -1,7 +1,6 @@
-// test move, turn, lift functions, claw functions, 15 second auton mayb distance
 /* main.h, is intended for declaring functions and variables shared between the
-user code files. main.h offers a variety of configurable options for
-tailoring PROS to our needs. */
+user code files. main.h offers a variety of configurable options for tailoring
+PROS to our needs. */
 #include "main.h"
 
 // math.h, is designed for basic mathematical operations.
@@ -23,23 +22,23 @@ Motor frontLift(10, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 Motor backLift(11, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
 // Claw
-/* The claw uses pnuematics, so it is connected to the brain using the ADI ports
-, therefore it is declared as an "ADIDIgitalOut". The second number, 0, states
-the state of the pnuematics. 0 is no air, and 1 is air. */
-ADIDigitalOut claw(1, 0); // change
+/* The claw is pnuematic, so it is connected to the brain using the ADI ports,
+therefore it is declared as an "ADIDIgitalOut". */
+ADIDigitalOut claw(1, 0);
 
 // Controllers
-/* Instead of having one person control the whole robot, we use partner
-controls. The master controller is used by Srihith and controls the robot's
-base. The partner controller is used by Kriya and controls the robot's front and
-back lift's and claw. */
+/* Instead of having one person control the  robot, we use partner controls. The
+master controller is used by Srihith and controls the robot's base. The partner
+controller is used by Kriya and controls the robot's front and back lift's and
+claw. */
 Controller master(E_CONTROLLER_MASTER); // base - Srihith
 Controller partner(E_CONTROLLER_PARTNER); // lifts and claw - Kriya
 
 // Sensor
 /* The inertial sensor is a 3-axis accelerometer and gyroscope. The
 accelerometer measures linear acceleration of the robot, while the gyroscope
-measures the rate of rotation about the inertial sensor 3-axis.*/
+measures the rate of rotation about the inertial sensor 3-axis. The inertial
+sensor helps us have accurate turns. */
 Imu inertial(4);
 
 // INITIALIZATION
@@ -53,7 +52,7 @@ void initialize() {
 
 	lcd::print(1, "IMU heading: %3f", getAngle); // shows angle on LCD screen
 
-	// INITIALIZE MOTORS
+	// Initialize Motors
 
 	// Base
 	fl.set_brake_mode(MOTOR_BRAKE_BRAKE);
@@ -74,8 +73,6 @@ void initialize() {
 	// Lifts
 	frontLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	backLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
-
-	// INITIALIZE pnuematics
 }
 
 /* Runs while the robot is in the disabled state of Field Management System or
@@ -86,7 +83,7 @@ void disabled() {}
 /* Runs after initialize(), and before autonomous when connected to the Field
 Management System or the VEX Competition Switch. This is intended for
 competition-specific initialization routines, such as an autonomous selector on
-the LCD.This task will exit when the robot is enabled and autonomous or
+the LCD. This task will exit when the robot is enabled and autonomous or
 opcontrol starts. */
 void competition_initialize() {}
 
@@ -147,6 +144,7 @@ void driveBackLift() {
 
 // Moves the claw up and down - partner controller.
 void driveClaw() {
+	//  0 and 1 are states of the pnuematics.
 	if(partner.get_digital(DIGITAL_A)==1) {
 		claw.set_value(0);
 	}
@@ -173,10 +171,9 @@ void opcontrol() {
 
 // AUTONOMOUS FUNCTIONS
 
-// MOVE and TURN
+// Move and Turn
 
 // Encoders
-
 const double encoderPerInch = 35;
 const double encoderPerDegreeTurn = 4.05;
 
@@ -191,8 +188,7 @@ double maxSpeed = 127;
 double accelerator = 0.0095;
 double turnAccelerator = 0.009;
 
-// MOVE
-
+// Move
 void move(double distanceInInches, double speedLimit) {
 	// reset base motors
 	fl.tare_position();
@@ -230,7 +226,7 @@ void move(double distanceInInches, double speedLimit) {
 			speed = speedLimit;
 		}
 
-		// deacceleration code
+		// deacceleration
 		double maxDeaccelerationSpeed = 3.5 * sqrt(error);
 		if (currentVelocity > maxDeaccelerationSpeed)
 		speed = maxDeaccelerationSpeed;
@@ -254,11 +250,11 @@ void move(double distanceInInches, double speedLimit) {
 	delay(10); // let motors fully stop
 }
 
-// TURN
+// Turn
 
 double getAngle() {
-	/* We use the inertial sensor to get the angle of the robot. This is used in
-	our turn funtion. */
+	/* "get_heading" gets the inertial sensor’s heading relative to the initial
+	direction of its x-axis */
 	double angle = inertial.get_heading();
 
 	if (angle > 180)
@@ -277,7 +273,7 @@ void turn (double angle, int speedLimit) {
 	bl.tare_position();
 	br.tare_position();
 
-	double startAngle = getAngle(); // startAngle is the current angle of robot
+	double startAngle = getAngle();
 	double targetAngle = startAngle + angle;
 	double start = 0;
 	double target = angle * encoderPerDegreeTurn;
@@ -332,14 +328,13 @@ void turn (double angle, int speedLimit) {
 			notAtTarget = false;
 
 			lcd::print(8, "error: %f", error);
-			//  lcd::print(8, "errorAngle: %f", errorAngle);
 		}
 		delay (5);
 	}
 	delay(50); // let motors stop
 }
 
-// LIFTS
+// Lifts
 
 void liftFrontLift() {
 	frontLift.move(127);
@@ -375,10 +370,10 @@ void unhookClaw() {
 	claw.set_value(0);
 }
 
-// fifteen second autonomous
+// Fifteen Second Autonomous
 
 void fifteenSecondAutonomousRightSide2Towers() {
-	move(56, 127); // move to the tower
+	move(56, 127); 
 	hookClaw();
 	delay(300);
 	move(-30, 127);
@@ -415,21 +410,25 @@ void fifteenSecondAutonomousLeftSideTwoTowers() {
 }
 
 void fifteenSecondAutonomousLeftSideCenterTower() {
-	
-}
 
-// skills autonomous
+}
 
 void calibrateMotor() {
 	inertial.get_heading();
-	move(48, 127);
+	turn(90, 127);
 	delay(100);
-	pros::lcd::print(2, "fl: %f", fl.get_position() );
-	pros::lcd::print(3, "bl: %f", bl.get_position() );
-	pros::lcd::print(4, "fr: %f", fr.get_position() );
-	pros::lcd::print(5, "br: %f", br.get_position() );
+	// gets the position of each base motor and displays them on the LCD screen
+	// "get_position" gets the absolute position of the motor in its encoder units
+	pros::lcd::print(2, "fl: %f", fl.get_position());
+	pros::lcd::print(3, "bl: %f", bl.get_position());
+	pros::lcd::print(4, "fr: %f", fr.get_position());
+	pros::lcd::print(5, "br: %f", br.get_position());
+	/* gets the average position of the base motors and displays it on the LCD
+	screen */
 	pros::lcd::print(6, "avg: %f", (fl.get_position() + bl.get_position() +
 	fr.get_position() + br.get_position() )/4 );
+	/* "get_heading" gets the inertial sensor’s heading relative to the initial
+	direction of its x-axis */
 	pros::lcd::print(7, "angle: %f", inertial.get_heading() );
 	delay(10000);
 }
