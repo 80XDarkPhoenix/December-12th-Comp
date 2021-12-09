@@ -98,7 +98,7 @@ non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
 void autonomous() {
-	calibrateMotor();
+	fifteenSecondAutonomousRightSideCenterTower();
 }
 
 // OPCONTROL FUNCTIONS
@@ -176,8 +176,9 @@ void opcontrol() {
 // MOVE and TURN
 
 // Encoders
+
 const double encoderPerInch = 35;
-const double encoderPerDegreeTurn = 3.94;
+const double encoderPerDegreeTurn = 4.05;
 
 // Speed
 const double defaultSpeed = 127;
@@ -188,7 +189,7 @@ double maxSpeed = 127;
 
 // Accelerator
 double accelerator = 0.0095;
-double turnAccelerator = 0.00095;
+double turnAccelerator = 0.009;
 
 // MOVE
 
@@ -343,28 +344,28 @@ void turn (double angle, int speedLimit) {
 // fix
 void liftFrontLift() {
 	frontLift.move(127);
-	delay(500);
+	delay(1200);
 	frontLift.move(0);
 }
 
 // fix
 void lowerFrontLift() {
 	frontLift.move(-127);
-	delay(500);
+	delay(1200);
 	frontLift.move(0);
 }
 
 // fix
 void liftBackLift() {
 	backLift.move(127);
-	delay(500);
+	delay(700);
 	backLift.move(0);
 }
 
 // fix
 void lowerBackLift() {
 	backLift.move(-127);
-	delay(500);
+	delay(700);
 	backLift.move(0);
 }
 
@@ -380,14 +381,38 @@ void unhookClaw() {
 
 // fifteen second autonomous
 
-void fifteenSecondAutonomousRightSide() {
-	move(52, 127); // move to the
+void fifteenSecondAutonomousRightSide2Towers() {
+	move(56, 127); // move to the tower
 	hookClaw();
-	liftFrontLift();
-	move(-28, 127);
+	delay(300);
+	move(-30, 127);
 	turn(-135, 127);
 	unhookClaw();
+	move(6, 127);
+	delay(10);
+	move(-5, 127);
+	turn(90, 127);
+	move(48, 127);
+	hookClaw();
+	delay(300);
+	move(-48, 127);
+	turn(-45, 127);
+	unhookClaw();
+	move(-6, 127);
 }
+
+void fifteenSecondAutonomousRightSideCenterTower() {
+	move(36, 127);
+	turn(-45, 127);
+	move(42, 127);
+	hookClaw();
+	delay(300);
+	move(-48, 127);
+	turn(-45, 127);
+	unhookClaw();
+	move(-6, 127);
+}
+
 
 void fifteenSecondAutonomousLeftSide() {
 
@@ -397,7 +422,7 @@ void fifteenSecondAutonomousLeftSide() {
 
 void calibrateMotor() {
 	inertial.get_heading();
-	turn(90, 127);
+	move(48, 127);
 	delay(100);
 	pros::lcd::print(2, "fl: %f", fl.get_position() );
 	pros::lcd::print(3, "bl: %f", bl.get_position() );

@@ -103,7 +103,8 @@ extern "C" {
   extern void unhookClaw();
   extern void hookClaw();
 
-  extern void fifteenSecondAutonomousRightSide();
+  extern void fifteenSecondAutonomousRightSideTwoTowers();
+  extern void fifteenSecondAutonomousRightSideCenterTower();
   extern void fifteenSecondAutonomousLeftSide();
 
   extern void calibrateMotor();
