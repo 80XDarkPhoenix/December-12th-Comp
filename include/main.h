@@ -17,7 +17,8 @@ extern "C" {
   extern Motor bl;
 
   extern Motor frontLift;
-  extern Motor backLift;
+  extern Motor backLiftLeft;
+  extern Motor backLiftRight;
 
   extern ADIDigitalOut claw;
 

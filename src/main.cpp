@@ -1,25 +1,26 @@
-/* main.h, is intended for declaring functions and variables shared between the
-user code files. main.h offers a variety of configurable options for tailoring
-PROS to our needs. */
+/* "main.h", is intended for declaring functions and variables shared between
+the user code files. main.h offers a variety of configurable options for
+tailoring PROS to our needs. */
 #include "main.h"
 
-// math.h, is designed for basic mathematical operations.
+// "math.h", is designed for basic mathematical operations.
 #include "math.h"
 
 // using namespace pros reduces the length of declarations.
 using namespace pros;
 
-// DECLARING MOTORS, SENSOR, and CONTROLLERS
+// DECLARATIONS
 
 // Base
-Motor fr(8, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front right
-Motor fl(1, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // front left
-Motor br(21, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back right
-Motor bl(2, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back left
+Motor fr(13, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front right
+Motor fl(20, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // front left
+Motor br(11, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back right
+Motor bl(19, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back left
 
 // Lifts
-Motor frontLift(10, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-Motor backLift(11, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor frontLift(12, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor backLiftLeft(16, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor backLiftRight(15, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
 // Claw
 /* The claw is pnuematic, so it is connected to the brain using the ADI ports,
@@ -39,7 +40,7 @@ Controller partner(E_CONTROLLER_PARTNER); // lifts and claw - Kriya
 accelerometer measures linear acceleration of the robot, while the gyroscope
 measures the rate of rotation about the inertial sensor 3-axis. The inertial
 sensor helps us have accurate turns. */
-Imu inertial(4);
+Imu inertial(18);
 
 // INITIALIZATION
 
@@ -72,7 +73,8 @@ void initialize() {
 
 	// Lifts
 	frontLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
-	backLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	backLiftLeft.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	backLiftRight.set_brake_mode(MOTOR_BRAKE_BRAKE);
 }
 
 /* Runs while the robot is in the disabled state of Field Management System or
@@ -131,14 +133,17 @@ void driveFrontLift() {
 // Moves the back lift up and down - partner controller.
 void driveBackLift() {
 	if(partner.get_digital(DIGITAL_L1)==1) {
-		backLift.move(127);
+		backLiftLeft.move(127);
+		backLiftRight.move(127);
 	}
 	else if(partner.get_digital(DIGITAL_L2)) {
-		backLift.move(-127);
+		backLiftLeft.move(-127);
+		backLiftRight.move(-127);
 	}
 	else
 	{
-		backLift.move(0);
+		backLiftLeft.move(0);
+		backLiftRight.move(0);
 	}
 }
 
@@ -349,15 +354,19 @@ void lowerFrontLift() {
 }
 
 void liftBackLift() {
-	backLift.move(127);
+	backLiftLeft.move(127);
+	backLiftRight.move(127);
 	delay(700);
-	backLift.move(0);
+	backLiftLeft.move(0);
+	backLiftRight.move(0);
 }
 
 void lowerBackLift() {
-	backLift.move(-127);
+	backLiftLeft.move(-127);
+	backLiftRight.move(-127);
 	delay(700);
-	backLift.move(0);
+	backLiftLeft.move(0);
+	backLiftRight.move(0);
 }
 
 // CLAW
@@ -373,7 +382,7 @@ void unhookClaw() {
 // Fifteen Second Autonomous
 
 void fifteenSecondAutonomousRightSide2Towers() {
-	move(56, 127); 
+	move(56, 127);
 	hookClaw();
 	delay(300);
 	move(-30, 127);
@@ -404,7 +413,6 @@ void fifteenSecondAutonomousRightSideCenterTower() {
 	move(-6, 127);
 }
 
-
 void fifteenSecondAutonomousLeftSideTwoTowers() {
 
 }
@@ -426,7 +434,7 @@ void calibrateMotor() {
 	/* gets the average position of the base motors and displays it on the LCD
 	screen */
 	pros::lcd::print(6, "avg: %f", (fl.get_position() + bl.get_position() +
-	fr.get_position() + br.get_position() )/4 );
+	fr.get_position() + br.get_position() )/4);
 	/* "get_heading" gets the inertial sensor’s heading relative to the initial
 	direction of its x-axis */
 	pros::lcd::print(7, "angle: %f", inertial.get_heading() );
