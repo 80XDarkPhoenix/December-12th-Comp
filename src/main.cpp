@@ -451,7 +451,7 @@ void fifteenSecondAutonomousLeftSideCenterTower() {
 	hookClaw();
 	delay(300);
 	move(-48, 127);
-	turn(45, 127);
+	turn(-45, 127);
 	unhookClaw();
 	move(-6, 127);
 }
