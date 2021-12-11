@@ -1,3 +1,4 @@
+// test lift auton functions
 /* "main.h", is intended for declaring functions and variables shared between
 the user code files. main.h offers a variety of configurable options for
 tailoring PROS to our needs. */
@@ -18,8 +19,8 @@ Motor br(11, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back right
 Motor bl(19, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back left
 
 // Lifts
-Motor frontLiftLeft(12, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-Motor frontLiftRight(10, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+Motor frontLiftLeft(9, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor frontLiftRight(12, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
 Motor backLiftLeft(16, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 Motor backLiftRight(15, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
@@ -391,7 +392,7 @@ void unhookClaw() {
 
 // Fifteen Second Autonomous
 
-void fifteenSecondAutonomousRightSide2Towers() {
+void fifteenSecondAutonomousRightSideTwoTowers() {
 	move(56, 127);
 	hookClaw();
 	delay(300);
@@ -424,11 +425,35 @@ void fifteenSecondAutonomousRightSideCenterTower() {
 }
 
 void fifteenSecondAutonomousLeftSideTwoTowers() {
-
+	move(56, 127);
+	hookClaw();
+	delay(300);
+	move(-30, 127);
+	turn(135, 127);
+	unhookClaw();
+	move(6, 127);
+	delay(10);
+	move(-5, 127);
+	turn(-90, 127);
+	move(48, 127);
+	hookClaw();
+	delay(300);
+	move(-48, 127);
+	turn(45, 127);
+	unhookClaw();
+	move(-6, 127);
 }
 
 void fifteenSecondAutonomousLeftSideCenterTower() {
-
+	move(36, 127);
+	turn(45, 127);
+	move(42, 127);
+	hookClaw();
+	delay(300);
+	move(-48, 127);
+	turn(45, 127);
+	unhookClaw();
+	move(-6, 127);
 }
 
 void calibrateMotor() {
