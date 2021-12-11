@@ -16,7 +16,8 @@ extern "C" {
   extern Motor br;
   extern Motor bl;
 
-  extern Motor frontLift;
+  extern Motor frontLiftLeft;
+  extern Motor frontLiftRight;
   extern Motor backLiftLeft;
   extern Motor backLiftRight;
 

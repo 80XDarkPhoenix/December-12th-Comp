@@ -18,8 +18,10 @@ Motor br(11, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back right
 Motor bl(19, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back left
 
 // Lifts
-Motor frontLift(12, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-Motor backLiftLeft(16, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor frontLiftLeft(12, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor frontLiftRight(10, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+
+Motor backLiftLeft(16, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 Motor backLiftRight(15, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
 // Claw
@@ -72,7 +74,8 @@ void initialize() {
 	br.set_voltage_limit(11500);
 
 	// Lifts
-	frontLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	frontLiftLeft.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	frontLiftRight.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	backLiftLeft.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	backLiftRight.set_brake_mode(MOTOR_BRAKE_BRAKE);
 }
@@ -97,7 +100,7 @@ non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
 void autonomous() {
-	fifteenSecondAutonomousRightSideCenterTower();
+	liftBackLift();
 }
 
 // OPCONTROL FUNCTIONS
@@ -119,14 +122,17 @@ void drive() {
 // Moves the front lift up and down - partner controller.
 void driveFrontLift() {
 	if(partner.get_digital(DIGITAL_R1)==1) {
-		frontLift.move(127);
+		frontLiftLeft.move(127);
+		frontLiftRight.move(127);
 	}
 	else if(partner.get_digital(DIGITAL_R2)) {
-		frontLift.move(-127);
+		frontLiftLeft.move(-127);
+		frontLiftRight.move(-127);
 	}
 	else
 	{
-		frontLift.move(0);
+		frontLiftLeft.move(0);
+		frontLiftRight.move(0);
 	}
 }
 
@@ -342,15 +348,19 @@ void turn (double angle, int speedLimit) {
 // Lifts
 
 void liftFrontLift() {
-	frontLift.move(127);
+	frontLiftLeft.move(127);
+	frontLiftRight.move(127);
 	delay(1200);
-	frontLift.move(0);
+	frontLiftLeft.move(0);
+	frontLiftRight.move(0);
 }
 
 void lowerFrontLift() {
-	frontLift.move(-127);
+	frontLiftLeft.move(-127);
+	frontLiftRight.move(-127);
 	delay(1200);
-	frontLift.move(0);
+	frontLiftLeft.move(0);
+	frontLiftRight.move(0);
 }
 
 void liftBackLift() {
