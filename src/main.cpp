@@ -14,7 +14,7 @@ using namespace pros;
 
 // Base
 Motor fr(13, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front right
-Motor fl(20, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // front left
+Motor fl(14, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // front left
 Motor br(11, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back right
 Motor bl(19, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back left
 
@@ -101,7 +101,7 @@ non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
 void autonomous() {
-	liftBackLift();
+	fifteenSecondAutonomousRightSideOneTower();
 }
 
 // OPCONTROL FUNCTIONS
@@ -349,16 +349,16 @@ void turn (double angle, int speedLimit) {
 // Lifts
 
 void liftFrontLift() {
-	frontLiftLeft.move(127);
-	frontLiftRight.move(127);
+	frontLiftLeft.move(-127);
+	frontLiftRight.move(-127);
 	delay(1200);
 	frontLiftLeft.move(0);
 	frontLiftRight.move(0);
 }
 
 void lowerFrontLift() {
-	frontLiftLeft.move(-127);
-	frontLiftRight.move(-127);
+	frontLiftLeft.move(127);
+	frontLiftRight.move(127);
 	delay(1200);
 	frontLiftLeft.move(0);
 	frontLiftRight.move(0);
@@ -383,14 +383,30 @@ void lowerBackLift() {
 // CLAW
 
 void hookClaw() {
-	claw.set_value(1);
-}
-
-void unhookClaw() {
 	claw.set_value(0);
 }
 
+void unhookClaw() {
+	claw.set_value(1);
+}
+
 // Fifteen Second Autonomous
+
+void fifteenSecondAutonomousRightSideOneTower() {
+	unhookClaw();
+	move(56, 127);
+	hookClaw();
+	delay(300);
+	move(-30, 127);
+	turn(-135, 127);
+	unhookClaw();
+	move(6, 127);
+	move(-6, 127);
+}
+
+void fifteenSecondAutonomousLeftSideOneTower() {
+
+}
 
 void fifteenSecondAutonomousRightSideTwoTowers() {
 	move(56, 127);
