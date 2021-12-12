@@ -48,12 +48,10 @@ Imu inertial(18);
 other competition modes are blocked by initialize. */
 void initialize() {
 	inertial.reset();
-	delay(5000); // allows for inertial sensor to reset
+	delay(3000); // allows for inertial sensor to reset
 	lcd::initialize();
 
 	lcd::print(1, "IMU heading: %3f", getAngle); // shows angle on LCD screen
-
-	// Initialize Motors
 
 	// Base
 	fl.set_brake_mode(MOTOR_BRAKE_BRAKE);
@@ -98,7 +96,6 @@ non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
 void autonomous() {
-	fifteenSecondAutonomousLeftSideOneTower();
 }
 
 // OPCONTROL FUNCTIONS
@@ -199,13 +196,16 @@ double turnAccelerator = 0.009;
 
 // Move
 void move(double distanceInInches, double speedLimit) {
-	// reset base motors
+	/* "tare_position" sets the “absolute” zero position of the motor to its
+	current position. */
 	fl.tare_position();
 	fr.tare_position();
 	bl.tare_position();
 	br.tare_position();
 
+	// "mills" gets the number of milliseconds since PROS initialized.
 	int startTime = millis();
+	// "fabs" gets the absolute value.
 	int maxTime = startTime + 100 + 70 * fabs(distanceInInches);
 
 	int directMultiplier = 1;
@@ -219,6 +219,7 @@ void move(double distanceInInches, double speedLimit) {
 	double progress = current;
 	double speed;
 
+  // "get_position"
 	while ((fabs(error) > 10 ) && (millis() < maxTime)) {
 		current = (fl.get_position() + bl.get_position() + fr.get_position() +
 		br.get_position())/4;
@@ -274,6 +275,7 @@ double getAngle() {
 }
 
 void turn (double angle, int speedLimit) {
+	// The robot is not at the target angle.
 	bool notAtTarget = true;
 
 	// reset motors
@@ -303,6 +305,7 @@ void turn (double angle, int speedLimit) {
 		double speed = minSpeed + 20 + fabs(turnAccelerator * progress * error);
 		double maxDeaccelerationSpeed = 4 * sqrt(error);
 
+		// "get_actual_velocity" gets the actual velocity of the motor.
 		double currentVelocity = fabs((fl.get_actual_velocity() +
 		fr.get_actual_velocity() + bl.get_actual_velocity() +
 		br.get_actual_velocity()) / 4);
@@ -315,11 +318,13 @@ void turn (double angle, int speedLimit) {
 		speed = speed * directionMultiplier;
 
 		fl.move(speed);
-		fr.move(- speed);
-		bl.move( speed);
-		br.move(- speed);
+		fr.move(-speed);
+		bl.move(speed);
+		br.move(-speed);
 
+		// The current angle of the robot it the heading the inertial sensor gets.
 		double currentAngle = getAngle();
+		// Example: 90 - 47 = 43 degrees left
 		double errorAngle = targetAngle - currentAngle;
 
 		if (errorAngle > 180)
@@ -329,18 +334,20 @@ void turn (double angle, int speedLimit) {
 		if ( (fabs (error) < 10) || (fabs(errorAngle) < 0.75) || (millis() >
 		maxTime) ) {
 
+			// stop the base motors
 			fl.move(0);
 			fr.move(0);
 			bl.move(0);
 			br.move(0);
 
+			// robot is now at target angle
 			notAtTarget = false;
 
 			lcd::print(8, "error: %f", error);
 		}
 		delay (5);
 	}
-	delay(50); // let motors stop
+	delay(50); // let motors come to a complete stop
 }
 
 // Lifts
@@ -400,7 +407,6 @@ void fifteenSecondAutonomousRightSideOneTower() {
 	move(6, 127);
 	move(-6, 127);
 }
-
 
 void fifteenSecondAutonomousRightSideOneTowerMoveBack() {
 	unhookClaw();
