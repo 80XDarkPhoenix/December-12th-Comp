@@ -1,4 +1,3 @@
-// test lift auton functions
 /* "main.h", is intended for declaring functions and variables shared between
 the user code files. main.h offers a variety of configurable options for
 tailoring PROS to our needs. */
@@ -10,7 +9,7 @@ tailoring PROS to our needs. */
 // using namespace pros reduces the length of declarations.
 using namespace pros;
 
-// DECLARATIONS
+// INITIALIZATION
 
 // Base
 Motor fr(13, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front right
@@ -28,7 +27,7 @@ Motor backLiftRight(15, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 // Claw
 /* The claw is pnuematic, so it is connected to the brain using the ADI ports,
 therefore it is declared as an "ADIDIgitalOut". */
-ADIDigitalOut claw(1, 0);
+ADIDigitalOut claw(8, 0);
 
 // Controllers
 /* Instead of having one person control the  robot, we use partner controls. The
@@ -44,8 +43,6 @@ accelerometer measures linear acceleration of the robot, while the gyroscope
 measures the rate of rotation about the inertial sensor 3-axis. The inertial
 sensor helps us have accurate turns. */
 Imu inertial(18);
-
-// INITIALIZATION
 
 /* Runs initialization code. This occurs as soon as the program is started. All
 other competition modes are blocked by initialize. */
@@ -101,7 +98,7 @@ non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
 void autonomous() {
-	fifteenSecondAutonomousRightSideOneTower();
+	fifteenSecondAutonomousLeftSideOneTower();
 }
 
 // OPCONTROL FUNCTIONS
@@ -157,10 +154,10 @@ void driveBackLift() {
 // Moves the claw up and down - partner controller.
 void driveClaw() {
 	//  0 and 1 are states of the pnuematics.
-	if(partner.get_digital(DIGITAL_A)==1) {
+	if(partner.get_digital(DIGITAL_X)==1) {
 		claw.set_value(0);
 	}
-	else if(partner.get_digital(DIGITAL_B))
+	else if(partner.get_digital(DIGITAL_Y))
 	claw.set_value(1);
 }
 
@@ -404,11 +401,25 @@ void fifteenSecondAutonomousRightSideOneTower() {
 	move(-6, 127);
 }
 
-void fifteenSecondAutonomousLeftSideOneTower() {
 
+void fifteenSecondAutonomousRightSideOneTowerMoveBack() {
+	unhookClaw();
+	move(56, 127);
+	hookClaw();
+	delay(300);
+	move(-36, 127);
+}
+
+void fifteenSecondAutonomousLeftSideOneTower() {
+	unhookClaw();
+	move(58.5, 127);
+	hookClaw();
+	delay(300);
+	move(-35, 127);
 }
 
 void fifteenSecondAutonomousRightSideTwoTowers() {
+	unhookClaw();
 	move(56, 127);
 	hookClaw();
 	delay(300);
@@ -416,7 +427,6 @@ void fifteenSecondAutonomousRightSideTwoTowers() {
 	turn(-135, 127);
 	unhookClaw();
 	move(6, 127);
-	delay(10);
 	move(-5, 127);
 	turn(90, 127);
 	move(48, 127);

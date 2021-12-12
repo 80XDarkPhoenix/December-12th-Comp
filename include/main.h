@@ -106,6 +106,7 @@ extern "C" {
   extern void hookClaw();
 
   extern void fifteenSecondAutonomousRightSideOneTower();
+  extern void fifteenSecondAutonomousRightSideOneTowerMoveBack();
   extern void fifteenSecondAutonomousLeftSideOneTower();
   extern void fifteenSecondAutonomousRightSideTwoTowers();
   extern void fifteenSecondAutonomousRightSideCenterTower();
