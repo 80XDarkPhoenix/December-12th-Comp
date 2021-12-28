@@ -12,36 +12,35 @@ using namespace pros;
 // INITIALIZATION
 
 // Base
-Motor fr(13, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front right
-Motor fl(14, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // front left
-Motor br(11, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back right
-Motor bl(19, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back left
+Motor fr(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES); // front right
+Motor br(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES); // back right
+Motor br2(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES); // elevated back right
+Motor fl(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES); // front left
+Motor bl(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES); // back left
+Motor bl2(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES); // elevated back left
 
-// Lifts
-Motor frontLiftLeft(9, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-Motor frontLiftRight(12, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+// Lift
+Motor frontLift(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES);
 
-Motor backLiftLeft(16, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-Motor backLiftRight(15, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+// Claws
+/* The claws is pnuematic, so they are connected to the brain through ADI ports,
+therefore it is initialized as an "ADIDIgitalOut". The second parameter is the
+state of the pneumatics. */
+ADIDigitalOut frontClaw(, );
+ADIDigitalOut backClaw(, );
 
-// Claw
-/* The claw is pnuematic, so it is connected to the brain using the ADI ports,
-therefore it is declared as an "ADIDIgitalOut". */
-ADIDigitalOut claw(8, 0);
+// Ring Intake
+Motor ringIntake(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES);
 
 // Controllers
-/* Instead of having one person control the  robot, we use partner controls. The
-master controller is used by Srihith and controls the robot's base. The partner
-controller is used by Kriya and controls the robot's front and back lift's and
-claw. */
-Controller master(E_CONTROLLER_MASTER); // base - Srihith
-Controller partner(E_CONTROLLER_PARTNER); // lifts and claw - Kriya
-
+Controller master(E_CONTROLLER_MASTER);
 // Sensor
 /* The inertial sensor is a 3-axis accelerometer and gyroscope. The
 accelerometer measures linear acceleration of the robot, while the gyroscope
 measures the rate of rotation about the inertial sensor 3-axis. The inertial
-sensor helps us have accurate turns. */
+sensor helps us have accurate turns. When we were testing our turns, we
+discovered that they were not accurate. We decided to use the inertial sensor to
+help with this. */
 Imu inertial(18);
 
 /* Runs initialization code. This occurs as soon as the program is started. All
@@ -51,29 +50,35 @@ void initialize() {
 	delay(3000); // allows for inertial sensor to reset
 	lcd::initialize();
 
-	lcd::print(1, "IMU heading: %3f", getAngle); // shows angle on LCD screen
+	lcd::print(1, "IMU heading: %3f", getAngle); // prints angle on LCD screen
 
 	// Base
 	fl.set_brake_mode(MOTOR_BRAKE_BRAKE);
-	fr.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	bl.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	bl2.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	fr.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	br.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	br2.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
 	fl.set_current_limit(11500);
-	fr.set_current_limit(11500);
 	bl.set_current_limit(11500);
+	bl2.set_current_limit(11500);
+	fr.set_current_limit(11500);
 	br.set_current_limit(11500);
+	br2.set_current_limit(11500);
 
 	fl.set_voltage_limit(11500);
-	fr.set_voltage_limit(11500);
 	bl.set_voltage_limit(11500);
+	bl2.set_voltage_limit(11500);
+	fr.set_voltage_limit(11500);
 	br.set_voltage_limit(11500);
+	br2.set_voltage_limit(11500);
 
-	// Lifts
-	frontLiftLeft.set_brake_mode(MOTOR_BRAKE_BRAKE);
-	frontLiftRight.set_brake_mode(MOTOR_BRAKE_BRAKE);
-	backLiftLeft.set_brake_mode(MOTOR_BRAKE_BRAKE);
-	backLiftRight.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	// Lift
+	frontLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
+
+	// Ring Intake
+	ringIntake.set_brake_mode(MOTOR_BRAKE_BRAKE);
 }
 
 /* Runs while the robot is in the disabled state of Field Management System or
@@ -100,77 +105,91 @@ void autonomous() {
 
 // OPCONTROL FUNCTIONS
 
-/* Master driver's "arcade" control for base. One joystick is used to control
+/* "Arcade" control for base. One joystick is used to control
 the base. The Y axis controls forward and backward motion and the X axis
 controls turning motion. Function gets analog of joystick and "sends" them to
 the base motors.*/
 void drive() {
+	/* "get_analog" gets the value of the analog channel (joystick) on the
+	controller */
 	float drives = master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y);
 	float turns = master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X);
 
+	// "move" sets the voltage for the motor from -127 to 127
 	fr.move(drives - turns);
-	fl.move(drives + turns);
 	br.move(drives - turns);
+	br2.move(drives - turns);
+	fl.move(drives + turns);
 	bl.move(drives + turns);
+	bl2.move(drives + turns);
 }
 
-// Moves the front lift up and down - partner controller.
+// Moves the front lift up and down.
 void driveFrontLift() {
-	if(partner.get_digital(DIGITAL_R1)==1) {
-		frontLiftLeft.move(127);
-		frontLiftRight.move(127);
+	/* "get_digital" checks if a digital channel "button" on the controller is
+	currently pressed */
+	// "move" sets the voltage for the motor from -127 to 127
+	if(master.get_digital(DIGITAL_R1)==1) {
+		frontLift.move(127);
 	}
-	else if(partner.get_digital(DIGITAL_R2)) {
-		frontLiftLeft.move(-127);
-		frontLiftRight.move(-127);
-	}
-	else
-	{
-		frontLiftLeft.move(0);
-		frontLiftRight.move(0);
-	}
-}
-
-// Moves the back lift up and down - partner controller.
-void driveBackLift() {
-	if(partner.get_digital(DIGITAL_L1)==1) {
-		backLiftLeft.move(127);
-		backLiftRight.move(127);
-	}
-	else if(partner.get_digital(DIGITAL_L2)) {
-		backLiftLeft.move(-127);
-		backLiftRight.move(-127);
+	else if(master.get_digital(DIGITAL_R2)) {
+		frontLift.move(-127);
 	}
 	else
 	{
-		backLiftLeft.move(0);
-		backLiftRight.move(0);
+		frontLift.move(0);
 	}
 }
 
-// Moves the claw up and down - partner controller.
-void driveClaw() {
+// Moves the front claw up and down.
+void drivefrontClaw() {
 	//  0 and 1 are states of the pnuematics.
-	if(partner.get_digital(DIGITAL_X)==1) {
-		claw.set_value(0);
+	if(master.get_digital(DIGITAL_X)==1) {
+		frontClaw.set_value(0);
 	}
-	else if(partner.get_digital(DIGITAL_Y))
-	claw.set_value(1);
+	else if(master.get_digital(DIGITAL_Y))
+		frontClaw.set_value(1);
 }
 
-/* Runs the operator control code. This function will be started in its own task
-with the default priority and stack size whenever the robot is enabled via the
-Field Management System or the VEX Competition Switch in the operator control
-mode. If no competition control is connected, this function will run immediately
-following initialize(). If the robot is disabled or communications is lost, the
-operator control task will be stopped. Re-enabling the robot will restart the
-task, not resume it from where it left off. */
+// Moves the front claw up and down.
+void driveBackClaw() {
+	//  0 and 1 are states of the pnuematics.
+	if(master.get_digital(DIGITAL_A)==1) {
+		backClaw.set_value(0);
+	}
+	else if(master.get_digital(DIGITAL_B))
+		backClaw.set_value(1);
+}
+
+// Moves ring conveyor.
+void driveRingIntake() {
+	if(master.get_digital(DIGITAL_L1)==1) {
+		ringIntake.move(127);
+	}
+	else if(master.get_digital(DIGITAL_L2)) {
+		ringIntake.move(-127);
+	}
+	else
+	{
+		ringIntake.move(0);
+	}
+}
+
+/* Runs the operator control code. This function will be started in its own
+task with the default priority and stack size whenever the robot is enabled
+via the Field Management System or the VEX Competition Switch in the
+operator control mode. If no competition control is connected, this function
+will run immediately following initialize(). If the robot is disabled or
+communications is lost, the operator control task will be stopped.
+Re-enabling the robot will restart the task, not resume it from where it
+left off. */
 void opcontrol() {
 	while (true) {
 		drive();
 		driveFrontLift();
-		driveClaw();
-		driveBackLift();
+		driveFrontClaw();
+		driveBackClaw();
+		driveRingIntake();
 		delay(20);
 	}
 }
@@ -199,9 +218,11 @@ void move(double distanceInInches, double speedLimit) {
 	/* "tare_position" sets the “absolute” zero position of the motor to its
 	current position. */
 	fl.tare_position();
-	fr.tare_position();
 	bl.tare_position();
+	bl2.tare_position();
+	fr.tare_position();
 	br.tare_position();
+	br2.tare_position();
 
 	// "mills" gets the number of milliseconds since PROS initialized.
 	int startTime = millis();
@@ -219,7 +240,9 @@ void move(double distanceInInches, double speedLimit) {
 	double progress = current;
 	double speed;
 
-  // "get_position"
+// ADD EXTRA MOTORS
+
+  // "get_position" gets the absolute position of the motor in its encoder units
 	while ((fabs(error) > 10 ) && (millis() < maxTime)) {
 		current = (fl.get_position() + bl.get_position() + fr.get_position() +
 		br.get_position())/4;
@@ -228,6 +251,7 @@ void move(double distanceInInches, double speedLimit) {
 		progress = current;
 		speed = minSpeed + accelerator * progress * error;
 
+		// "get_actual_velocity" gets the actual velocity of the motor
 		double currentVelocity = fabs((fl.get_actual_velocity() +
 		fr.get_actual_velocity() + bl.get_actual_velocity() +
 		br.get_actual_velocity()) / 4);
@@ -244,18 +268,22 @@ void move(double distanceInInches, double speedLimit) {
 		speed = speed * directMultiplier;
 
 		fl.move(speed);
-		fr.move(speed);
 		bl.move(speed);
+		bl2.move(speed);
+		fr.move(speed);
 		br.move(speed);
+		br2.move(speed);
 
 		delay(10);
 	}
 
 	// stop base motors
 	fl.move(0);
-	fr.move(0);
 	bl.move(0);
+	bl2.move(0);
+	fr.move(0);
 	br.move(0);
+	br2.move(0);
 
 	delay(10); // let motors fully stop
 }
@@ -274,15 +302,19 @@ double getAngle() {
 	return angle;
 }
 
+// ADD EXTRA MOTORS
+
 void turn (double angle, int speedLimit) {
 	// The robot is not at the target angle.
 	bool notAtTarget = true;
 
 	// reset motors
 	fl.tare_position();
-	fr.tare_position();
 	bl.tare_position();
+	bl2.tare_position();
+	fr.tare_position();
 	br.tare_position();
+	br2.tare_position();
 
 	double startAngle = getAngle();
 	double targetAngle = startAngle + angle;
@@ -353,140 +385,179 @@ void turn (double angle, int speedLimit) {
 // Lifts
 
 void liftFrontLift() {
-	frontLiftLeft.move(-127);
-	frontLiftRight.move(-127);
+	frontLift.move(-127);
 	delay(1200);
-	frontLiftLeft.move(0);
-	frontLiftRight.move(0);
+	frontLift.move(0);
 }
 
 void lowerFrontLift() {
-	frontLiftLeft.move(127);
-	frontLiftRight.move(127);
+	frontLift.move(127);
 	delay(1200);
-	frontLiftLeft.move(0);
-	frontLiftRight.move(0);
+	frontLift.move(0);
 }
 
-void liftBackLift() {
-	backLiftLeft.move(127);
-	backLiftRight.move(127);
-	delay(700);
-	backLiftLeft.move(0);
-	backLiftRight.move(0);
+// CLAWS
+
+// front claw
+
+void hookFrontClaw() {
+	frontClaw.set_value(0);
 }
 
-void lowerBackLift() {
-	backLiftLeft.move(-127);
-	backLiftRight.move(-127);
-	delay(700);
-	backLiftLeft.move(0);
-	backLiftRight.move(0);
+void unhookFrontClaw() {
+	frontClaw.set_value(1);
 }
 
-// CLAW
+// back claw
 
-void hookClaw() {
-	claw.set_value(0);
+void hookBackClaw() {
+	backClaw.set_value(0);
 }
 
-void unhookClaw() {
-	claw.set_value(1);
+void unhookBackClaw() {
+	backClaw.set_value(1);
+}
+
+// ring intake
+
+void intakeRingIntake() {
+	ringIntake(127);
+}
+
+void outtakeRingIntake() {
+	ringIntake(-127);
+}
+
+void stopRingIntake() {
+	ringIntake(0);
 }
 
 // Fifteen Second Autonomous
 
-void fifteenSecondAutonomousRightSideOneTower() {
-	unhookClaw();
-	move(56, 127);
-	hookClaw();
-	delay(300);
-	move(-30, 127);
-	turn(-135, 127);
-	unhookClaw();
-	move(6, 127);
-	move(-6, 127);
+void rightSideAllianceGoal() {
+	unhookBackClaw();
+	unhookFrontClaw();
+	// robot facing backwards
+	move(-, 127); // reverse to alliance goal
+	turn(45, 127); // turn to alliance goal
+	move(-, 127); // reverse to touch alliance goal
+	hookBackClaw(); // hook the back claw on alliance goal
+	intakeRingIntake(); // start scoring preload rings on alliance goal
+	move(, 127); // move alliance goal while scoring rings on it
 }
 
-void fifteenSecondAutonomousRightSideOneTowerMoveBack() {
-	unhookClaw();
-	move(56, 127);
-	hookClaw();
-	delay(300);
-	move(-36, 127);
+void leftSideAllianceGoal() {
+	unhookBackClaw();
+	unhookFrontClaw();
+	// robot facing left
+	move(-, 127); // reverse to alliance goal
+	hookBackClaw(); // hook the back claw on the alliance goal
+	intakeRingIntake(); // start scoring preload rings on the alliance goal
+	move(, 127); // move alliance goal while scoring rings on it
 }
 
-void fifteenSecondAutonomousLeftSideOneTower() {
-	unhookClaw();
-	move(58.5, 127);
-	hookClaw();
-	delay(300);
-	move(-35, 127);
+void rightSideAllianceGoalMobileGoal() {
+	unhookBackClaw();
+	unhookFrontClaw();
+	// robot facing forward
+	// move to mobile goal to get it before opposing alliance
+	move(); // move to mobile goal
+	hookFrontClaw(); // hook the front claw on the mobile goal
+	move(-, 127); // reverse to alliance goal
+	turn(-135, 127); // turn with the back facing the alliance goal
+	move(-, 127); // reverse to alliance goal
+	hookBackClaw(); // hook the back claw on the alliance goal
+	intakeRingIntake(); // start scoring preload rings on the alliance goal
+	move(, 127); // move goals while scoring preload rings on the alliance goal
 }
 
-void fifteenSecondAutonomousRightSideTwoTowers() {
-	unhookClaw();
-	move(56, 127);
-	hookClaw();
-	delay(300);
-	move(-30, 127);
-	turn(-135, 127);
-	unhookClaw();
-	move(6, 127);
-	move(-5, 127);
-	turn(90, 127);
-	move(48, 127);
-	hookClaw();
-	delay(300);
-	move(-48, 127);
-	turn(-45, 127);
-	unhookClaw();
-	move(-6, 127);
+void leftSideAllianceGoalMobileGoal() {
+	unhookBackClaw();
+	unhookFrontClaw();
+	// robot facing forward
+	// move to mobile goal to get it before opposing alliance
+	move(, 127); // move to mobile goal
+	hookFrontClaw(); // hook front claw on mobile goal
+	move(-, 127); // reverse to alliance goal
+	turn(-90, 127); // turn so back faces the alliance goal
+	move(-, 127); // reverse to alliance goal
+	hookBackClaw(); // hook back claw on alliance goal
+	intakeRingIntake(); // start scoring preload rings on the alliance goal
+	move(, 127); // move goals while scoring preload rings on the alliance goal
 }
 
-void fifteenSecondAutonomousRightSideCenterTower() {
-	move(36, 127);
-	turn(-45, 127);
-	move(42, 127);
-	hookClaw();
-	delay(300);
-	move(-48, 127);
-	turn(-45, 127);
-	unhookClaw();
-	move(-6, 127);
+void rightSideMobileGoalCenterGoal() {
+	unhookBackClaw();
+	unhookFrontClaw();
+	move(, 127); // move to first mobile goal
+	hookFrontClaw(); // hook front claw on first mobile goal
+	move(, 127); // move to center of field
+	turn(90, 127); // turn with back to center goal
+	move(-, 127); // reverse to center goal
+	hookBackClaw(); // hook back claw on center goal
+	turn(45, 127); // turn with goals
+	move(, 127); // move to alliance home zone scoring goals
 }
 
-void fifteenSecondAutonomousLeftSideTwoTowers() {
-	move(56, 127);
-	hookClaw();
-	delay(300);
-	move(-30, 127);
-	turn(135, 127);
-	unhookClaw();
-	move(6, 127);
-	delay(10);
-	move(-5, 127);
-	turn(-90, 127);
-	move(48, 127);
-	hookClaw();
-	delay(300);
-	move(-48, 127);
-	turn(45, 127);
-	unhookClaw();
-	move(-6, 127);
+void leftSideMobileGoalCenterGoal() {
+	unhookBackClaw();
+	unhookFrontClaw();
+	move(, 127); // move to forst mobile goal
+	hookFrontClaw(); // hook front claw on first mobile goal
+	move(, 127); // move to center of the field
+	turn(-90, 127); // turn with back to center goal
+	move(-, 127); // reverse to center goal
+	hookBackClaw(); // hook back claw on center goal
+	turn(-45, 127); // turn with goals
+	move(, 127); // move to alliamce home zone scoring goals
 }
 
-void fifteenSecondAutonomousLeftSideCenterTower() {
-	move(36, 127);
-	turn(45, 127);
-	move(42, 127);
-	hookClaw();
-	delay(300);
-	move(-48, 127);
-	turn(-45, 127);
-	unhookClaw();
-	move(-6, 127);
+void rightSideMobileGoal() {
+	unhookBackClaw();
+	unhookFrontClaw();
+	// robot facing forward
+	// move to mobile goal to get it before opposing alliance
+	move(); // move to mobile goal
+	hookFrontClaw(); // hook the front claw on the mobile goal
+	move(-, 127); // reverse to alliance zone
 }
+
+void leftSideMobileGoal() {
+	unhookBackClaw();
+	unhookFrontClaw();
+	// robot facing forward
+	// move to mobile goal to get it before opposing alliance
+	move(); // move to mobile goal
+	hookFrontClaw(); // hook the front claw on the mobile goal
+	move(-, 127); // reverse to alliance zone
+}
+
+void rightSideCenterGoal() {
+	unhookBackClaw();
+	unhookFrontClaw();
+	move(, 127);
+	turn(-45, 127); // turn to center goal
+	move(, 127); // move to center goal
+	hookFrontClaw(); // hook front claw on center goal
+	move(-, 127); // reverse to alliance home zone with center goal
+}
+
+void leftSideCenterGoal() {
+	unhookBackClaw();
+	unhookFrontClaw();
+	move(, 127);
+	turn(45, 127); // turn to center goal
+	move(, 127); // move to center goal
+	hookFrontClaw(); // hool front claw on center goal
+	move(-, 127); // reverse to alliane home zone with center goal
+}
+
+// SKILLS AUTONOMOUS
+
+void skillsAuton() {
+}
+
+// ADD EXTRA MOTORS
 
 void calibrateMotor() {
 	inertial.get_heading();
