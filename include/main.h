@@ -6,6 +6,30 @@
 #define PROS_USE_LITERALS
 
 #include "api.h"
+#include "15secAutons.h"
+#include "autonFunctions.h"
+#include "opcontrolFunctions.h"
+#include "skillsAuton.h"
+
+using namespace pros;
+
+extern Motor fr;
+extern Motor br;
+extern Motor br2;
+extern Motor fl;
+extern Motor bl;
+extern Motor bl2;
+
+extern Motor frontLift;
+
+extern ADIDigitalOut frontClaw;
+extern ADIDigitalOut backClaw;
+
+extern Motor ringIntake;
+
+extern Controller master;
+
+extern Imu inertial;
 
 #ifdef __cplusplus
 extern "C" {
