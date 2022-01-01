@@ -12,15 +12,15 @@ using namespace pros;
 // INITIALIZATION
 
 // Base
-Motor fr(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES); // front right
-Motor br(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES); // back right
-Motor br2(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES); // elevated back right
-Motor fl(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES); // front left
-Motor bl(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES); // back left
-Motor bl2(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES); // elevated back left
+Motor fr(13, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front right
+Motor br(16, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back right
+Motor br2(7, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // elevated back right
+Motor fl(14, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front left
+Motor bl(18, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back left
+Motor bl2(8, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // elevated back left
 
 // Lift
-Motor frontLift(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES);
+Motor frontLift(15, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
 // Claws
 /* The claws is pnuematic, so they are connected to the brain through ADI ports,
@@ -30,7 +30,7 @@ ADIDigitalOut frontClaw(, );
 ADIDigitalOut backClaw(, );
 
 // Ring Intake
-Motor ringIntake(, E_MOTOR_GEARSET_18, , E_MOTOR_ENCODER_DEGREES);
+Motor ringIntake(21, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
 // Controllers
 Controller master(E_CONTROLLER_MASTER);
@@ -52,7 +52,7 @@ void initialize() {
 
 	lcd::print(1, "IMU heading: %3f", getAngle); // prints angle on LCD screen
 
-	// Base
+	// base
 	fl.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	bl.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	bl2.set_brake_mode(MOTOR_BRAKE_BRAKE);
@@ -60,24 +60,26 @@ void initialize() {
 	br.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	br2.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
-	fl.set_current_limit(11500);
-	bl.set_current_limit(11500);
-	bl2.set_current_limit(11500);
-	fr.set_current_limit(11500);
-	br.set_current_limit(11500);
-	br2.set_current_limit(11500);
+	// fl.set_current_limit(11500);
+	// bl.set_current_limit(11500);
+	// bl2.set_current_limit(11500);
+	// fr.set_current_limit(11500);
+	// br.set_current_limit(11500);
+	// br2.set_current_limit(11500);
+	//
+	// fl.set_voltage_limit(11500);
+	// bl.set_voltage_limit(11500);
+	// bl2.set_voltage_limit(11500);
+	// fr.set_voltage_limit(11500);
+	// br.set_voltage_limit(11500);
+	// br2.set_voltage_limit(11500);
 
-	fl.set_voltage_limit(11500);
-	bl.set_voltage_limit(11500);
-	bl2.set_voltage_limit(11500);
-	fr.set_voltage_limit(11500);
-	br.set_voltage_limit(11500);
-	br2.set_voltage_limit(11500);
-
-	// Lift
+	// lift
 	frontLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	// frontLift.set_current_limit(11500);
+	// frontLift.set_voltage_limit(11500);
 
-	// Ring Intake
+	// ring intake
 	ringIntake.set_brake_mode(MOTOR_BRAKE_BRAKE);
 }
 
@@ -100,8 +102,7 @@ Alternatively, this function may be called in initialize or opcontrol for
 non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
-void autonomous() {
-}
+void autonomous() {}
 
 /* Runs the operator control code. This function will be started in its own
 task with the default priority and stack size whenever the robot is enabled
@@ -115,7 +116,7 @@ void opcontrol() {
 	while (true) {
 		drive();
 		driveFrontLift();
-		driveFrontClaw();
+	//	driveFrontClaw();
 		driveBackClaw();
 		driveRingIntake();
 		delay(20);

@@ -6,10 +6,10 @@
 #define PROS_USE_LITERALS
 
 #include "api.h"
-#include "15secAutons.h"
-#include "autonFunctions.h"
-#include "opcontrolFunctions.h"
-#include "skillsAuton.h"
+#include "15secAutons.hpp"
+#include "autonFunctions.hpp"
+#include "opcontrolFunctions.hpp"
+#include "skillsAuton.hpp"
 
 using namespace pros;
 

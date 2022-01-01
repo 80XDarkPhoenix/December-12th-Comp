@@ -4,24 +4,26 @@
 
 using namespace pros;
 
-// Move and Turn
+// MOVE AND TURN
 
-// Encoders
+// encoders
+/* Throughout the code the built-in encoder are used. They track the robot's
+rotational position and velocity. */
 const double encoderPerInch = 35;
 const double encoderPerDegreeTurn = 4.05;
 
-// Speed
+// speed
 const double defaultSpeed = 127;
 const double defaultTurnSpeed = 127;
 
 double minSpeed = 35;
 double maxSpeed = 127;
 
-// Accelerator
+// accelerators
 double accelerator = 0.0095;
 double turnAccelerator = 0.009;
 
-// Move
+// move
 void move(double distanceInInches, double speedLimit) {
 	/* "tare_position" sets the “absolute” zero position of the motor to its
 	current position. */
@@ -50,14 +52,15 @@ void move(double distanceInInches, double speedLimit) {
 
 	// "get_position" gets the absolute position of the motor in its encoder units
 	while ((fabs(error) > 10 ) && (millis() < maxTime)) {
-		current = (fl.get_position() + bl.get_position() + bl2.get_position() + fr.get_position() +
-		br.get_position() + br2.get_position())/6;
+		current = (fl.get_position() + bl.get_position() + bl2.get_position() +
+		fr.get_position() + br.get_position() + br2.get_position())/6;
 
 		error = distanceInEncoders - current;
 		progress = current;
 		speed = minSpeed + accelerator * progress * error;
 
 		// "get_actual_velocity" gets the actual velocity of the motor
+		// "currentVelocity" equals the average/mean of the base motors
 		double currentVelocity = fabs((fl.get_actual_velocity() +
 		+ bl.get_actual_velocity() + bl2.get_actual_velocity() +
 		fr.get_actual_velocity() + br.get_actual_velocity() +
@@ -109,13 +112,13 @@ double getAngle() {
 	return angle;
 }
 
-// ADD EXTRA MOTORS
 
 void turn (double angle, int speedLimit) {
-	// The robot is not at the target angle.
+	// robot is "notAtTarget"
 	bool notAtTarget = true;
 
-	// reset motors
+	/* reset motors - "tare_position" sets the "absolute" zero position of the
+	motor to its current position */
 	fl.tare_position();
 	bl.tare_position();
 	bl2.tare_position();
@@ -123,6 +126,7 @@ void turn (double angle, int speedLimit) {
 	br.tare_position();
 	br2.tare_position();
 
+	// the "startAngle" is the angle the inertial sensor gets
 	double startAngle = getAngle();
 	double targetAngle = startAngle + angle;
 	double start = 0;
@@ -130,21 +134,20 @@ void turn (double angle, int speedLimit) {
 	double current = 0;
 	double directionMultiplier = 1;
 	int startTime = millis();
+	// WHY 20?
 	int maxTime = startTime + 20 * fabs(angle);
 
 	if (target < start)
 	directionMultiplier = -1;
 	while(notAtTarget) {
 
-		// ADD EXTRA MOTORS
-		double current = (fl.get_position() - fr.get_position() - br.get_position()
-		+ bl.get_position())/4;
+		double current = (fr.get_position() - br.get_position() - br2.get_position()
+		+ bl.get_position() + fl.get_position() + bl2.get_position()) / 6;
 
 		double error = (target - current);
 		double progress = current - start;
 		double speed = minSpeed + 20 + fabs(turnAccelerator * progress * error);
-		// IS IS SUPPOSED TO BE 6 NOW?
-		double maxDeaccelerationSpeed = 4 * sqrt(error);
+		double maxDeaccelerationSpeed = 6 * sqrt(error);
 
 		// "get_actual_velocity" gets the actual velocity of the motor.
 		double currentVelocity = fabs((fl.get_actual_velocity() +
@@ -162,9 +165,9 @@ void turn (double angle, int speedLimit) {
 		fl.move(speed);
 		bl.move(speed);
 		bl2.move(speed);
-		fr.move(- speed);
-		br.move(- speed);
-		br2.move(- speed);
+		fr.move(-speed);
+		br.move(-speed);
+		br2.move(-speed);
 
 		// The current angle of the robot it the heading the inertial sensor gets.
 		double currentAngle = getAngle();
@@ -195,7 +198,7 @@ void turn (double angle, int speedLimit) {
 	delay(50); // let base come to a complete stop
 }
 
-// Lifts
+// LIFTS
 
 void liftFrontLift() {
 	frontLift.move(-127);
@@ -231,21 +234,26 @@ void unhookBackClaw() {
 	backClaw.set_value(1);
 }
 
-// ring intake
+// RING INTAKE
 
 void intakeRingIntake() {
-	ringIntake.move(127);
+	ringIntake.move(50);
 }
 
 void outtakeRingIntake() {
-	ringIntake.move(-127);
+	ringIntake.move(-50);
 }
 
 void stopRingIntake() {
 	ringIntake.move(0);
 }
 
+/* "calibrateMotor" is used for testing purposes. We were sturgginling to tune
+our encoderPerDegreeTurn and turnAccelerator blindly, so this function allows us
+to see how far off the angle the robot went compared to the target angle. */
 void calibrateMotor() {
+	/* "get_heading" gets the inertial sensor's heading relative to the initial
+	direction of its x-axis */
 	inertial.get_heading();
 	turn(90, 127);
 	delay(100);
@@ -258,12 +266,13 @@ void calibrateMotor() {
 	pros::lcd::print(6, "br: %f", br.get_position());
 	pros::lcd::print(7, "br2: %f", br2.get_position());
 	/* gets the average position of the base motors and displays it on the LCD
-	screen */
-	pros::lcd::print(6, "avg: %f", (fl.get_position() + bl.get_position() +
+	screen - "get_position" gets the absolute position of the motor in its encoder
+	units */
+	pros::lcd::print(8, "avg: %f", (fl.get_position() + bl.get_position() +
 	bl2.get_position() + fr.get_position() + br.get_position() +
 	br2.get_position())/6);
 	/* "get_heading" gets the inertial sensor’s heading relative to the initial
 	direction of its x-axis */
-	pros::lcd::print(7, "angle: %f", inertial.get_heading() );
+	pros::lcd::print(9, "angle: %f", inertial.get_heading() );
 	delay(10000);
 }

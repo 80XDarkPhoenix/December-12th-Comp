@@ -63,10 +63,10 @@ void driveBackClaw() {
 // Moves ring conveyor.
 void driveRingIntake() {
 	if(master.get_digital(DIGITAL_L1)==1) {
-		ringIntake.move(127);
+		ringIntake.move(50);
 	}
 	else if(master.get_digital(DIGITAL_L2)) {
-		ringIntake.move(-127);
+		ringIntake.move(-50);
 	}
 	else
 	{
