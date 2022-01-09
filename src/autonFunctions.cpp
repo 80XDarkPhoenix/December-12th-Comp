@@ -225,7 +225,7 @@ void unhookFrontClaw() {
 }
 
 // back claw
-
+/*
 void hookBackClaw() {
 	backClaw.set_value(0);
 }
@@ -233,7 +233,7 @@ void hookBackClaw() {
 void unhookBackClaw() {
 	backClaw.set_value(1);
 }
-
+*/
 // RING INTAKE
 
 void intakeRingIntake() {

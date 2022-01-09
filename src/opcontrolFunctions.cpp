@@ -24,11 +24,11 @@ void drive() {
 }
 
 // Moves the front lift up and down.
-void driveFrontLift() {
+void driveFrontLift() { }
 	/* "get_digital" checks if a digital channel "button" on the controller is
 	currently pressed */
 	// "move" sets the voltage for the motor from -127 to 127
-	if(master.get_digital(DIGITAL_R1)==1) {
+	/* if(master.get_digital(DIGITAL_R1)==1) {
 		frontLift.move(127);
 	}
 	else if(master.get_digital(DIGITAL_R2)) {

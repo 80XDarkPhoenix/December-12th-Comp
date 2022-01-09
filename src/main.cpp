@@ -26,8 +26,8 @@ Motor frontLift(15, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 /* The claws is pnuematic, so they are connected to the brain through ADI ports,
 therefore it is initialized as an "ADIDIgitalOut". The second parameter is the
 state of the pneumatics. */
-ADIDigitalOut frontClaw(, );
-ADIDigitalOut backClaw(, );
+// ADIDigitalOut frontClaw(, );
+ADIDigitalOut backClaw(1, 0);
 
 // Ring Intake
 Motor ringIntake(21, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
@@ -116,8 +116,8 @@ void opcontrol() {
 	while (true) {
 		drive();
 		driveFrontLift();
-	//	driveFrontClaw();
-		driveBackClaw();
+	  //driveFrontClaw();
+		//driveBackClaw();
 		driveRingIntake();
 		delay(20);
 	}
