@@ -2,7 +2,6 @@
 the user code files. main.h offers a variety of configurable options for
 tailoring PROS to our needs. */
 #include "main.h"
-
 // "math.h", is designed for basic mathematical operations.
 #include "math.h"
 
@@ -12,7 +11,7 @@ using namespace pros;
 // INITIALIZATION
 
 // Base
-Motor fr(13, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front right
+Motor fr(13, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // front right
 Motor br(16, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back right
 Motor br2(7, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // elevated back right
 Motor fl(14, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front left
@@ -23,10 +22,10 @@ Motor bl2(8, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // elevated ba
 Motor frontLift(15, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
 // Claws
-/* The claws is pnuematic, so they are connected to the brain through ADI ports,
-therefore it is initialized as an "ADIDIgitalOut". The second parameter is the
+/* The claws are pnuematic, so they are connected to the brain through ADI ports
+, therefore it is initialized as an "ADIDIgitalOut". The second parameter is the
 state of the pneumatics. */
-// ADIDigitalOut frontClaw(, );
+ADIDigitalOut frontClaw(2, 0);
 ADIDigitalOut backClaw(1, 0);
 
 // Ring Intake
@@ -41,18 +40,22 @@ measures the rate of rotation about the inertial sensor 3-axis. The inertial
 sensor helps us have accurate turns. When we were testing our turns, we
 discovered that they were not accurate. We decided to use the inertial sensor to
 help with this. */
-Imu inertial(18);
+Imu inertial(12);
 
 /* Runs initialization code. This occurs as soon as the program is started. All
 other competition modes are blocked by initialize. */
 void initialize() {
-	inertial.reset();
-	delay(3000); // allows for inertial sensor to reset
+	inertial.reset(); // calibrates IMU
+	// 5 second delay that allows for inertial sensor to reset
+	delay(5000);
 	lcd::initialize();
 
-	lcd::print(1, "IMU heading: %3f", getAngle); // prints angle on LCD screen
+	// prints angle on LCD screen
+	lcd::print(1, "IMU heading: %3f", getAngle);
 
-	// base
+	// Base
+	/* The base is set to brake mode per the drivers preference and so it is easier
+	for the robot to climb the bridge. */
 	fl.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	bl.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	bl2.set_brake_mode(MOTOR_BRAKE_BRAKE);
@@ -60,26 +63,10 @@ void initialize() {
 	br.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	br2.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
-	// fl.set_current_limit(11500);
-	// bl.set_current_limit(11500);
-	// bl2.set_current_limit(11500);
-	// fr.set_current_limit(11500);
-	// br.set_current_limit(11500);
-	// br2.set_current_limit(11500);
-	//
-	// fl.set_voltage_limit(11500);
-	// bl.set_voltage_limit(11500);
-	// bl2.set_voltage_limit(11500);
-	// fr.set_voltage_limit(11500);
-	// br.set_voltage_limit(11500);
-	// br2.set_voltage_limit(11500);
-
-	// lift
+	// Lift
 	frontLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
-	// frontLift.set_current_limit(11500);
-	// frontLift.set_voltage_limit(11500);
 
-	// ring intake
+	// Ring Intake
 	ringIntake.set_brake_mode(MOTOR_BRAKE_BRAKE);
 }
 
@@ -102,7 +89,9 @@ Alternatively, this function may be called in initialize or opcontrol for
 non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
-void autonomous() {}
+void autonomous() {
+	rightSideAllianceGoal();
+}
 
 /* Runs the operator control code. This function will be started in its own
 task with the default priority and stack size whenever the robot is enabled
@@ -116,8 +105,8 @@ void opcontrol() {
 	while (true) {
 		drive();
 		driveFrontLift();
-	  //driveFrontClaw();
-		//driveBackClaw();
+	  driveFrontClaw();
+		driveBackClaw();
 		driveRingIntake();
 		delay(20);
 	}

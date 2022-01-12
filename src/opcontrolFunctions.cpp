@@ -1,20 +1,23 @@
 #include "main.h"
-
 #include "math.h"
 
 using namespace pros;
+
+/* "move" sets the voltage for the motor from -127 to 127. It is used throughout
+the code, especially opcontrol. */
+
+/* "get_digital" checks if a digital channel "button" on the controller is
+currently pressed. */
 
 /* "Arcade" control for base. One joystick is used to control
 the base. The Y axis controls forward and backward motion and the X axis
 controls turning motion. Function gets analog of joystick and "sends" them to
 the base motors.*/
 void drive() {
-	/* "get_analog" gets the value of the analog channel (joystick) on the
-	controller */
+	// "get_analog" gets the value of an analog channel (joystick) on a controller
 	float drives = master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y);
 	float turns = master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X);
 
-	// "move" sets the voltage for the motor from -127 to 127
 	fr.move(drives - turns);
 	br.move(drives - turns);
 	br2.move(drives - turns);
@@ -24,11 +27,8 @@ void drive() {
 }
 
 // Moves the front lift up and down.
-void driveFrontLift() { }
-	/* "get_digital" checks if a digital channel "button" on the controller is
-	currently pressed */
-	// "move" sets the voltage for the motor from -127 to 127
-	/* if(master.get_digital(DIGITAL_R1)==1) {
+void driveFrontLift() {
+	if(master.get_digital(DIGITAL_R1)==1) {
 		frontLift.move(127);
 	}
 	else if(master.get_digital(DIGITAL_R2)) {
@@ -40,9 +40,11 @@ void driveFrontLift() { }
 	}
 }
 
+// Claws
+//  0 and 1 are states of the pnuematics.
+
 // Moves the front claw up and down.
-void drivefrontClaw() {
-	//  0 and 1 are states of the pnuematics.
+void driveFrontClaw() {
 	if(master.get_digital(DIGITAL_X)==1) {
 		frontClaw.set_value(0);
 	}
@@ -50,15 +52,16 @@ void drivefrontClaw() {
 	frontClaw.set_value(1);
 }
 
-// Moves the front claw up and down.
+// Moves the back claw up and down.
 void driveBackClaw() {
-	//  0 and 1 are states of the pnuematics.
 	if(master.get_digital(DIGITAL_A)==1) {
 		backClaw.set_value(0);
 	}
 	else if(master.get_digital(DIGITAL_B))
 	backClaw.set_value(1);
 }
+
+// Ring Intake
 
 // Moves ring conveyor.
 void driveRingIntake() {

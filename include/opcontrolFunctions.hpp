@@ -6,7 +6,7 @@ extern void drive();
 extern void driveFrontLift();
 
 // claws
-// extern void drivefrontClaw();
+extern void driveFrontClaw();
 extern void driveBackClaw();
 
 extern void driveRingIntake();
