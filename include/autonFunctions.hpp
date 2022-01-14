@@ -25,6 +25,7 @@ extern void turn (double angle, int speedLimit);
 // Lifts
 extern void liftFrontLift();
 extern void lowerFrontLift();
+extern void moveLift(double liftSpeed);
 
 // CLAWS
 

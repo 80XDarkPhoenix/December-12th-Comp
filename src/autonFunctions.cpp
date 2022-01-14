@@ -213,6 +213,10 @@ void lowerFrontLift() {
 	frontLift.move(0);
 }
 
+void moveLift(double liftSpeed) {
+	frontLift.move(liftSpeed);
+}
+
 // CLAWS
 
 // Front Claw

@@ -10,8 +10,7 @@ void leftSideAllianceGoalMobileGoal();
 void rightSideMobileGoalCenterGoal();
 void leftSideMobileGoalCenterGoal();
 
-void rightSideMobileGoal();
-void leftSideMobileGoal();
+void mobileGoal();
 
 void rightSideCenterGoal();
 void leftSideCenterGoal();
