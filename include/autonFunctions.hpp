@@ -38,9 +38,7 @@ extern void hookBackClaw();
 extern void unhookBackClaw();
 
 // ring intake
-void intakeRingIntake();
-void outtakeRingIntake();
-void stopRingIntake();
+void moveRingIntake(double ringIntakeSpeed);
 
 void calibrateMotor();
 #endif

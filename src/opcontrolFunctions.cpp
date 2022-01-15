@@ -69,7 +69,7 @@ void driveRingIntake() {
 		ringIntake.move(100);
 	}
 	else if(master.get_digital(DIGITAL_L2)) {
-		ringIntake.move(-100);		
+		ringIntake.move(-100);
 	}
 	else
 	{

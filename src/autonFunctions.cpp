@@ -1,5 +1,4 @@
 #include "main.h"
-
 #include "math.h"
 
 using namespace pros;
@@ -241,25 +240,6 @@ void unhookBackClaw() {
 
 // RING INTAKE
 
-void intakeRingIntake() {
-	ringIntake.move(50);
+void moveRingIntake(double ringIntakeSpeed) {
+	ringIntake.move(ringIntakeSpeed);
 }
-
-void outtakeRingIntake() {
-	ringIntake.move(-50);
-}
-
-void stopRingIntake() {
-	ringIntake.move(0);
-}
-
-// bool intakeRings = false;
-//
-// void moveRingIntake() {
-//   while(true) {
-//     if(intakeRings) {
-//         ringIntake.move(50);
-//       }
-//     }
-//     delay(5);
-//   }

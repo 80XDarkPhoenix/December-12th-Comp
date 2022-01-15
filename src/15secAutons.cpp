@@ -6,37 +6,46 @@ using namespace pros;
 void rightSideAllianceGoalMobileGoal() {
 	unhookBackClaw();
 	unhookFrontClaw();
-	// robot facing forward
-	// move to mobile goal to get it before opposing alliance
-	move(55, 110); // move to mobile goal
+	move(55, 127); // move to mobile goal
 	hookFrontClaw(); // hook the front claw on the mobile goal
 	delay(500);
-	move(-25, 110); // reverse to alliance zone
-	/* delay(100);
-	turn(-125, 110); // turn with back to center goal
+	move(-32, 80); // reverse to alliance zone
+
 	unhookBackClaw();
-	delay(100);
+	delay(200);
+	unhookFrontClaw();
+	turn(-135, 80); // turn with back to center goal
+	delay(200);
 	moveLift(110);
-	move(-20, 110); // reverse to center goal
+	move(-20, 80); // reverse to center goal
 	moveLift(0);
-	hookBackClaw(); // hook back claw on center goal
-	intakeRingIntake();
-	delay(100);
-	turn(45, 110); // turn with goals
-	delay(100);
-	move(5, 110); // move to alliance home zone scoring goals */
+	moveRingIntake(100);
+	delay(3000);
+	move(5, 127);
 }
 
 void leftSideAllianceGoalMobileGoal() {
 	unhookBackClaw();
 	unhookFrontClaw();
-	// robot facing forward
-	// move to mobile goal to get it before opposing alliance
-	move(55, 110); // move to mobile goal
-	hookFrontClaw(); // hook the front claw on the mobile goal
+
+	hookFrontClaw();
+	unhookFrontClaw();
+	delay(100);
+	move(-13, 80);
+	delay(200);
+	turn(-50, 80);
+	delay(200);
+	move(72, 80);
+	delay(100);
+	hookFrontClaw();
 	delay(500);
-	move(-25, 110); // reverse to alliance zone
+	move(-35, 80);
+	unhookFrontClaw();
 }
+
+
+
+////////////////////////////////////////////////////////////////////////////////
 
 /*
 void rightSideAllianceGoal() {
@@ -116,4 +125,5 @@ void leftSideCenterGoal() {
 	hookFrontClaw(); // hool front claw on center goal
 	// move(-, 110); // reverse to alliane home zone with center goal
 }
+
 */
