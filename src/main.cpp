@@ -33,7 +33,9 @@ Motor ringIntake(21, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
 // Controllers
 Controller master(E_CONTROLLER_MASTER);
-// Sensor
+
+// Sensors
+
 /* The inertial sensor is a 3-axis accelerometer and gyroscope. The
 accelerometer measures linear acceleration of the robot, while the gyroscope
 measures the rate of rotation about the inertial sensor 3-axis. The inertial
@@ -41,6 +43,16 @@ sensor helps us have accurate turns. When we were testing our turns, we
 discovered that they were not accurate. We decided to use the inertial sensor to
 help with this. */
 Imu inertial(12);
+
+/* The V5 Distance Sensor measures distance to an object, approximate object
+size, and approach speed. The distance measurement range is 20mm to 2,000mm.
+The V5 Distance Sensor uses a classroom safe Class 1 Laser, similar to those
+used on modern cell phones for head detection. The laser allows the sensor to
+have a very narrow field of view, so detection is always directly in front of
+the sensor. We use the distance sensor to detect the wall, so our autonomous
+stays consistent on different fields. */
+Distance frontDistance();
+Distance backDistance();
 
 /* Runs initialization code. This occurs as soon as the program is started. All
 other competition modes are blocked by initialize. */
@@ -90,8 +102,8 @@ non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
 void autonomous() {
+	// leftSideAllianceGoal();
 	// rightSideAllianceGoalMobileGoal();
-	// leftSideAllianceGoalMobileGoal();
 	// skillsAuton();
 }
 

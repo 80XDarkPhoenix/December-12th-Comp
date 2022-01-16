@@ -30,6 +30,8 @@ extern Motor ringIntake;
 extern Controller master;
 
 extern Imu inertial;
+extern Distance frontDistance;
+extern Distance backDistance;
 
 #ifdef __cplusplus
 extern "C" {

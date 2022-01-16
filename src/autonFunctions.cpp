@@ -6,7 +6,6 @@ using namespace pros;
 // Move and Turn
 
 // Preset Functions Used in Move and Turn Functions
-
 /* "tare_position" sets the “absolute” zero position of the motor to its
 current position. */
 // "fabs" gets the absolute value.
@@ -218,8 +217,6 @@ void moveLift(double liftSpeed) {
 
 // CLAWS
 
-// Front Claw
-
 void hookFrontClaw() {
 	frontClaw.set_value(0);
 }
@@ -227,8 +224,6 @@ void hookFrontClaw() {
 void unhookFrontClaw() {
 	frontClaw.set_value(1);
 }
-
-// Back Claw
 
 void hookBackClaw() {
 	backClaw.set_value(0);
@@ -239,7 +234,48 @@ void unhookBackClaw() {
 }
 
 // RING INTAKE
-
 void moveRingIntake(double ringIntakeSpeed) {
 	ringIntake.move(ringIntakeSpeed);
+}
+
+// DISTANCE
+
+double getFrontDistance() {
+  // Gets the distance from the front distance sensor to the perimeter wall.
+  double dist = 0;
+  int index = 0;
+
+  while ((index < 10) && (dist == 0)) {
+    dist = frontDistance.get() * 0.0394;
+    delay(5);
+    index++;
+  }
+  return dist;
+}
+
+double getBackDistance() {
+  // Gets the distance from the back distance sensor to the perimeter wall.
+  double dist = 0;
+  int index = 0;
+
+  while ((index < 10) && (dist == 0)) {
+    dist = backDistance.get()*0.0394;
+    delay(5);
+    index++;
+  }
+  return dist;
+}
+
+void frontDistanceMove(double goalDistanceFromWall)
+{
+  double actualDistanceFromWall = getFrontDistance();
+  if (actualDistanceFromWall != 0)
+  move (actualDistanceFromWall - goalDistanceFromWall, 110);
+}
+
+void backDistanceMove(double goalDistanceFromWall)
+{
+  double actualDistanceFromWall = getBackDistance();
+  if (actualDistanceFromWall != 0)
+  move (-actualDistanceFromWall + goalDistanceFromWall, 110);
 }

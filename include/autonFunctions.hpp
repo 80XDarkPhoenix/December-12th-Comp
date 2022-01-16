@@ -40,5 +40,12 @@ extern void unhookBackClaw();
 // ring intake
 void moveRingIntake(double ringIntakeSpeed);
 
-void calibrateMotor();
+// DISTANCE
+
+double getFrontDistance();
+double getBackDistance();
+
+void frontDistanceMove(double goalDistanceFromWall);
+void backDistanceMove(double goalDistanceFromWall);
+
 #endif
