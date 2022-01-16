@@ -29,10 +29,10 @@ void leftSideAllianceGoalMobileGoal() {
 	unhookFrontClaw();
 
 	hookFrontClaw();
+	delay(2000);
 	unhookFrontClaw();
-	delay(100);
 	move(-13, 80);
-	delay(200);
+/*	delay(200);
 	turn(-50, 80);
 	delay(200);
 	move(72, 80);
@@ -40,7 +40,7 @@ void leftSideAllianceGoalMobileGoal() {
 	hookFrontClaw();
 	delay(500);
 	move(-35, 80);
-	unhookFrontClaw();
+	unhookFrontClaw(); */
 }
 
 

@@ -22,8 +22,8 @@ Motor bl2(8, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // elevated ba
 Motor frontLift(15, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
 // Claws
-/* The claws are pnuematic, so they are connected to the brain through ADI ports
-, therefore it is initialized as an "ADIDIgitalOut". The second parameter is the
+/* The claws are pnuematic, so they are connected to the brain through ADI ports,
+therefore it is initialized as an "ADIDIgitalOut". The second parameter is the
 state of the pneumatics. */
 ADIDigitalOut frontClaw(2, 1);
 ADIDigitalOut backClaw(1, 1);
@@ -90,19 +90,9 @@ non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
 void autonomous() {
-	// ONLY CHANGE THIS
 	// rightSideAllianceGoalMobileGoal();
-	leftSideAllianceGoalMobileGoal();
+	// leftSideAllianceGoalMobileGoal();
 	// skillsAuton();
-
-	// if u need to make a new program just write it here
-	// functions u should use r
-	// move(); for the base so like move(24, 110);
-	// moveLift(); for the lift put the speed in the () so like moveLift(120); amd moveLift(0); to stop it
-	// unhookBackClaw(); and hookBackClaw();
-	// unhookFrontClaw(); and unhookFrontClaw;
-	// turn(); put the angle and speed so like turn(90, 110);
-	// moveRingIntake(); put the speed in the parantheses
 }
 
 /* Runs the operator control code. This function will be started in its own
