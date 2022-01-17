@@ -4,30 +4,30 @@
 extern const double encoderPerInch;
 extern const double encoderPerDegreeTurn;
 
-// Speed
+// speed
 extern const double defaultSpeed;
 extern const double defaultTurnSpeed;
 
 extern double minSpeed;
 extern double maxSpeed;
 
-// Accelerator
+// accelerator
 extern double accelerator;
 extern double turnAccelerator;
 
-// Move
+// move
 extern void move(double distanceInInches, double speedLimit);
 
-// Turn
+// turn
 extern double getAngle();
 extern void turn (double angle, int speedLimit);
 
-// Lifts
-extern void liftFrontLift();
-extern void lowerFrontLift();
+// lift
+extern void liftLift();
+extern void lowerLift();
 extern void moveLift(double liftSpeed);
 
-// CLAWS
+// claws
 
 // front claw
 extern void hookFrontClaw();
@@ -40,7 +40,7 @@ extern void unhookBackClaw();
 // ring intake
 void moveRingIntake(double ringIntakeSpeed);
 
-// DISTANCE
+// distance 
 
 double getFrontDistance();
 double getBackDistance();

@@ -5,18 +5,17 @@ using namespace pros;
 
 // Move and Turn
 
-// Preset Functions Used in Move and Turn Functions
-/* "tare_position" sets the “absolute” zero position of the motor to its
-current position. */
-// "fabs" gets the absolute value.
-// "mills" gets the number of milliseconds since PROS initialized.
-// "get_actual_velocity" gets the actual velocity of the motor
+/* Preset Functions Used in Move and Turn Functions
+- "tare_position" sets the “absolute” zero position of the motor to its
+current position.
+- "fabs" gets the absolute value.
+- "mills" gets the number of milliseconds since PROS initialized.
+- "get_actual_velocity" gets the actual velocity of the motor */
 
 // Encoders
-/* Throughout the code the built-in encoder are used. They track the robot's
+/* Throughout the code the built-in encoders are used. They track the robot's
 rotational position and velocity. */
-// [360/3.25(perimeter of wheel)] / pi
-const double encoderPerInch = 25;
+const double encoderPerInch = 25; // [360/3.25(perimeter of wheel)] / pi
 const double encoderPerDegreeTurn = 2.7;
 
 // Speed
@@ -79,6 +78,7 @@ void move(double distanceInInches, double speedLimit) {
 
 		speed = speed * directMultiplier;
 
+		// move motors by speed * directMultiplier
 		fl.move(speed);
 		bl.move(speed);
 		bl2.move(speed);
@@ -131,19 +131,21 @@ void turn (double angle, int speedLimit) {
 	double target = angle * encoderPerDegreeTurn;
 	double current = 0;
 	double directionMultiplier = 1;
-	int startTime = millis();
 
+	int startTime = millis();
 	int maxTime = startTime + 20 * fabs(angle);
 
 	if (target < start)
 	directionMultiplier = -1;
 	while(notAtTarget) {
 
+		// current = average position of base motors (to turn)
 		double current = (-fr.get_position() - br.get_position() - br2.get_position()
 		+ bl.get_position() + fl.get_position() + bl2.get_position()) / 6;
 
 		double error = (target - current);
 		double progress = current - start;
+
 		double speed = minSpeed  + fabs(turnAccelerator * progress * error);
 		double maxDeaccelerationSpeed = 4 * sqrt(error);
 
@@ -184,8 +186,10 @@ void turn (double angle, int speedLimit) {
 			br.move(0);
 			br2.move(0);
 
+			// let base motors stop
       delay(100);
 
+			// used to tune turnEncoders and turnAccelerator
 			pros::lcd::print(3, "a: %f", getAngle());
 			pros::lcd::print(4, "e: %f", error);
 
@@ -199,62 +203,73 @@ void turn (double angle, int speedLimit) {
 
 // LIFTS
 
-void liftFrontLift() {
+// lift the front lift completely
+void liftLift() {
 	frontLift.move(127);
 	delay(1100);
 	frontLift.move(0);
 }
 
-void lowerFrontLift() {
+// lower the front lift completely
+void lowerLift() {
 	frontLift.move(-127);
 	delay(1100);
 	frontLift.move(0);
 }
 
+// move the lift at a set speed
 void moveLift(double liftSpeed) {
 	frontLift.move(liftSpeed);
 }
 
 // CLAWS
 
+// lower the front claw
 void hookFrontClaw() {
 	frontClaw.set_value(0);
 }
 
+// lift the front claw
 void unhookFrontClaw() {
 	frontClaw.set_value(1);
 }
 
+// lower the back claw
 void hookBackClaw() {
 	backClaw.set_value(0);
 }
 
+// lift the back claw
 void unhookBackClaw() {
 	backClaw.set_value(1);
 }
 
 // RING INTAKE
+
+// move the ring intake at a set speed
 void moveRingIntake(double ringIntakeSpeed) {
 	ringIntake.move(ringIntakeSpeed);
 }
 
 // DISTANCE
 
+/* gets the distance in inches from an object (perimeter wall) to the front
+distance sensor */
 double getFrontDistance() {
-  // Gets the distance from the front distance sensor to the perimeter wall.
   double dist = 0;
   int index = 0;
 
   while ((index < 10) && (dist == 0)) {
-    dist = frontDistance.get() * 0.0394;
+    dist = frontDistance.get() * 0.0394; // converts distance to inches
     delay(5);
     index++;
   }
   return dist;
 }
 
+/* gets the distance in inches from an object (perimeter wall) to the back
+distance sensor */
 double getBackDistance() {
-  // Gets the distance from the back distance sensor to the perimeter wall.
   double dist = 0;
   int index = 0;
 
@@ -266,16 +281,18 @@ double getBackDistance() {
   return dist;
 }
 
+// move to goalDistanceFromWall using the front distance sensor
 void frontDistanceMove(double goalDistanceFromWall)
 {
   double actualDistanceFromWall = getFrontDistance();
-  if (actualDistanceFromWall != 0)
-  move (actualDistanceFromWall - goalDistanceFromWall, 110);
+  if(actualDistanceFromWall != 0)
+  move(actualDistanceFromWall - goalDistanceFromWall, 110);
 }
 
+// move to goalDistanceFromWall using the front distance sensor
 void backDistanceMove(double goalDistanceFromWall)
 {
   double actualDistanceFromWall = getBackDistance();
   if (actualDistanceFromWall != 0)
-  move (-actualDistanceFromWall + goalDistanceFromWall, 110);
+  move(-actualDistanceFromWall + goalDistanceFromWall, 110);
 }

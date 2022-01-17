@@ -1,11 +1,6 @@
-/* "main.h", is intended for declaring functions and variables shared between
-the user code files. main.h offers a variety of configurable options for
-tailoring PROS to our needs. */
 #include "main.h"
-// "math.h", is designed for basic mathematical operations.
 #include "math.h"
 
-// using namespace pros reduces the length of declarations.
 using namespace pros;
 
 // INITIALIZATION
@@ -50,7 +45,7 @@ The V5 Distance Sensor uses a classroom safe Class 1 Laser, similar to those
 used on modern cell phones for head detection. The laser allows the sensor to
 have a very narrow field of view, so detection is always directly in front of
 the sensor. We use the distance sensor to detect the wall, so our autonomous
-stays consistent on different fields. */
+stays consistent on multiple fields and in different conditions. */
 Distance frontDistance();
 Distance backDistance();
 
@@ -102,9 +97,7 @@ non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
 void autonomous() {
-	// leftSideAllianceGoal();
-	// rightSideAllianceGoalMobileGoal();
-	// skillsAuton();
+
 }
 
 /* Runs the operator control code. This function will be started in its own

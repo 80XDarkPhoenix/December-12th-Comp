@@ -13,6 +13,7 @@
 
 using namespace pros;
 
+// base
 extern Motor fr;
 extern Motor br;
 extern Motor br2;
@@ -20,16 +21,25 @@ extern Motor fl;
 extern Motor bl;
 extern Motor bl2;
 
+// lift
 extern Motor frontLift;
 
+// claws
 extern ADIDigitalOut frontClaw;
 extern ADIDigitalOut backClaw;
 
+// ring intake
 extern Motor ringIntake;
 
+// controller
 extern Controller master;
 
+// sensors
+
+// inertial sensor
 extern Imu inertial;
+
+// distance sensors 
 extern Distance frontDistance;
 extern Distance backDistance;
 

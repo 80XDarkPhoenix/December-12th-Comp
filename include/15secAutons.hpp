@@ -1,8 +1,16 @@
 #ifndef FIFTEENSECAUTONS
 #define FIFTEENSECAUTONS
 
-void leftSideAllianceGoal();
+void leftAllianceGoal() {}
+void rightAllianceGoal() {}
 
-void rightSideAllianceGoalMobileGoal();
+void rightMobileGoalAllianceGoal() {}
+void leftMobileGoalAllianceGoal() {}
+
+void rightAllianceGoals() {}
+void leftAllianceGoals() {}
+
+void rightAllianceGoalMobileGoals() {}
+void leftAllianceGoalMobileGoals() {}
 
 #endif

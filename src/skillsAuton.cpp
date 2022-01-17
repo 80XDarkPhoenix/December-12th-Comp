@@ -47,7 +47,7 @@ void skillsAuton() {
   delay(500);
 
   move(-, 110);
-  lowerFrontLift();
+  lowerLift();
   turn(-90, 110);
   unhookBackClaw();
   delay(50);
@@ -107,7 +107,7 @@ void skillsAuton() {
   delay(500);
 
   move(-, 110);
-  lowerFrontLift();
+  lowerLift();
   turn(45, 110);
   move(, 110);
   hookFrontClaw();
