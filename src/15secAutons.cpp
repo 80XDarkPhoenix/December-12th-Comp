@@ -63,6 +63,7 @@ void rightMobileGoalAllianceGoal() {
 	move(5, 127);
 }
 
+// done, but not consistent
 void rightMobileGoalCenterGoalAllianceGoal() {
 	// make sure claws are unhooked
 	unhookBackClaw();
@@ -73,49 +74,34 @@ void rightMobileGoalCenterGoalAllianceGoal() {
 	hookBackClaw();
 	delay(500);
 
-	move(32, 127); // reverse to alliance zone
+	move(34, 110); // reverse to alliance zone
 	// backDistanceMove(); // correct distance
 
 	delay(50);
-	turn(145, 127); // turn with back to center goal
+	turn(145, 100); // turn with back to center goal
 	delay(50);
 
-	move(38, 127);
+	move(42, 120);
 	hookFrontClaw();
 	delay(500);
 
-	move(-42, 120);
+	move(-40, 110);
 	delay(50);
-	turn(90, 120);
+	turn(90, 110);
 	unhookBackClaw();
-	delay(200);
-	move(-7, 120);
+	delay(500);
+	move(-7, 110);
 	delay(50);
-	turn(-145, 120);
+	turn(-165, 110);
 	unhookFrontClaw();
 	delay(50);
 	moveLift(127);
-	move(-8, 120);
+	move(-18, 110);
 	moveLift(0);
 	moveRingIntake(100);
 	delay(2000);
 	moveRingIntake(0);
 	move(10, 127);
-
-/*	// let go of mobile go (in home zone)
-	unhookBackClaw();
-	delay(200);
-	unhookFrontClaw();
-
-	moveLift(110);
-
-	// clear and put rings on alliance goal
-	move(-20, 80); // reverse to center goal
-	moveLift(0);
-	moveRingIntake(100);
-	delay(3000);
-	moveRingIntake(0);
-	move(5, 127); */
 }
 
 /*
@@ -146,25 +132,38 @@ void leftMobileGoalAllianceGoal() {
 	move(5, 127);
 }
 
-void rightAllianceGoals() {}
-
-void leftAllianceGoals() {}
-
 void rightAllianceGoalMobileGoals() {}
 
 void leftAllianceGoalMobileGoals() {}
 */
 
-void winPoint() {
+void leftWinPoint() {
+	// start 90 degrees
 	// make sure claws are unhooked
 	unhookBackClaw();
 	unhookFrontClaw();
-	
-	// move(distance, speed);
-	// delay(50);
-	// turn(angle, speed);
-	// moveLift(speed);
-	// moveRingIntake(speed);
-	// hookBackClaw();
-	// unhookBackClaw();
+
+	hookFrontClaw();
+	delay(500);
+	unhookFrontClaw();
+
+	move(-10, 100);
+	delay(50);
+	turn(-135, 100);
+
+	move(-18, 100); // measure
+	turn(-45, 100);
+	/* move(-70, 100); // measure
+	moveRingIntake(100);
+	delay(1000);
+	moveRingIntake(0);
+	move(10, 127); */
 }
+
+// move(distance, speed);
+// delay(50);
+// turn(angle, speed);
+// moveLift(speed);
+// moveRingIntake(speed);
+// hookBackClaw();
+// unhookBackClaw();

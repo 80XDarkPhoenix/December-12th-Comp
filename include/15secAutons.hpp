@@ -15,5 +15,5 @@ extern void leftAllianceGoals();
 extern void rightAllianceGoalMobileGoals();
 extern void leftAllianceGoalMobileGoals();
 
-extern void winPoint();
+extern void leftWinPoint();
 #endif
