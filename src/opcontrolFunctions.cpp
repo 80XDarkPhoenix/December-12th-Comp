@@ -29,9 +29,11 @@ void drive() {
 // Moves the front lift up and down.
 void driveFrontLift() {
 	if(master.get_digital(DIGITAL_R1)==1) {
+		ringIntake.move(90);
 		frontLift.move(127);
 	}
 	else if(master.get_digital(DIGITAL_R2)) {
+		ringIntake.move(0);
 		frontLift.move(-127);
 	}
 	else
@@ -65,10 +67,10 @@ void driveBackClaw() {
 // Moves ring conveyor.
 void driveRingIntake() {
 	if(master.get_digital(DIGITAL_L1)==1) {
-		ringIntake.move(100);
+		ringIntake.move(90);
 	}
 	else if(master.get_digital(DIGITAL_L2)) {
-		ringIntake.move(-100);
+		ringIntake.move(-90);
 	}
 	else
 	{

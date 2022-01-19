@@ -40,12 +40,12 @@ extern void unhookBackClaw();
 // ring intake
 void moveRingIntake(double ringIntakeSpeed);
 
-// distance 
-
+// distance
+/*
 double getFrontDistance();
 double getBackDistance();
 
 void frontDistanceMove(double goalDistanceFromWall);
 void backDistanceMove(double goalDistanceFromWall);
-
+*/
 #endif

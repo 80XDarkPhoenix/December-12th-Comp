@@ -39,9 +39,9 @@ extern Controller master;
 // inertial sensor
 extern Imu inertial;
 
-// distance sensors 
-extern Distance frontDistance;
-extern Distance backDistance;
+// distance sensors
+//extern Distance frontDistance;
+//extern Distance backDistance;
 
 #ifdef __cplusplus
 extern "C" {

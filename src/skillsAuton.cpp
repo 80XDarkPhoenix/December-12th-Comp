@@ -3,7 +3,7 @@
 #include "math.h"
 
 using namespace pros;
-
+/*
 void skillsAuton() {
   // start 90 degrees left
 
@@ -129,3 +129,4 @@ void skillsAuton() {
   move(-, 127);
   moveLift(-127);
 }
+*/

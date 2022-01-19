@@ -3,7 +3,7 @@
 
 using namespace pros;
 
-// Move and Turn
+// move and turn
 
 /* Preset Functions Used in Move and Turn Functions
 - "tare_position" sets the “absolute” zero position of the motor to its
@@ -12,20 +12,20 @@ current position.
 - "mills" gets the number of milliseconds since PROS initialized.
 - "get_actual_velocity" gets the actual velocity of the motor */
 
-// Encoders
+// encoders
 /* Throughout the code the built-in encoders are used. They track the robot's
 rotational position and velocity. */
 const double encoderPerInch = 25; // [360/3.25(perimeter of wheel)] / pi
-const double encoderPerDegreeTurn = 2.7;
+const double encoderPerDegreeTurn = 2.6;
 
-// Speed
+// speed
 const double defaultSpeed = 127;
 const double defaultTurnSpeed = 127;
 
-double minSpeed = 35;
+double minSpeed = 10;
 double maxSpeed = 127;
 
-// Accelerators
+// accelerators
 double accelerator = 0.0095;
 double turnAccelerator = 0.008;
 
@@ -55,7 +55,7 @@ void move(double distanceInInches, double speedLimit) {
 
 	while ((fabs(error) > 10) && (millis() < maxTime)) {
 		current = (fl.get_position() + bl.get_position() + bl2.get_position() +
-		fr.get_position() + br.get_position() + br2.get_position()) / 6;
+		fr.get_position() + br.get_position() + br2.get_position()) / 6.0;
 
 		error = distanceInEncoders - current;
 		progress = current;
@@ -71,8 +71,8 @@ void move(double distanceInInches, double speedLimit) {
 			speed = speedLimit;
 		}
 
-		// Deacceleration
-		double maxDeaccelerationSpeed = 3.25 * sqrt(error);
+		// deacceleration
+		double maxDeaccelerationSpeed = 4.25 * sqrt(error);
 		if (currentVelocity > maxDeaccelerationSpeed)
 		speed = maxDeaccelerationSpeed;
 
@@ -100,7 +100,7 @@ void move(double distanceInInches, double speedLimit) {
 	delay(10); // let motors fully stop
 }
 
-// Turn
+// turn
 
 double getAngle() {
 	/* "get_heading" gets the inertial sensor’s heading relative to the initial
@@ -222,7 +222,7 @@ void moveLift(double liftSpeed) {
 	frontLift.move(liftSpeed);
 }
 
-// CLAWS
+// claws
 
 // lower the front claw
 void hookFrontClaw() {
@@ -236,31 +236,30 @@ void unhookFrontClaw() {
 
 // lower the back claw
 void hookBackClaw() {
-	backClaw.set_value(0);
+	backClaw.set_value(1);
 }
 
 // lift the back claw
 void unhookBackClaw() {
-	backClaw.set_value(1);
+	backClaw.set_value(0);
 }
 
-// RING INTAKE
+// ring intake
 
 // move the ring intake at a set speed
 void moveRingIntake(double ringIntakeSpeed) {
 	ringIntake.move(ringIntakeSpeed);
 }
 
-// DISTANCE
+// distance
 
 /* gets the distance in inches from an object (perimeter wall) to the front
 distance sensor */
 double getFrontDistance() {
   double dist = 0;
   int index = 0;
-
   while ((index < 10) && (dist == 0)) {
-    dist = frontDistance.get() * 0.0394; // converts distance to inches
+  //  dist = frontDistance.get() * 0.0394; // converts distance to inches
     delay(5);
     index++;
   }
@@ -274,7 +273,7 @@ double getBackDistance() {
   int index = 0;
 
   while ((index < 10) && (dist == 0)) {
-    dist = backDistance.get()*0.0394;
+  //  dist = backDistance.get()*0.0394;
     delay(5);
     index++;
   }

@@ -5,7 +5,7 @@ using namespace pros;
 
 // INITIALIZATION
 
-// Base
+// base
 Motor fr(13, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // front right
 Motor br(16, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back right
 Motor br2(7, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // elevated back right
@@ -13,17 +13,17 @@ Motor fl(14, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front left
 Motor bl(18, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back left
 Motor bl2(8, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // elevated back left
 
-// Lift
+// lift
 Motor frontLift(15, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
-// Claws
+// claws
 /* The claws are pnuematic, so they are connected to the brain through ADI ports,
 therefore it is initialized as an "ADIDIgitalOut". The second parameter is the
 state of the pneumatics. */
 ADIDigitalOut frontClaw(2, 1);
-ADIDigitalOut backClaw(1, 1);
+ADIDigitalOut backClaw(1, 0);
 
-// Ring Intake
+// ring intake
 Motor ringIntake(21, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
 // Controllers
@@ -46,8 +46,8 @@ used on modern cell phones for head detection. The laser allows the sensor to
 have a very narrow field of view, so detection is always directly in front of
 the sensor. We use the distance sensor to detect the wall, so our autonomous
 stays consistent on multiple fields and in different conditions. */
-Distance frontDistance();
-Distance backDistance();
+//Distance frontDistance();
+//Distance backDistance();
 
 /* Runs initialization code. This occurs as soon as the program is started. All
 other competition modes are blocked by initialize. */
@@ -60,7 +60,7 @@ void initialize() {
 	// prints angle on LCD screen
 	lcd::print(1, "IMU heading: %3f", getAngle);
 
-	// Base
+	// base
 	/* The base is set to brake mode per the drivers preference and so it is easier
 	for the robot to climb the bridge. */
 	fl.set_brake_mode(MOTOR_BRAKE_BRAKE);
@@ -70,10 +70,10 @@ void initialize() {
 	br.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	br2.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
-	// Lift
+	// lift
 	frontLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
-	// Ring Intake
+	// ring Intake
 	ringIntake.set_brake_mode(MOTOR_BRAKE_BRAKE);
 }
 
@@ -97,7 +97,8 @@ non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
 void autonomous() {
-
+	rightMobileGoalCenterGoalAllianceGoal();
+	//winPoint();
 }
 
 /* Runs the operator control code. This function will be started in its own
