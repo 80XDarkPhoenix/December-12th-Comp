@@ -3,7 +3,7 @@
 #include "math.h"
 
 using namespace pros;
-/*
+
 void skillsAuton() {
   // start 90 degrees left
 
@@ -11,31 +11,72 @@ void skillsAuton() {
   unhookFrontClaw();
   unhookBackClaw();
 
-  move(-, 110); // move back to alliance goal
-  delay(50);
-  frontDistanceMove();
+  // hook on to alliance goal
+  moveLift(127);
+  move(-22, 110); // move back to alliance goal
+  moveLift(0);
+//  frontDistanceMove();
   hookBackClaw();
   delay(500);
   moveRingIntake(100);
 
-  move(, 110);
+  // in between alliance goal and mobile goal
+  move(12, 110);
   delay(50);
-  frontDistanceMove();
-  turn(90, 110);
+//  frontDistanceMove();
+  turn(45, 110);
   moveRingIntake(0);
-  backDistanceMove();
   delay(50);
-  move(, 110);
+  move(10, 110);
   delay(50);
-  frontDistanceMove();
+  turn(58, 110);
+  delay(50);
+  moveLift(-127);
+  move(34, 110);
+  moveLift(0);
   delay(50);
   turn(45, 110);
+  delay(50);
 
-  move(, 110);
+  // claw on mobile goal
+  move(14, 110);
   hookFrontClaw();
   delay(500);
-  moveLift(110);
-  move(, 110);
+
+  moveLift(127);
+  moveRingIntake(100);
+  move(65, 110);
+  moveLift(0);
+  moveRingIntake(0);
+  delay(50);
+  turn(-45,100);
+  delay(50);
+  move(5,120);
+  moveLift(-127);
+  delay(200);
+  moveLift(0);
+  unhookFrontClaw();
+  move(-8,120);
+  delay(50);
+  turn(-93,110);
+  delay(50);
+  unhookBackClaw();
+  delay(200);
+  moveLift(-127);
+  move(45,120);
+  moveLift(0);
+  hookFrontClaw();
+  delay(250);
+  move(-16,110);
+  turn(62,100);
+  delay(50);
+  move(-40,120);
+
+
+//  turn(-45, 110);
+
+
+/*  move(, 110);
   delay(50);
   turn(45, 110);
   move(, 110);
@@ -86,7 +127,7 @@ void skillsAuton() {
   delay(50);
   turn(90, 110);
   moveLift(-110)
-  frontDistanceMove();
+//  frontDistanceMove();
   delay(50);
   move(-, 110);
   moveLift(0);
@@ -127,6 +168,5 @@ void skillsAuton() {
   unhookBackClaw();
   delay(500);
   move(-, 127);
-  moveLift(-127);
+  moveLift(-127); */
 }
-*/

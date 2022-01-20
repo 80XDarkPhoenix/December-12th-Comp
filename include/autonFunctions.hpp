@@ -9,6 +9,7 @@ extern const double defaultSpeed;
 extern const double defaultTurnSpeed;
 
 extern double minSpeed;
+extern double turnMinSpeed;
 extern double maxSpeed;
 
 // accelerator

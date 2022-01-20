@@ -23,6 +23,7 @@ const double defaultSpeed = 127;
 const double defaultTurnSpeed = 127;
 
 double minSpeed = 10;
+double turnMinSpeed = 35;
 double maxSpeed = 127;
 
 // accelerators
@@ -146,7 +147,7 @@ void turn (double angle, int speedLimit) {
 		double error = (target - current);
 		double progress = current - start;
 
-		double speed = minSpeed  + fabs(turnAccelerator * progress * error);
+		double speed = turnMinSpeed  + fabs(turnAccelerator * progress * error);
 		double maxDeaccelerationSpeed = 4 * sqrt(error);
 
 		double currentVelocity = fabs((fl.get_actual_velocity() +
