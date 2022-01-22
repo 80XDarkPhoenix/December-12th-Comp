@@ -11,7 +11,7 @@ extern void driveFrontLift();
 extern void driveFrontClaw();
 extern void driveBackClaw();
 
-// ring intake 
+// ring intake
 extern void driveRingIntake();
 
 #endif

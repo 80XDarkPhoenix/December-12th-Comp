@@ -49,28 +49,28 @@ void skillsAuton() {
   moveLift(0);
   moveRingIntake(0);
   delay(50);
-  turn(-45,100);
+  turn(-45, 100);
   delay(50);
-  move(10,120);
+  move(10, 120);
   moveLift(-127);
   delay(200);
   moveLift(0);
   unhookFrontClaw();
-  move(-9,120);
+  move(-9, 120);
   delay(50);
-  turn(-95,110);
+  turn(-95, 110);
   delay(50);
   unhookBackClaw();
   delay(200);
   moveLift(-127);
-  move(52,120);
+  move(52, 120);
   moveLift(0);
   hookFrontClaw();
   delay(250);
-  move(-20,110);
+  move(-20, 110);
   turn(62,100);
   delay(50);
-  move(-100,120);
+  move(-100, 120);
 
 
 //  turn(-45, 110);
