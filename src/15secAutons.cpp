@@ -155,11 +155,3 @@ void leftWinPoint() {
 	move(25, 127);
 	moveRingIntake(0);
 }
-
-// move(distance, speed);
-// delay(50);
-// turn(angle, speed);
-// moveLift(speed);
-// moveRingIntake(speed);
-// hookBackClaw();
-// unhookBackClaw();

@@ -21,7 +21,8 @@ Motor frontLift(15, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 therefore it is initialized as an "ADIDIgitalOut". The second parameter is the
 state of the pneumatics. */
 ADIDigitalOut frontClaw(2, 1);
-ADIDigitalOut backClaw(1, 0);
+ADIDigitalOut backClaw(1, 1);
+ADIDigitalOut backClaw2(3, 1);
 
 // ring intake
 Motor ringIntake(21, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
@@ -103,7 +104,7 @@ void autonomous() {
 	// rightMobileGoalCenterGoalAllianceGoal();
 	// leftMobileGoalAllianceGoal();
 	// leftWinPoint();
-	 skillsAuton();
+	// skillsAuton();
 }
 
 /* Runs the operator control code. This function will be started in its own
@@ -120,7 +121,7 @@ void opcontrol() {
 		driveFrontLift();
 	  driveFrontClaw();
 		driveBackClaw();
-	  // driveRingIntake();
+	  driveRingIntake();
 		delay(20);
 	}
 }

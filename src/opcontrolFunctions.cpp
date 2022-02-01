@@ -30,7 +30,6 @@ void drive() {
 void driveFrontLift() {
 	if(master.get_digital(DIGITAL_R1)==1) {
 		frontLift.move(127);
-		ringIntake.move(100);
 	}
 	else if(master.get_digital(DIGITAL_R2)) {
 		frontLift.move(-127);
@@ -38,7 +37,6 @@ void driveFrontLift() {
 	else
 	{
 		frontLift.move(0);
-		ringIntake.move(0);
 	}
 }
 
@@ -57,24 +55,21 @@ void driveFrontClaw() {
 // Moves the back claw up and down.
 void driveBackClaw() {
 	if(master.get_digital(DIGITAL_L1)==1) {
-		backClaw.set_value(0);
+		backClaw.set_value(1);
+		backClaw2.set_value(0);
 	}
 	else if(master.get_digital(DIGITAL_L2))
-	backClaw.set_value(1);
+		backClaw.set_value(0);
+		backClaw2.set_value(1);
 }
 
-/*
 // Moves the ring intake.
 void driveRingIntake() {
-	if(master.get_digital_new_press(DIGITAL_UP)==1) {
-		ringIntake.move(100);
-	}
-	else if(master.get_digital_new_press(DIGITAL_DOWN)) {
-		ringIntake.move(-100);
+	if(master.get_digital(DIGITAL_A)==1) {
+		ringIntake.move(0);
 	}
 	else
 	{
-		ringIntake.move(0);
+		ringIntake.move(100);
 	}
 }
-*/

@@ -5,7 +5,7 @@ using namespace pros;
 
 // move and turn
 
-/* Preset Functions Used in Move and Turn Functions
+/* PROS Functions Used in Move and Turn Functions
 - "tare_position" sets the “absolute” zero position of the motor to its
 current position.
 - "fabs" gets the absolute value.
