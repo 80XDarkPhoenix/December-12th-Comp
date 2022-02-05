@@ -1,16 +1,14 @@
 #ifndef FIFTEENSECAUTONS
 #define FIFTEENSECAUTONS
 
-extern void leftAllianceGoal();
-extern void rightAllianceGoal();
+#include "main.h"
+#include "math.h"
+
+using namespace pros;
 
 extern void rightMobileGoalAllianceGoal();
-extern void leftMobileGoalAllianceGoal();
-
 extern void rightMobileGoalCenterGoalAllianceGoal();
+extern void leftMobileGoalAllianceGoal();
+extern void centerGoal();
 
-extern void rightAllianceGoals();
-extern void leftAllianceGoals();
-
-extern void leftWinPoint();
 #endif

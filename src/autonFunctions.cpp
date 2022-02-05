@@ -54,7 +54,7 @@ void move(double distanceInInches, double speedLimit) {
 	double progress = current;
 	double speed;
 
-	while ((fabs(error) > 10) && (millis() < maxTime)) {
+	while ((fabs(error) > 15) && (millis() < maxTime)) {
 		current = (fl.get_position() + bl.get_position() + bl2.get_position() +
 		fr.get_position() + br.get_position() + br2.get_position()) / 6.0;
 
@@ -81,10 +81,10 @@ void move(double distanceInInches, double speedLimit) {
 
 		// move motors by speed * directMultiplier
 		fl.move(speed);
-		bl.move(speed);
-		bl2.move(speed);
 		fr.move(speed);
+		bl.move(speed);
 		br.move(speed);
+		bl2.move(speed);
 		br2.move(speed);
 
 		delay(10);
@@ -227,12 +227,12 @@ void moveLift(double liftSpeed) {
 
 // lower the front claw
 void hookFrontClaw() {
-	frontClaw.set_value(0);
+	frontClaw.set_value(1);
 }
 
 // lift the front claw
 void unhookFrontClaw() {
-	frontClaw.set_value(1);
+	frontClaw.set_value(0);
 }
 
 // lower the back claw
