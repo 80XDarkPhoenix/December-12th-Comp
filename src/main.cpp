@@ -40,16 +40,6 @@ discovered that they were not accurate. We decided to use the inertial sensor to
 help with this. */
 Imu inertial(12);
 
-/* The V5 Distance Sensor measures distance to an object, approximate object
-size, and approach speed. The distance measurement range is 20mm to 2,000mm.
-The V5 Distance Sensor uses a classroom safe Class 1 Laser, similar to those
-used on modern cell phones for head detection. The laser allows the sensor to
-have a very narrow field of view, so detection is always directly in front of
-the sensor. We use the distance sensor to detect the wall, so our autonomous
-stays consistent on multiple fields and in different conditions. */
-//Distance frontDistance();
-//Distance backDistance();
-
 /* Runs initialization code. This occurs as soon as the program is started. All
 other competition modes are blocked by initialize. */
 void initialize() {
@@ -74,7 +64,7 @@ void initialize() {
 	// lift
 	frontLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
-	// ring Intake
+	// ring intake
 	ringIntake.set_brake_mode(MOTOR_BRAKE_BRAKE);
 }
 
@@ -98,7 +88,7 @@ non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
 void autonomous() {
-	//rightMobileGoalAllianceGoal();
+	// rightMobileGoalAllianceGoal();
 	// rightMobileGoalCenterGoalAllianceGoal();
   // leftMobileGoalAllianceGoal();
 	// skillsAuton();

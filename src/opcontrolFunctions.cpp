@@ -9,6 +9,8 @@ the code, especially opcontrol. */
 /* "get_digital" checks if a digital channel "button" on the controller is
 currently pressed. */
 
+// All the buttons/joysticks used are chosen based off the driver's preference.
+
 /* "Arcade" control for base. One joystick is used to control
 the base. The Y axis controls forward and backward motion and the X axis
 controls turning motion. Function gets analog of joystick and "sends" them to
@@ -26,7 +28,7 @@ void drive() {
 	bl2.move(drives + turns);
 }
 
-// Moves the front lift up and down.
+// moves the front lift up and down
 void driveFrontLift() {
 	if(master.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y) > 5) {
 		frontLift.move(127);
@@ -43,18 +45,18 @@ void driveFrontLift() {
 // Claws
 //  0 and 1 are states of the pnuematics.
 
-// Moves the front claw up and down.
+// moves the front claw up and down
 void driveFrontClaw() {
-	if(master.get_digital(DIGITAL_R1)==1) {
+	if(master.get_digital(DIGITAL_R1) == 1) {
 		frontClaw.set_value(0);
 	}
 	else if(master.get_digital(DIGITAL_R2))
 	frontClaw.set_value(1);
 }
 
-// Moves the back claw up and down.
+// moves the back claw up and down
 void driveBackClaw() {
-	if(master.get_digital(DIGITAL_L1)==1) {
+	if(master.get_digital(DIGITAL_L1) == 1) {
 		backClaw.set_value(1);
 		backClaw2.set_value(0);
 	}
@@ -63,9 +65,9 @@ void driveBackClaw() {
 		backClaw2.set_value(1);
 }
 
-// Moves the ring intake.
+// moves the ring intake
 void driveRingIntake() {
-	if(master.get_digital(DIGITAL_A)==1) {
+	if(master.get_digital(DIGITAL_A) == 1) {
 		ringIntake.move(-100);
 	}
 	else

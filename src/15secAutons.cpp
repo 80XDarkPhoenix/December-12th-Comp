@@ -3,6 +3,7 @@
 
 using namespace pros;
 
+// scores mobile goal and clears and scores rings in alliance goal on right side
 void rightMobileGoalAllianceGoal() {
 	// make sure claws are up
 	unhookBackClaw();
@@ -29,9 +30,13 @@ void rightMobileGoalAllianceGoal() {
 	move(20, 100);
 	delay(50);
 	moveLift(0);
-	delay(100);
+
+	unhookBackClaw();
+	unhookFrontClaw();
 }
 
+/* scores mobile goal and center goal and clears and scores rings in alliance
+goal on right side */
 void rightMobileGoalCenterGoalAllianceGoal() {
 	// make sure claws are unhooked
 	unhookBackClaw();
@@ -66,8 +71,12 @@ void rightMobileGoalCenterGoalAllianceGoal() {
 	delay(200);
 
 	move(-12, 120);
+
+	unhookBackClaw();
+	unhookFrontClaw();
 }
 
+// scores mobile goal and clears and scores rings in alliance goal on left side
 void leftMobileGoalAllianceGoal() {
 	// make sure claws are unhooked
 	unhookBackClaw();
@@ -107,10 +116,7 @@ void leftMobileGoalAllianceGoal() {
 	move(-15, 50);
 	delay(200);
 	move(15, 50);
-	delay(200);
-	move(-15, 50);
-	delay(200);
-	move(15, 50);
-	delay(200);
-	move(-15, 50);
+
+	unhookBackClaw();
+	unhookFrontClaw();
 }

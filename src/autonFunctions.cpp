@@ -81,8 +81,8 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 		}
 
 		// deacceleration
-		double maxDeaccelerationSpeed = 6.0 * sqrt(error);
-		if (currentVelocity > maxDeaccelerationSpeed) 
+		maxDeaccelerationSpeed = 6.0 * sqrt(error);
+		if (currentVelocity > maxDeaccelerationSpeed)
 		speed = maxDeaccelerationSpeed;
 
 		speed = speed * directMultiplier;
@@ -105,7 +105,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 	br.move(0);
 	br2.move(0);
 
-	delay(10); // let motors fully stop
+	delay(10);
 }
 
 // turn
@@ -194,7 +194,6 @@ void turn (double angle, int speedLimit) {
 			br.move(0);
 			br2.move(0);
 
-			// let base motors stop
       delay(100);
 
 			// used to tune turnEncoders and turnAccelerator
@@ -206,7 +205,7 @@ void turn (double angle, int speedLimit) {
 		}
 		delay (5);
 	}
-	delay(100); // let base come to a complete stop
+	delay(100);
 }
 
 // LIFTS
@@ -257,49 +256,4 @@ void unhookBackClaw() {
 // move the ring intake at a set speed
 void moveRingIntake(double ringIntakeSpeed) {
 	ringIntake.move(ringIntakeSpeed);
-}
-
-// distance
-
-/* gets the distance in inches from an object (perimeter wall) to the front
-distance sensor */
-double getFrontDistance() {
-  double dist = 0;
-  int index = 0;
-  while ((index < 10) && (dist == 0)) {
-  //  dist = frontDistance.get() * 0.0394; // converts distance to inches
-    delay(5);
-    index++;
-  }
-  return dist;
-}
-
-/* gets the distance in inches from an object (perimeter wall) to the back
-distance sensor */
-double getBackDistance() {
-  double dist = 0;
-  int index = 0;
-
-  while ((index < 10) && (dist == 0)) {
-  //  dist = backDistance.get()*0.0394;
-    delay(5);
-    index++;
-  }
-  return dist;
-}
-
-// move to goalDistanceFromWall using the front distance sensor
-void frontDistanceMove(double goalDistanceFromWall)
-{
-  double actualDistanceFromWall = getFrontDistance();
-  if(actualDistanceFromWall != 0)
-  move(actualDistanceFromWall - goalDistanceFromWall, 110);
-}
-
-// move to goalDistanceFromWall using the front distance sensor
-void backDistanceMove(double goalDistanceFromWall)
-{
-  double actualDistanceFromWall = getBackDistance();
-  if (actualDistanceFromWall != 0)
-  move(-actualDistanceFromWall + goalDistanceFromWall, 110);
 }
