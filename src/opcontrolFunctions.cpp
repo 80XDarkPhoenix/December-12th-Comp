@@ -16,7 +16,7 @@ the base motors.*/
 void drive() {
 	// "get_analog" gets the value of an analog channel (joystick) on a controller
 	float drives = master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y);
-	float turns = master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X);
+	float turns = master.get_analog(E_CONTROLLER_ANALOG_LEFT_X);
 
 	fr.move(drives - turns);
 	br.move(drives - turns);
@@ -28,10 +28,10 @@ void drive() {
 
 // Moves the front lift up and down.
 void driveFrontLift() {
-	if(master.get_digital(DIGITAL_R1)==1) {
+	if(master.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y) > 5) {
 		frontLift.move(127);
 	}
-	else if(master.get_digital(DIGITAL_R2)) {
+	else if(master.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y) < -5) {
 		frontLift.move(-127);
 	}
 	else
@@ -45,10 +45,10 @@ void driveFrontLift() {
 
 // Moves the front claw up and down.
 void driveFrontClaw() {
-	if(master.get_digital(DIGITAL_X)==1) {
+	if(master.get_digital(DIGITAL_R1)==1) {
 		frontClaw.set_value(0);
 	}
-	else if(master.get_digital(DIGITAL_Y))
+	else if(master.get_digital(DIGITAL_R2))
 	frontClaw.set_value(1);
 }
 
@@ -66,7 +66,7 @@ void driveBackClaw() {
 // Moves the ring intake.
 void driveRingIntake() {
 	if(master.get_digital(DIGITAL_A)==1) {
-		ringIntake.move(0);
+		ringIntake.move(-100);
 	}
 	else
 	{

@@ -8,8 +8,8 @@ void rightMobileGoalAllianceGoal() {
 	unhookBackClaw();
 	unhookFrontClaw();
 	moveRingIntake(100);
-	move(55, 127); // move to mobile goal
-	hookFrontClaw();
+	move(48, 127, true); // move to mobile goal
+	//hookFrontClaw();
 	delay(500);
 	move(-20, 120);
 	liftLift();
@@ -74,8 +74,9 @@ void leftMobileGoalAllianceGoal() {
 	unhookFrontClaw();
 
 	// move and hook claw on mobile goal
-	move(60, 127); // move to mobile goal
-	hookFrontClaw();
+
+	move(48, 127, true); // move to mobile goal
+	// hookFrontClaw();
 	delay(500);
 
 	move(-52, 110); // reverse to alliance zone

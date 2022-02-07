@@ -27,11 +27,12 @@ double turnMinSpeed = 35;
 double maxSpeed = 127;
 
 // accelerators
-double accelerator = 0.0095;
+double accelerator = 0.04;
 double turnAccelerator = 0.008;
+double maxDeaccelerationSpeed;
 
 // move
-void move(double distanceInInches, double speedLimit) {
+void move(double distanceInInches, double speedLimit, bool operateClaw) {
 	// "resets" motors
 	fl.tare_position();
 	bl.tare_position();
@@ -60,6 +61,13 @@ void move(double distanceInInches, double speedLimit) {
 
 		error = distanceInEncoders - current;
 		progress = current;
+
+		if(operateClaw && (fabs(error) < 60))
+			{
+				hookFrontClaw();
+				operateClaw = false;
+			}
+
 		speed = minSpeed + accelerator * progress * error;
 
 		// "currentVelocity" equals the average/mean of the base motors
@@ -73,13 +81,12 @@ void move(double distanceInInches, double speedLimit) {
 		}
 
 		// deacceleration
-		double maxDeaccelerationSpeed = 4.25 * sqrt(error);
-		if (currentVelocity > maxDeaccelerationSpeed)
+		double maxDeaccelerationSpeed = 6.0 * sqrt(error);
+		if (currentVelocity > maxDeaccelerationSpeed) 
 		speed = maxDeaccelerationSpeed;
 
 		speed = speed * directMultiplier;
 
-		// move motors by speed * directMultiplier
 		fl.move(speed);
 		fr.move(speed);
 		bl.move(speed);

@@ -15,9 +15,10 @@ extern double maxSpeed;
 // accelerator
 extern double accelerator;
 extern double turnAccelerator;
+extern double maxDeaccelerationSpeed;
 
 // move
-extern void move(double distanceInInches, double speedLimit);
+extern void move(double distanceInInches, double speedLimit, bool operateClaw = false);
 
 // turn
 extern double getAngle();

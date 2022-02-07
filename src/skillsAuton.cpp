@@ -1,5 +1,4 @@
 #include "main.h"
-
 #include "math.h"
 
 using namespace pros;
@@ -15,7 +14,6 @@ void skillsAuton() {
   moveLift(127);
   move(-22, 110); // move back to alliance goal
   moveLift(0);
-//  frontDistanceMove();
   hookBackClaw();
   delay(500);
   moveRingIntake(100);
@@ -23,7 +21,6 @@ void skillsAuton() {
   // in between alliance goal and mobile goal
   move(12, 110);
   delay(50);
-//  frontDistanceMove();
   turn(45, 110);
   moveRingIntake(0);
   delay(50);
@@ -71,102 +68,4 @@ void skillsAuton() {
   turn(62,100);
   delay(50);
   move(-100, 120);
-
-
-//  turn(-45, 110);
-
-
-/*  move(, 110);
-  delay(50);
-  turn(45, 110);
-  move(, 110);
-  delay(50);
-  turn(-90, 110);
-  delay(50);
-  move(, 110);
-  unhookFrontClaw();
-  delay(500);
-
-  move(-, 110);
-  lowerLift();
-  turn(-90, 110);
-  unhookBackClaw();
-  delay(50);
-
-  move(, 110);
-  hookFrontClaw();
-  delay(500);
-
-  move(-, 110);
-  delay(50);
-  turn(45, 110);
-  delay(50);
-  move(-, 110);
-  hookBackClaw();
-  delay(500);
-  move(-, 110);
-  unhookBackClaw();
-  delay(50);
-
-  move(, 110);
-  delay(50);
-  move(-, 110);
-  hookBackClaw();
-  delay(500);
-
-  moveLift(110);
-  move(, 110);
-  delay(50);
-  turn(90, 110);
-  move(, 110);
-  unhookFrontClaw();
-  delay(500);
-  moveLift(0);
-
-  move(-, 110);
-  delay(50);
-  turn(90, 110);
-  moveLift(-110)
-//  frontDistanceMove();
-  delay(50);
-  move(-, 110);
-  moveLift(0);
-  delay(50);
-  turn(-90, 110);
-  delay(50);
-
-  move(, 110);
-  hookFrontClaw();
-  delay(500);
-  moveLift(110);
-  move(, 110);
-  delay(50);
-  turn(-45, 110);
-  delay(50, 110);
-  move(, 110);
-  unhookFrontClaw();
-  delay(500);
-
-  move(-, 110);
-  lowerLift();
-  turn(45, 110);
-  move(, 110);
-  hookFrontClaw();
-  delay(500);
-  move(-, 110);
-  delay(50);
-  turn(-180, 110);
-  unhookBackClaw();
-  delay(50);
-
-  move(, 110);
-  delay(50);
-  turn(45, 110);
-  moveLift(110);
-  delay(50);
-  move(, 110);
-  unhookBackClaw();
-  delay(500);
-  move(-, 127);
-  moveLift(-127); */
 }
