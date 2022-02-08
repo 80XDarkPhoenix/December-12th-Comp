@@ -3,6 +3,8 @@
 
 using namespace pros;
 
+// CHANGE AND CHANGE PNEUMATICS DELAY
+
 // scores mobile goal and clears and scores rings in alliance goal on right side
 void rightMobileGoalAllianceGoal() {
 	// make sure claws are up

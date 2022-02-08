@@ -15,21 +15,28 @@ current position.
 // encoders
 /* Throughout the code the built-in encoders are used. They track the robot's
 rotational position and velocity. */
-const double encoderPerInch = 25; // [360/3.25(perimeter of wheel)] / pi
-const double encoderPerDegreeTurn = 2.6;
+const double encoderPerInch = 35.26; // [360/3.25(perimeter of wheel)] / pi // old one 25
+const double encoderPerDegreeTurn = 2.6; // CHANGE
 
 // speed
 const double defaultSpeed = 127;
 const double defaultTurnSpeed = 127;
 
-double minSpeed = 10;
-double turnMinSpeed = 35;
+double minSpeed = 10; // CHMAGE
+double turnMinSpeed = 35; // CHNAGE
 double maxSpeed = 127;
 
 // accelerators
-double accelerator = 0.04;
-double turnAccelerator = 0.008;
+double accelerator = 0.04; // 0.0095 // CHANGE
+double turnAccelerator = 0.008; // CHANGE
 double maxDeaccelerationSpeed;
+double deaccelFactor = 6.0; // 4.25 CHANGE
+double turnDeaccelFactor = 4; // CHANGE
+
+void initSpeedControlForSkills() {
+	accelerator = 0.0095; // CHANGE
+	deaccelFactor = 4.25; // CHANGE
+}
 
 // move
 void move(double distanceInInches, double speedLimit, bool operateClaw) {
@@ -42,7 +49,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 	br2.tare_position();
 
 	int startTime = millis();
-	int maxTime = startTime + 100 + 70 * fabs(distanceInInches);
+	int maxTime = startTime + 100 + 70 * fabs(distanceInInches); // CHANGE?
 
 	int directMultiplier = 1;
 	if (distanceInInches < 0)
@@ -55,14 +62,14 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 	double progress = current;
 	double speed;
 
-	while ((fabs(error) > 15) && (millis() < maxTime)) {
+	while ((fabs(error) > 15 ) && (millis() < maxTime)) { // CHANGE
 		current = (fl.get_position() + bl.get_position() + bl2.get_position() +
 		fr.get_position() + br.get_position() + br2.get_position()) / 6.0;
 
 		error = distanceInEncoders - current;
 		progress = current;
 
-		if(operateClaw && (fabs(error) < 60))
+		if(operateClaw && (fabs(error) < 60)) // CHANGE
 			{
 				hookFrontClaw();
 				operateClaw = false;
@@ -74,14 +81,14 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 		double currentVelocity = fabs((fl.get_actual_velocity() +
 		+ bl.get_actual_velocity() + bl2.get_actual_velocity() +
 		fr.get_actual_velocity() + br.get_actual_velocity() +
-		br2.get_actual_velocity()) / 6);
+		br2.get_actual_velocity()) / 6.0);
 
 		if (speed > speedLimit) {
 			speed = speedLimit;
 		}
 
 		// deacceleration
-		maxDeaccelerationSpeed = 6.0 * sqrt(error);
+		maxDeaccelerationSpeed = deaccelFactor * sqrt(error);
 		if (currentVelocity > maxDeaccelerationSpeed)
 		speed = maxDeaccelerationSpeed;
 
@@ -141,7 +148,7 @@ void turn (double angle, int speedLimit) {
 	double directionMultiplier = 1;
 
 	int startTime = millis();
-	int maxTime = startTime + 20 * fabs(angle);
+	int maxTime = startTime + 20 * fabs(angle); // CHANGE
 
 	if (target < start)
 	directionMultiplier = -1;
@@ -149,18 +156,18 @@ void turn (double angle, int speedLimit) {
 
 		// current = average position of base motors (to turn)
 		double current = (-fr.get_position() - br.get_position() - br2.get_position()
-		+ bl.get_position() + fl.get_position() + bl2.get_position()) / 6;
+		+ bl.get_position() + fl.get_position() + bl2.get_position()) / 6.0;
 
 		double error = (target - current);
 		double progress = current - start;
 
 		double speed = turnMinSpeed  + fabs(turnAccelerator * progress * error);
-		double maxDeaccelerationSpeed = 4 * sqrt(error);
+		double maxDeaccelerationSpeed = turnDeaccelFactor * sqrt(error);
 
 		double currentVelocity = fabs((fl.get_actual_velocity() +
 		bl.get_actual_velocity() + bl2.get_actual_velocity() +
 		fr.get_actual_velocity() + br.get_actual_velocity() +
-		br2.get_actual_velocity()) / 6);
+		br2.get_actual_velocity()) / 6.0);
 
 		if (currentVelocity > maxDeaccelerationSpeed)
 		speed = maxDeaccelerationSpeed;
@@ -213,14 +220,14 @@ void turn (double angle, int speedLimit) {
 // lift the front lift completely
 void liftLift() {
 	frontLift.move(127);
-	delay(1100);
+	delay(1100); // CHANGE
 	frontLift.move(0);
 }
 
 // lower the front lift completely
 void lowerLift() {
 	frontLift.move(-127);
-	delay(1100);
+	delay(1100); // CHANGE
 	frontLift.move(0);
 }
 
