@@ -92,7 +92,11 @@ void autonomous() {
 	// rightMobileGoalCenterGoalAllianceGoal();
   // leftMobileGoalAllianceGoal();
 	// skillsAuton();
-	move(24, 110);
+unhookFrontClaw();
+	move(48, 110, true);
+	delay(250);
+	move(-40,110);
+
 }
 
 /* Runs the operator control code. This function will be started in its own

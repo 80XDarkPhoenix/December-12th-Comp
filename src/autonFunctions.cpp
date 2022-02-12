@@ -15,7 +15,7 @@ current position.
 // encoders
 /* Throughout the code the built-in encoders are used. They track the robot's
 rotational position and velocity. */
-const double encoderPerInch = 32.143*6; // [360/3.25(perimeter of wheel)] / pi // old one 25
+const double encoderPerInch = 58.0; // [360/3.25(perimeter of wheel)] / pi // old one 25
 const double encoderPerDegreeTurn = 3.4; // CHANGE old - 2.6
 
 // speed
@@ -82,7 +82,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 		current = (fl.get_position() + bl.get_position() + bl2.get_position() +
 		fr.get_position() + br.get_position() + br2.get_position()) / 6.0;
 		progress=current;
-		
+
 
 		error = distanceInEncoders - current;
 		currentAngle = getAngle();
