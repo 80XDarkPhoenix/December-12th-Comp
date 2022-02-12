@@ -6,26 +6,26 @@ using namespace pros;
 // INITIALIZATION
 
 // base
-Motor fr(13, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // front right
-Motor br(16, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // back right
-Motor br2(7, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // elevated back right
-Motor fl(14, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // front left
-Motor bl(18, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES); // back left
-Motor bl2(8, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES); // elevated back left
+Motor fr(16, E_MOTOR_GEARSET_06,false, E_MOTOR_ENCODER_DEGREES); // front right
+Motor br(11, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // back right
+Motor br2(13, E_MOTOR_GEARSET_06,false, E_MOTOR_ENCODER_DEGREES); // elevated back right
+Motor fl(15, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // front left
+Motor bl(17, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES); // back left
+Motor bl2(12, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // elevated back left
 
 // lift
-Motor frontLift(15, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor frontLift(14, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
 // claws
-/* The claws are pnuematic, so they are connected to the brain through ADI ports,
-therefore it is initialized as an "ADIDIgitalOut". The second parameter is the
+/* The claws are pnuematic, so they are connected to the brain through ADI ports
+,therefore it is initialized as an "ADIDIgitalOut". The second parameter is the
 state of the pneumatics. */
 ADIDigitalOut frontClaw(2, 1);
 ADIDigitalOut backClaw(1, 1);
 ADIDigitalOut backClaw2(3, 1);
 
 // ring intake
-Motor ringIntake(21, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+Motor ringIntake(0, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
 // Controllers
 Controller master(E_CONTROLLER_MASTER);
@@ -38,7 +38,7 @@ measures the rate of rotation about the inertial sensor 3-axis. The inertial
 sensor helps us have accurate turns. When we were testing our turns, we
 discovered that they were not accurate. We decided to use the inertial sensor to
 help with this. */
-Imu inertial(12);
+Imu inertial(21);
 
 /* Runs initialization code. This occurs as soon as the program is started. All
 other competition modes are blocked by initialize. */
@@ -92,6 +92,7 @@ void autonomous() {
 	// rightMobileGoalCenterGoalAllianceGoal();
   // leftMobileGoalAllianceGoal();
 	// skillsAuton();
+	move(24, 110);
 }
 
 /* Runs the operator control code. This function will be started in its own

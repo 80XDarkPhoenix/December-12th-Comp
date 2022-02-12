@@ -15,29 +15,40 @@ current position.
 // encoders
 /* Throughout the code the built-in encoders are used. They track the robot's
 rotational position and velocity. */
-const double encoderPerInch = 35.26; // [360/3.25(perimeter of wheel)] / pi // old one 25
-const double encoderPerDegreeTurn = 2.6; // CHANGE
+const double encoderPerInch = 32.143*6; // [360/3.25(perimeter of wheel)] / pi // old one 25
+const double encoderPerDegreeTurn = 3.4; // CHANGE old - 2.6
 
 // speed
-const double defaultSpeed = 127;
-const double defaultTurnSpeed = 127;
+const double defaultSpeed = 127.0;
+const double defaultTurnSpeed = 127.0;
 
-double minSpeed = 10; // CHMAGE
-double turnMinSpeed = 35; // CHNAGE
-double maxSpeed = 127;
+double minSpeed = 35.0; // CHMAGE
+double turnMinSpeed = 35.0; // CHNAGE
+double maxSpeed = 127.0;
 
 // accelerators
-double accelerator = 0.04; // 0.0095 // CHANGE
+double accelerator = 0.1; // 0.0095 // CHANGE
 double turnAccelerator = 0.008; // CHANGE
 double maxDeaccelerationSpeed;
 double deaccelFactor = 6.0; // 4.25 CHANGE
-double turnDeaccelFactor = 4; // CHANGE
+double turnDeaccelFactor = 4.0; // CHANGE
 
-void initSpeedControlForSkills() {
+void speedControlForSkills() {
 	accelerator = 0.0095; // CHANGE
 	deaccelFactor = 4.25; // CHANGE
 }
 
+// double getAngle()
+// {
+// 	double current_heading	= inertial.get_heading();
+//
+// 	if(current_heading > 180)
+// 	current_heading	= current_heading - 360.0;
+// 	else if(current_heading <=-180)
+// 	current_heading	= current_heading + 360.0;
+//
+// 	return current_heading;
+// }
 // move
 void move(double distanceInInches, double speedLimit, bool operateClaw) {
 	// "resets" motors
@@ -48,28 +59,36 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 	br.tare_position();
 	br2.tare_position();
 
-	int startTime = millis();
-	int maxTime = startTime + 100 + 70 * fabs(distanceInInches); // CHANGE?
+	double startAngle = getAngle();
 
-	int directMultiplier = 1;
-	if (distanceInInches < 0)
-	directMultiplier = -1;
+	int startTime = millis();
+	int maxTime = startTime + 100.0 + 70.0 * fabs(distanceInInches); // CHANGE?
+
+	int directMultiplier = 1.0;
+	if (distanceInInches < 0.0)
+	directMultiplier = -1.0;
 
 	double distanceInEncoders = distanceInInches * encoderPerInch;
 
-	double current = 0;
+	double current = 0.0;
 	double error = distanceInEncoders - current;
 	double progress = current;
 	double speed;
+	double currentAngle = startAngle;
+	double changeAngle = 0.0;
+	double headingCorrection = 0.0;
 
-	while ((fabs(error) > 15 ) && (millis() < maxTime)) { // CHANGE
+	while ((fabs(error) > 15.0) && (millis() < maxTime)) { // CHANGE
 		current = (fl.get_position() + bl.get_position() + bl2.get_position() +
 		fr.get_position() + br.get_position() + br2.get_position()) / 6.0;
+		progress=current;
+		
 
 		error = distanceInEncoders - current;
-		progress = current;
+		currentAngle = getAngle();
+		changeAngle = currentAngle - startAngle;
 
-		if(operateClaw && (fabs(error) < 60)) // CHANGE
+		if(operateClaw && (fabs(error) < 60.0))
 			{
 				hookFrontClaw();
 				operateClaw = false;
@@ -93,13 +112,14 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 		speed = maxDeaccelerationSpeed;
 
 		speed = speed * directMultiplier;
+		headingCorrection = changeAngle * 10.0;
 
-		fl.move(speed);
-		fr.move(speed);
-		bl.move(speed);
-		br.move(speed);
-		bl2.move(speed);
-		br2.move(speed);
+		fl.move(speed - headingCorrection);
+		fr.move(speed + headingCorrection);
+		bl.move(speed - headingCorrection);
+		br.move(speed + headingCorrection);
+		bl2.move(speed - headingCorrection);
+		br2.move(speed + headingCorrection);
 
 		delay(10);
 	}
@@ -142,16 +162,16 @@ void turn (double angle, int speedLimit) {
 
 	double startAngle = getAngle();
 	double targetAngle = startAngle + angle;
-	double start = 0;
+	double start = 0.0;
 	double target = angle * encoderPerDegreeTurn;
-	double current = 0;
+	double current = 0.0;
 	double directionMultiplier = 1;
 
 	int startTime = millis();
-	int maxTime = startTime + 20 * fabs(angle); // CHANGE
+	int maxTime = startTime + 20.0 * fabs(angle); // CHANGE
 
 	if (target < start)
-	directionMultiplier = -1;
+	directionMultiplier = -1.0;
 	while(notAtTarget) {
 
 		// current = average position of base motors (to turn)
