@@ -112,7 +112,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 		speed = maxDeaccelerationSpeed;
 
 		speed = speed * directMultiplier;
-		headingCorrection = changeAngle * 10.0;
+		headingCorrection = changeAngle * 5.0 * directMultiplier;
 
 		fl.move(speed - headingCorrection);
 		fr.move(speed + headingCorrection);

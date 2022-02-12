@@ -93,9 +93,10 @@ void autonomous() {
   // leftMobileGoalAllianceGoal();
 	// skillsAuton();
 unhookFrontClaw();
-	move(48, 110, true);
-	delay(250);
-	move(-40,110);
+unhookBackClaw();
+	move(46, 110, true);
+	delay(400);
+	move(-36,110);
 
 }
 
