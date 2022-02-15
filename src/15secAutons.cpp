@@ -3,7 +3,18 @@
 
 using namespace pros;
 
-// CHANGE AND CHANGE PNEUMATICS DELAY
+// CHANGE AND CHANGE PNEUMATICS DELAY AND LIFT AFTER PICKING UP 
+
+/*
+right mobile goal
+left mobile goal
+right mobile goal and alliance goal wp
+left mobile goal and alliance goal wp
+right alliance goal wp
+left alliance goal wp
+wp from right
+wp from left
+*/
 
 // scores mobile goal and clears and scores rings in alliance goal on right side
 void rightMobileGoalAllianceGoal() {
