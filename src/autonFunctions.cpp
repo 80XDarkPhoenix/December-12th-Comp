@@ -33,22 +33,6 @@ double maxDeaccelerationSpeed;
 double deaccelFactor = 6.0; // 4.25 CHANGE
 double turnDeaccelFactor = 4.0; // CHANGE
 
-void speedControlForSkills() {
-	accelerator = 0.0095; // CHANGE
-	deaccelFactor = 4.25; // CHANGE
-}
-
-// double getAngle()
-// {
-// 	double current_heading	= inertial.get_heading();
-//
-// 	if(current_heading > 180)
-// 	current_heading	= current_heading - 360.0;
-// 	else if(current_heading <=-180)
-// 	current_heading	= current_heading + 360.0;
-//
-// 	return current_heading;
-// }
 // move
 void move(double distanceInInches, double speedLimit, bool operateClaw) {
 	// "resets" motors
@@ -62,7 +46,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 	double startAngle = getAngle();
 
 	int startTime = millis();
-	int maxTime = startTime + 100.0 + 70.0 * fabs(distanceInInches); // CHANGE?
+	int maxTime = startTime + 100.0 + 70.0 * fabs(distanceInInches);
 
 	int directMultiplier = 1.0;
 	if (distanceInInches < 0.0)
@@ -78,11 +62,11 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 	double changeAngle = 0.0;
 	double headingCorrection = 0.0;
 
-	while ((fabs(error) > 15.0) && (millis() < maxTime)) { // CHANGE
+	while ((fabs(error) > 15.0) && (millis() < maxTime)) {
 		current = (fl.get_position() + bl.get_position() + bl2.get_position() +
 		fr.get_position() + br.get_position() + br2.get_position()) / 6.0;
-		progress=current;
 
+		progress = current;
 
 		error = distanceInEncoders - current;
 		currentAngle = getAngle();

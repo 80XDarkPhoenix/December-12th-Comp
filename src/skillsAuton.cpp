@@ -6,10 +6,9 @@ using namespace pros;
 // CHANGE AND CHANGE PNEUMATICS DELAY
 
 void skillsAuton() {
-  speedControlForSkills();
 
   // start 90 degrees left
-  
+
   // make sure claws start up
   unhookFrontClaw();
   unhookBackClaw();

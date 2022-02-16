@@ -19,8 +19,6 @@ extern double maxDeaccelerationSpeed;
 extern double deaccelFactor;
 extern double turnDeaccelFactor;
 
-extern void speedControlForSkills();
-
 // move
 extern void move(double distanceInInches, double speedLimit, bool operateClaw = false);
 

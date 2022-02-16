@@ -3,7 +3,7 @@
 
 using namespace pros;
 
-// CHANGE AND CHANGE PNEUMATICS DELAY AND LIFT AFTER PICKING UP 
+// CHANGE AND CHANGE PNEUMATICS DELAY AND LIFT AFTER PICKING UP
 
 /*
 right mobile goal
@@ -14,122 +14,81 @@ right alliance goal wp
 left alliance goal wp
 wp from right
 wp from left
+
+unhookFrontClaw();
+unhookBackClaw();
+move(46, 110, true);
+delay(400);
+move(-36,110);
 */
 
-// scores mobile goal and clears and scores rings in alliance goal on right side
-void rightMobileGoalAllianceGoal() {
-	// make sure claws are up
-	unhookBackClaw();
-	unhookFrontClaw();
-	moveRingIntake(100);
-	move(48, 127, true); // move to mobile goal
-	//hookFrontClaw();
-	delay(500);
-	move(-20, 120);
-	liftLift();
-	delay(75);
-	turn(-100, 120);
-	moveLift(-127);
-	delay(100);
-	unhookFrontClaw();
-	delay(200);
-	move(-24, 120);
-	hookBackClaw();
-	delay(500);
-	move(12, 120);
-	delay(200);
-	turn(-125, 120);
-	liftLift();
-	move(20, 100);
-	delay(50);
-	moveLift(0);
+// mobile goal
 
-	unhookBackClaw();
+void rightMobile() {
+	// unhook both claws
 	unhookFrontClaw();
+	unhookBackClaw();
+
+	move(, 127, true); // move to mobile goal
+	moveLift(127); // lift lift so teams cannot steal the goal
+	delay(400);
+	moveLift(0); // stop lift
+
+	move(-, 127); // move to alliance zone
 }
 
-/* scores mobile goal and center goal and clears and scores rings in alliance
-goal on right side */
-void rightMobileGoalCenterGoalAllianceGoal() {
-	// make sure claws are unhooked
-	unhookBackClaw();
+void leftMobile() {
+	// unhook both claws
 	unhookFrontClaw();
-
-	// move and hook claw on mobile goal
-	move(-55, 127); // move to mobile goal
-	hookBackClaw();
-	delay(500);
-
-	turn(97, 100);
-	delay(200);
-	move(28, 120);
-	hookFrontClaw();
-	delay(500);
-
-	turn(60, 120);
-	delay(200);
-	move(-50, 120);
-	delay(200);
-	turn(45, 120);
-	delay(200);
-	move(-5, 120);
 	unhookBackClaw();
-	delay(200);
 
-	move(7, 120);
-	delay(200);
-	turn(-90, 120);
-	hookBackClaw();
-	moveRingIntake(100);
-	delay(200);
+	move(, 127, true); // move to mobile goal
+	moveLift(127); // lift lift so teams cannot steal the goal
+	delay(400);
+	moveLift(0); // stop lift
 
-	move(-12, 120);
-
-	unhookBackClaw();
-	unhookFrontClaw();
+	move(-, 127); // move to alliance zone
 }
 
-// scores mobile goal and clears and scores rings in alliance goal on left side
-void leftMobileGoalAllianceGoal() {
-	// make sure claws are unhooked
-	unhookBackClaw();
-	unhookFrontClaw();
+// mobile and alliance goals
 
-	// move and hook claw on mobile goal
+void rightMobileAlliance() {
+	// same thing as mobile goal
 
-	move(48, 127, true); // move to mobile goal
-	// hookFrontClaw();
-	delay(500);
-
-	move(-52, 110); // reverse to alliance zone
-//	backDistanceMove(); // correct distance
-
-// let go of mobile go (in home zone)
-	unhookFrontClaw();
+	unhookFrontClaw(); // let go of mobile goal in alliance zone
 	delay(200);
-
-	turn(-120, 80); // turn with back to center goal
-	moveLift(110);
-	delay(100);
-	move(-13, 80);
-	moveLift(0);
+	turn(-90, 100); // turn with back to alliance goal
+	move(-, 100);
 	hookBackClaw();
-	delay(250);
-	moveRingIntake(100);
-	move(35, 40);
-	delay(100);
-	move(-15, 50);
 	delay(200);
-	move(15, 50);
-	delay(200);
-	move(-15, 50);
-	delay(200);
-	move(15, 50);
-	delay(200);
-	move(-15, 50);
-	delay(200);
-	move(15, 50);
-
-	unhookBackClaw();
-	unhookFrontClaw();
+	moveRingIntake();
+	move(, 127);
 }
+
+void leftMobileAlliance() {
+	// same thing as mobile goal
+
+	unhookFrontClaw(); // let go of mobile goal in alliance zone
+	delay(200);
+	turn(-90, 100); // turn with back to alliance goal
+	delay(200);
+	move(-, 100); // reverse to alliance goal
+	hookBackClaw();
+	delay(200);
+	moveRingIntake();
+}
+
+void rightAlliance() {}
+void leftAlliance() {}
+
+void rightWinPoint() {}
+void leftWinPoint() {}
+
+void rightCenter() {}
+void leftCenter() {}
+
+void rightMobileCenter() {}
+void leftMobileCenter() {}
+
+void rightMobileCenterAlliance() {}
+void leftMobileCenterAlliance() {}
