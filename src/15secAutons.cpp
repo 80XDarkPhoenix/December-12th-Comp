@@ -3,25 +3,6 @@
 
 using namespace pros;
 
-// CHANGE AND CHANGE PNEUMATICS DELAY AND LIFT AFTER PICKING UP
-
-/*
-right mobile goal
-left mobile goal
-right mobile goal and alliance goal wp
-left mobile goal and alliance goal wp
-right alliance goal wp
-left alliance goal wp
-wp from right
-wp from left
-
-unhookFrontClaw();
-unhookBackClaw();
-move(46, 110, true);
-delay(400);
-move(-36,110);
-*/
-
 // mobile goal
 
 void rightMobile() {

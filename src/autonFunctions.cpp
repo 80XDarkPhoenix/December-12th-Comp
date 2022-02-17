@@ -22,16 +22,16 @@ const double encoderPerDegreeTurn = 3.4; // CHANGE old - 2.6
 const double defaultSpeed = 127.0;
 const double defaultTurnSpeed = 127.0;
 
-double minSpeed = 35.0; // CHMAGE
-double turnMinSpeed = 35.0; // CHNAGE
+double minSpeed = 35.0;
+double turnMinSpeed = 35.0;
 double maxSpeed = 127.0;
 
 // accelerators
-double accelerator = 0.1; // 0.0095 // CHANGE
-double turnAccelerator = 0.008; // CHANGE
+double accelerator = 0.1; // 0.0095
+double turnAccelerator = 0.008;
 double maxDeaccelerationSpeed;
-double deaccelFactor = 6.0; // 4.25 CHANGE
-double turnDeaccelFactor = 4.0; // CHANGE
+double deaccelFactor = 6.0; // 4.25
+double turnDeaccelFactor = 4.0; //
 
 // move
 void move(double distanceInInches, double speedLimit, bool operateClaw) {
@@ -78,16 +78,20 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 				operateClaw = false;
 			}
 
-		speed = minSpeed + accelerator * progress * error;
-
 		// "currentVelocity" equals the average/mean of the base motors
 		double currentVelocity = fabs((fl.get_actual_velocity() +
 		+ bl.get_actual_velocity() + bl2.get_actual_velocity() +
 		fr.get_actual_velocity() + br.get_actual_velocity() +
 		br2.get_actual_velocity()) / 6.0);
 
+		// speed = minSpeed + accelerator * progress * error;
+		speed = currentVelocity + 10;
+
 		if (speed > speedLimit) {
 			speed = speedLimit;
+		}
+		else if (speed < minSpeed) {
+			speed = minSpeed;
 		}
 
 		// deacceleration

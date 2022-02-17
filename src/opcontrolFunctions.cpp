@@ -65,10 +65,10 @@ void driveBackClaw() {
 // moves the ring intake using button A
 void driveRingIntake() {
 	if(master.get_digital(DIGITAL_A) == 1) {
-		ringIntake.move(-100);
+		ringIntake.move(-);
 	}
 	else
 	{
-		ringIntake.move(100);
+		ringIntake.move();
 	}
 }
