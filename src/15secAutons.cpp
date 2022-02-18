@@ -10,12 +10,12 @@ void rightMobile() {
 	unhookFrontClaw();
 	unhookBackClaw();
 
-	move(, 127, true); // move to mobile goal
+	move(1, 127, true); // move to mobile goal
 	moveLift(127); // lift lift so teams cannot steal the goal
 	delay(400);
 	moveLift(0); // stop lift
 
-	move(-, 127); // move to alliance zone
+	move(-1, 127); // move to alliance zone
 }
 
 void leftMobile() {
@@ -23,12 +23,12 @@ void leftMobile() {
 	unhookFrontClaw();
 	unhookBackClaw();
 
-	move(, 127, true); // move to mobile goal
+	move(1, 127, true); // move to mobile goal
 	moveLift(127); // lift lift so teams cannot steal the goal
 	delay(400);
 	moveLift(0); // stop lift
 
-	move(-, 127); // move to alliance zone
+	move(-1, 127); // move to alliance zone
 }
 
 // mobile and alliance goals
@@ -39,11 +39,11 @@ void rightMobileAlliance() {
 	unhookFrontClaw(); // let go of mobile goal in alliance zone
 	delay(200);
 	turn(-90, 100); // turn with back to alliance goal
-	move(-, 100);
+	move(-1, 100);
 	hookBackClaw();
 	delay(200);
-	moveRingIntake();
-	move(, 127);
+	moveRingIntake(1);
+	move(1, 127);
 }
 
 void leftMobileAlliance() {
@@ -53,10 +53,10 @@ void leftMobileAlliance() {
 	delay(200);
 	turn(-90, 100); // turn with back to alliance goal
 	delay(200);
-	move(-, 100); // reverse to alliance goal
+	move(-1, 100); // reverse to alliance goal
 	hookBackClaw();
 	delay(200);
-	moveRingIntake();
+	moveRingIntake(1);
 }
 
 void rightAlliance() {}

@@ -6,26 +6,26 @@ using namespace pros;
 // INITIALIZATION
 
 // base
-Motor fr(, E_MOTOR_GEARSET_06,false, E_MOTOR_ENCODER_DEGREES); // front right
-Motor br(, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // back right
-Motor br2(, E_MOTOR_GEARSET_06,false, E_MOTOR_ENCODER_DEGREES); // elevated back right
-Motor fl(, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // front left
-Motor bl(, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES); // back left
-Motor bl2(, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // elevated back left
+Motor fr(4, E_MOTOR_GEARSET_06,true, E_MOTOR_ENCODER_DEGREES); // front right
+Motor br(3, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES); // back right
+Motor br2(2, E_MOTOR_GEARSET_06,true, E_MOTOR_ENCODER_DEGREES); // elevated back right
+Motor fl(7, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // front left
+Motor bl(8, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // back left
+Motor bl2(9, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES); // elevated back left
 
 // lift
-Motor frontLift(, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor frontLift(1, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
 // claws
 /* The claws are pnuematic, so they are connected to the brain through ADI ports
 ,therefore it is initialized as an "ADIDIgitalOut". The second parameter is the
 state of the pneumatics. */
-ADIDigitalOut frontClaw(, 1);
-ADIDigitalOut backClaw(, 1);
-ADIDigitalOut backClaw2(, 1);
+ADIDigitalOut frontClaw(3, 1);
+ADIDigitalOut backClaw(1, 1);
+
 
 // ring intake
-Motor ringIntake(, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+Motor ringIntake(20, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
 // Controllers
 Controller master(E_CONTROLLER_MASTER);
@@ -38,7 +38,7 @@ measures the rate of rotation about the inertial sensor 3-axis. The inertial
 sensor helps us have accurate turns. When we were testing our turns, we
 discovered that they were not accurate. We decided to use the inertial sensor to
 help with this. */
-Imu inertial();
+Imu inertial(21);
 
 /* Runs initialization code. This occurs as soon as the program is started. All
 other competition modes are blocked by initialize. */

@@ -55,20 +55,18 @@ void driveFrontClaw() {
 void driveBackClaw() {
 	if(master.get_digital(DIGITAL_L1) == 1) {
 		backClaw.set_value(1);
-		backClaw2.set_value(0);
 	}
 	else if(master.get_digital(DIGITAL_L2))
 		backClaw.set_value(0);
-		backClaw2.set_value(1);
 }
 
 // moves the ring intake using button A
 void driveRingIntake() {
 	if(master.get_digital(DIGITAL_A) == 1) {
-		ringIntake.move(-);
+		ringIntake.move(-1);
 	}
 	else
 	{
-		ringIntake.move();
+		ringIntake.move(1);
 	}
 }

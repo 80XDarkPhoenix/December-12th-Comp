@@ -27,7 +27,6 @@ extern Motor frontLift;
 // claws
 extern ADIDigitalOut frontClaw;
 extern ADIDigitalOut backClaw;
-extern ADIDigitalOut backClaw2;
 
 // ring intake
 extern Motor ringIntake;
