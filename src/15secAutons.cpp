@@ -6,44 +6,44 @@ using namespace pros;
 // mobile goal
 
 void rightMobile() {
-	// unhook both claws
-	unhookFrontClaw();
-	unhookBackClaw();
-
-	move(1, 127, true); // move to mobile goal
-	moveLift(127); // lift lift so teams cannot steal the goal
-	delay(400);
-	moveLift(0); // stop lift
-
-	move(-1, 127); // move to alliance zone
+	frontLift.move_absolute(0, 50);
+	move(48, 127, true); // move to mobile goal
+	//moveLift(120); // lift lift so teams cannot steal the goal
+	frontLift.move_absolute(500, 120);
+	move(-30, 127);
+	frontLift.move_absolute(7, 120);
 }
 
 void leftMobile() {
-	// unhook both claws
-	unhookFrontClaw();
-	unhookBackClaw();
-
-	move(1, 127, true); // move to mobile goal
-	moveLift(127); // lift lift so teams cannot steal the goal
-	delay(400);
-	moveLift(0); // stop lift
-
-	move(-1, 127); // move to alliance zone
+	frontLift.move_absolute(0, 50);
+	move(53, 127, true); // move to mobile goal
+	//moveLift(120); // lift lift so teams cannot steal the goal
+	frontLift.move_absolute(500, 120);
+	delay(200);
+	move(-30, 127);
+	frontLift.move_absolute(7, 120);
 }
 
 // mobile and alliance goals
 
 void rightMobileAlliance() {
-	// same thing as mobile goal
-
-	unhookFrontClaw(); // let go of mobile goal in alliance zone
+	frontLift.move_absolute(0, 50);
+	move(48, 127, true); // move to mobile goal
+	//moveLift(120); // lift lift so teams cannot steal the goal
+	frontLift.move_absolute(500, 120);
 	delay(200);
-	turn(-90, 100); // turn with back to alliance goal
-	move(-1, 100);
+	move(-24, 127);
+	frontLift.move_absolute(7, 120);
+
+	delay(200);
+	turn(-90, 80); // turn with back to alliance goal
+	move(-16, 80);
 	hookBackClaw();
 	delay(200);
-	moveRingIntake(1);
-	move(1, 127);
+	moveRingIntake(100);
+	move(20, 127);
+	unhookBackClaw();
+	unhookFrontClaw();
 }
 
 void leftMobileAlliance() {

@@ -6,12 +6,13 @@ using namespace pros;
 // INITIALIZATION
 
 // base
-Motor fr(4, E_MOTOR_GEARSET_06,true, E_MOTOR_ENCODER_DEGREES); // front right
-Motor br(3, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES); // back right
-Motor br2(2, E_MOTOR_GEARSET_06,true, E_MOTOR_ENCODER_DEGREES); // elevated back right
+Motor fr(4, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES); // front right
+Motor br(2, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // back right
+Motor br2(3, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES); // elevated back right
+
 Motor fl(7, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // front left
-Motor bl(8, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // back left
-Motor bl2(9, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES); // elevated back left
+Motor bl(9, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES); // back left
+Motor bl2(8, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // elevated back left
 
 // lift
 Motor frontLift(1, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
@@ -25,7 +26,7 @@ ADIDigitalOut backClaw(1, 1);
 
 
 // ring intake
-Motor ringIntake(20, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+Motor ringIntake(11, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
 // Controllers
 Controller master(E_CONTROLLER_MASTER);
@@ -87,7 +88,9 @@ Alternatively, this function may be called in initialize or opcontrol for
 non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
-void autonomous() {}
+void autonomous() {
+	rightMobile();
+}
 
 /* Runs the operator control code. This function will be started in its own
 task with the default priority and stack size whenever the robot is enabled

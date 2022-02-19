@@ -15,8 +15,8 @@ current position.
 // encoders
 /* Throughout the code the built-in encoders are used. They track the robot's
 rotational position and velocity. */
-const double encoderPerInch = 58.0; // [360/3.25(perimeter of wheel)] / pi // old one 25
-const double encoderPerDegreeTurn = 3.4; // CHANGE old - 2.6
+const double encoderPerInch = 51.5; // [360/3.25(perimeter of wheel)] / pi // old one 25
+const double encoderPerDegreeTurn = 6.43; // CHANGE old - 2.6
 
 // speed
 const double defaultSpeed = 127.0;
@@ -30,7 +30,7 @@ double maxSpeed = 127.0;
 double accelerator = 0.1; // 0.0095
 double turnAccelerator = 0.008;
 double maxDeaccelerationSpeed;
-double deaccelFactor = 6.0; // 4.25
+double deaccelFactor = 4.25;
 double turnDeaccelFactor = 4.0; //
 
 // move
@@ -72,7 +72,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 		currentAngle = getAngle();
 		changeAngle = currentAngle - startAngle;
 
-		if(operateClaw && (fabs(error) < 60.0))
+		if(operateClaw && (fabs(error) < 50.0))
 			{
 				hookFrontClaw();
 				operateClaw = false;
@@ -100,7 +100,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 		speed = maxDeaccelerationSpeed;
 
 		speed = speed * directMultiplier;
-		headingCorrection = changeAngle * 5.0 * directMultiplier;
+		headingCorrection = changeAngle * 2.0 * directMultiplier;
 
 		fl.move(speed - headingCorrection);
 		fr.move(speed + headingCorrection);
@@ -114,10 +114,10 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 
 	// stop base motors
 	fl.move(0);
-	bl.move(0);
-	bl2.move(0);
 	fr.move(0);
+	bl.move(0);
 	br.move(0);
+	bl2.move(0);
 	br2.move(0);
 
 	delay(10);
@@ -248,22 +248,22 @@ void moveLift(double liftSpeed) {
 
 // lower the front claw
 void hookFrontClaw() {
-	frontClaw.set_value(1);
+	frontClaw.set_value(0);
 }
 
 // lift the front claw
 void unhookFrontClaw() {
-	frontClaw.set_value(0);
+	frontClaw.set_value(1);
 }
 
 // lower the back claw
 void hookBackClaw() {
-	backClaw.set_value(1);
+	backClaw.set_value(0);
 }
 
 // lift the back claw
 void unhookBackClaw() {
-	backClaw.set_value(0);
+	backClaw.set_value(1);
 }
 
 // ring intake

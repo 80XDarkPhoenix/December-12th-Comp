@@ -45,28 +45,28 @@ void driveFrontLift() {
 // moves the front claw up and down using buttons X and Y
 void driveFrontClaw() {
 	if(master.get_digital(DIGITAL_X) == 1) {
-		frontClaw.set_value(0);
+		frontClaw.set_value(1);
 	}
 	else if(master.get_digital(DIGITAL_Y))
-	frontClaw.set_value(1);
+	frontClaw.set_value(0);
 }
 
 // moves the back claw up and down using buttons L1 and L2
 void driveBackClaw() {
 	if(master.get_digital(DIGITAL_L1) == 1) {
-		backClaw.set_value(1);
+		backClaw.set_value(0);
 	}
 	else if(master.get_digital(DIGITAL_L2))
-		backClaw.set_value(0);
+		backClaw.set_value(1);
 }
 
 // moves the ring intake using button A
 void driveRingIntake() {
 	if(master.get_digital(DIGITAL_A) == 1) {
-		ringIntake.move(-1);
+		ringIntake.move(-100);
 	}
 	else
 	{
-		ringIntake.move(1);
+		ringIntake.move(100);
 	}
 }
