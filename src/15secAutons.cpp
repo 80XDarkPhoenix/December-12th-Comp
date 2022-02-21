@@ -40,7 +40,7 @@ void rightMobileAlliance() {
 	double currentAngle = getAngle();
 	double turnAngle = -90-currentAngle;
 	turn(turnAngle, 80);
-	 // turn with back to alliance goal
+	// turn with back to alliance goal
 	 unhookBackClaw();
 	move(-14, 80);
 	hookBackClaw();
@@ -56,14 +56,14 @@ void leftMobileAlliance() {
 	move(53, 127, true); // move to mobile goal
 	//moveLift(120); // lift lift so teams cannot steal the goal
 	delay(400);
-	move(-51, 80);
+	move(-51, 120);
 	frontLift.move_absolute(7, 120);
-	turn(-130, 80);
-	frontLift.move_absolute(500, 120);
-	delay(200);
+	turnTo(110, 80);
+	frontLift.move_absolute(600, 120);
+	delay(400);
 	move(-16, 80);
 	hookBackClaw();
-	delay(200);
+	delay(400);
 	moveRingIntake(127);
 	move(36, 30);
 	unhookBackClaw();
@@ -114,19 +114,19 @@ void winPoint() {
 	delay(400);
 	move(24, 80);
 	delay(400);
-	turn(-88, 80);
+	turn(-85, 80);
 	delay(400);
 	move(-115, 80);
 	delay(400);
 	hookBackClaw();
 	delay(400);
 	moveRingIntake(127);
-	frontLift.move_absolute(500, 120);
+	frontLift.move_absolute(600, 120);
 	move(15, 80);
 	delay(400);
 	turn(-90, 80);
 	delay(200);
-	move(20, 50);
+	move(20, 40);
 	/* hookBackClaw();
 	delay(200);
 	move(15, 80);
@@ -134,6 +134,36 @@ void winPoint() {
 	turn(-90, 80);
 	delay(200);
 	move(20, 50); */
+}
+
+void winPoint1() {
+	move(-2.5, 80);
+	hookBackClaw();
+	delay(200);
+	moveRingIntake(127);
+	delay(2000);
+	moveRingIntake(0);
+	unhookBackClaw();
+	move(10, 80);
+	delay(200);
+	turnTo(90, 80);
+	delay(400);
+	move(24, 80);
+	delay(400);
+	turnTo(0, 80);
+	delay(400);
+	move(-115, 80);
+	turnTo(0, 80);
+	delay(400);
+	hookBackClaw();
+	delay(400);
+	moveRingIntake(127);
+	frontLift.move_absolute(600, 120);
+	move(15, 80);
+	delay(400);
+	turnTo(-90, 80);
+	delay(200);
+	move(36, 50);
 }
 
 void rightWinPoint() {

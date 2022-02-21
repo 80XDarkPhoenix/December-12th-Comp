@@ -100,7 +100,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 		speed = maxDeaccelerationSpeed;
 
 		speed = speed * directMultiplier;
-		headingCorrection = 0;//changeAngle * 2.0 * directMultiplier;
+		headingCorrection = changeAngle * 2.0;
 
 		fl.move(speed - headingCorrection);
 		fr.move(speed + headingCorrection);
@@ -221,6 +221,12 @@ void turn (double angle, int speedLimit) {
 		delay (5);
 	}
 	delay(100);
+}
+
+void turnTo(double angle, int speedLimit) {
+	double currentAngle = getAngle();
+	double turnAngle = angle - currentAngle;
+	turn(turnAngle, 80);
 }
 
 // LIFTS

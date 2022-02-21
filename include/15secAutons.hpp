@@ -19,6 +19,7 @@ extern void rightWinPoint();
 extern void leftWinPoint();
 
 extern void winPoint();
+extern void winPoint1();
 
 extern void rightCenter();
 extern void leftCenter();

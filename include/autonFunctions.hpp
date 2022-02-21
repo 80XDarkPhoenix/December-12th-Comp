@@ -25,6 +25,7 @@ extern void move(double distanceInInches, double speedLimit, bool operateClaw = 
 // turn
 extern double getAngle();
 extern void turn (double angle, int speedLimit);
+extern void turnTo(double angle, int speedLimit);
 
 // lift
 extern void liftLift();
