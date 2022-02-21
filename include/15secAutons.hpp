@@ -18,6 +18,8 @@ extern void leftAlliance();
 extern void rightWinPoint();
 extern void leftWinPoint();
 
+extern void winPoint();
+
 extern void rightCenter();
 extern void leftCenter();
 

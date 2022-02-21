@@ -16,13 +16,13 @@ current position.
 /* Throughout the code the built-in encoders are used. They track the robot's
 rotational position and velocity. */
 const double encoderPerInch = 51.5; // [360/3.25(perimeter of wheel)] / pi // old one 25
-const double encoderPerDegreeTurn = 6.43; // CHANGE old - 2.6
+const double encoderPerDegreeTurn = 6.02; // CHANGE old - 2.6
 
 // speed
 const double defaultSpeed = 127.0;
 const double defaultTurnSpeed = 127.0;
 
-double minSpeed = 35.0;
+double minSpeed = 30.0;
 double turnMinSpeed = 35.0;
 double maxSpeed = 127.0;
 
@@ -30,8 +30,8 @@ double maxSpeed = 127.0;
 double accelerator = 0.1; // 0.0095
 double turnAccelerator = 0.008;
 double maxDeaccelerationSpeed;
-double deaccelFactor = 4.25;
-double turnDeaccelFactor = 4.0; //
+double deaccelFactor = 6.0;
+double turnDeaccelFactor = 3.5; //
 
 // move
 void move(double distanceInInches, double speedLimit, bool operateClaw) {
@@ -48,7 +48,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 	int startTime = millis();
 	int maxTime = startTime + 100.0 + 70.0 * fabs(distanceInInches);
 
-	int directMultiplier = 1.0;
+	double directMultiplier = 1.0;
 	if (distanceInInches < 0.0)
 	directMultiplier = -1.0;
 
@@ -72,7 +72,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 		currentAngle = getAngle();
 		changeAngle = currentAngle - startAngle;
 
-		if(operateClaw && (fabs(error) < 50.0))
+		if(operateClaw && (fabs(error) < 40.0))
 			{
 				hookFrontClaw();
 				operateClaw = false;
@@ -100,7 +100,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 		speed = maxDeaccelerationSpeed;
 
 		speed = speed * directMultiplier;
-		headingCorrection = changeAngle * 2.0 * directMultiplier;
+		headingCorrection = 0;//changeAngle * 2.0 * directMultiplier;
 
 		fl.move(speed - headingCorrection);
 		fr.move(speed + headingCorrection);
@@ -198,7 +198,7 @@ void turn (double angle, int speedLimit) {
 		errorAngle = errorAngle - 360;
 		else if (errorAngle <= -180)
 		errorAngle = 360 + errorAngle;
-		if ((fabs (error) < 10.0) || (fabs(errorAngle) < 1.0) || (millis() >
+		if ((fabs (error) < 15.0) || (fabs(errorAngle) < 2.0) || (millis() >
 		maxTime)) {
 
 			// stop the base motors

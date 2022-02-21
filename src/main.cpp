@@ -62,7 +62,7 @@ void initialize() {
 	br.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	br2.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
-	// lift
+	// Enable brake mode for the lift motor
 	frontLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
 	// ring intake
@@ -89,7 +89,8 @@ non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
 void autonomous() {
-	rightMobile();
+	//rightMobileAlliance();
+	winPoint();
 }
 
 /* Runs the operator control code. This function will be started in its own
