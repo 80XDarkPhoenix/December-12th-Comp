@@ -72,7 +72,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 		currentAngle = getAngle();
 		changeAngle = currentAngle - startAngle;
 
-		if(operateClaw && (fabs(error) < 40.0))
+		if(operateClaw && (fabs(error) < 60.0))
 			{
 				hookFrontClaw();
 				operateClaw = false;

@@ -5,7 +5,44 @@ using namespace pros;
 
 // CHANGE AND CHANGE PNEUMATICS DELAY
 
-void skillsAuton() {
+void skills() {
+  unhookBackClaw();
+  unhookFrontClaw();
+
+  move(-7, 80);
+  hookBackClaw();
+  delay(200);
+  // hooked red alliance goal with back claw
+
+  move(12, 80);
+  moveRingIntake(127);
+  delay(200);
+  turnTo(45, 80);
+  delay(200);
+  move(12, 80);
+  delay(200);
+  turnTo(90, 80);
+  delay(200);
+  move(24, 80);
+  delay(200);
+  turnTo(127, 80);
+  delay(200);
+  move(24, 80, true);
+  delay(200);
+  frontLift.move_absolute(500, 100);
+  move(, 80);
+  delay(400);
+  turnTo(90, 80);
+  move(, 80);
+  moveLift(-100);
+  delay(50);
+  moveLift(0);
+  unhookFrontClaw();
+  delay(200);
+  
+}
+
+void skillsAuton1() {
 
   // start 90 degrees left
 
