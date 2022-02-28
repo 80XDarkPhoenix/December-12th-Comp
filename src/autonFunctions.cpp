@@ -15,10 +15,14 @@ current position.
 // encoders
 /* Throughout the code the built-in encoders are used. They track the robot's
 rotational position and velocity. */
-const double encoderPerInch = 51.5; // [360/3.25(perimeter of wheel)] / pi // old one 25
-const double encoderPerDegreeTurn = 6.02; // CHANGE old - 2.6
+
+/* We use the const keyword to make sure the value cannot be changed once the
+variable has been initialized. */
+const double encoderPerInch = 51.5;
+const double encoderPerDegreeTurn = 6.02;
 
 // speed
+/* The default speeds are the maximum speed possible. */
 const double defaultSpeed = 127.0;
 const double defaultTurnSpeed = 127.0;
 
@@ -27,15 +31,16 @@ double turnMinSpeed = 35.0;
 double maxSpeed = 127.0;
 
 // accelerators
-double accelerator = 0.1; // 0.0095
+double accelerator = 0.1;
 double turnAccelerator = 0.008;
 double maxDeaccelerationSpeed;
 double deaccelFactor = 6.0;
-double turnDeaccelFactor = 3.5; //
+double turnDeaccelFactor = 3.5;
 
 // move
 void move(double distanceInInches, double speedLimit, bool operateClaw) {
-	// "resets" motors
+
+	// reset motors
 	fl.tare_position();
 	bl.tare_position();
 	bl2.tare_position();
@@ -43,6 +48,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 	br.tare_position();
 	br2.tare_position();
 
+	// The start angle equals the heading the inertial sensor gets relative to its initial direction to its x-axis.
 	double startAngle = getAngle();
 
 	int startTime = millis();
@@ -123,11 +129,9 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 	delay(10);
 }
 
-// turn
+// TURN
 
 double getAngle() {
-	/* "get_heading" gets the inertial sensor’s heading relative to the initial
-	direction of its x-axis */
 	double angle = inertial.get_heading();
 
 	if (angle > 180)
@@ -140,7 +144,6 @@ double getAngle() {
 void turn (double angle, int speedLimit) {
 	bool notAtTarget = true;
 
-	// "resets" motors
 	fl.tare_position();
 	bl.tare_position();
 	bl2.tare_position();
@@ -223,58 +226,63 @@ void turn (double angle, int speedLimit) {
 	delay(100);
 }
 
+/* turnTo uses the turn logic but makes the turn correct based of the currentAngle
+of the robot. If the robot needs to turn to 90 degrees instead of actually turning
+90 degrees it will turn based off the angle it is already at. For example, if the
+robot is at 3 degrees it turns to 90 degrees, but it actaully is only turning 87
+degrees. */
 void turnTo(double angle, int speedLimit) {
 	double currentAngle = getAngle();
 	double turnAngle = angle - currentAngle;
 	turn(turnAngle, 80);
 }
 
-// LIFTS
+// LIFT
 
-// lift the front lift completely
+// lifts the front lift completely
 void liftLift() {
 	frontLift.move(127);
 	delay(1100); // CHANGE
 	frontLift.move(0);
 }
 
-// lower the front lift completely
+// lowers the front lift completely
 void lowerLift() {
 	frontLift.move(-127);
 	delay(1100); // CHANGE
 	frontLift.move(0);
 }
 
-// move the lift at a set speed
+// moves the lift at a set speed
 void moveLift(double liftSpeed) {
 	frontLift.move(liftSpeed);
 }
 
-// claws
+// CLAWS
 
-// lower the front claw
+// lowers the front claw
 void hookFrontClaw() {
 	frontClaw.set_value(0);
 }
 
-// lift the front claw
+// lifts the front claw
 void unhookFrontClaw() {
 	frontClaw.set_value(1);
 }
 
-// lower the back claw
+// lowers the back claw
 void hookBackClaw() {
 	backClaw.set_value(0);
 }
 
-// lift the back claw
+// lifts the back claw
 void unhookBackClaw() {
 	backClaw.set_value(1);
 }
 
-// ring intake
+// RING INTAKE
 
-// move the ring intake at a set speed
+// moves the ring intake at a set speed
 void moveRingIntake(double ringIntakeSpeed) {
 	ringIntake.move(ringIntakeSpeed);
 }

@@ -1,6 +1,9 @@
+/* main. is intended for decalring functions and variables shared between the user code files.
+main.h also offers a variety of configuarble options for tailoring PROS to our needs. */
 #include "main.h"
 #include "math.h"
 
+// using namespace pros reduces the length of declarations when using C++.
 using namespace pros;
 
 // INITIALIZATION
@@ -18,27 +21,25 @@ Motor bl2(8, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // elevated bac
 Motor frontLift(1, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
 // claws
-/* The claws are pnuematic, so they are connected to the brain through ADI ports
-,therefore it is initialized as an "ADIDIgitalOut". The second parameter is the
+/* The claws are pnuematic, so they are connected to the brain through ADI ports,
+therefore they is initialized as an "ADIDIgitalOut". The second parameter is the
 state of the pneumatics. */
 ADIDigitalOut frontClaw(3, 1);
 ADIDigitalOut backClaw(1, 1);
 
-
 // ring intake
 Motor ringIntake(11, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
-// Controllers
+// controller
 Controller master(E_CONTROLLER_MASTER);
 
-// Sensors
+// sensors
 
 /* The inertial sensor is a 3-axis accelerometer and gyroscope. The
 accelerometer measures linear acceleration of the robot, while the gyroscope
-measures the rate of rotation about the inertial sensor 3-axis. The inertial
-sensor helps us have accurate turns. When we were testing our turns, we
-discovered that they were not accurate. We decided to use the inertial sensor to
-help with this. */
+measures the rate of rotation about the inertial sensor 3-axis. We only use the
+gyroscope. The inertial sensor is used in our move function to implement heading
+correction and turn function to turn accurately. */
 Imu inertial(21);
 
 /* Runs initialization code. This occurs as soon as the program is started. All
@@ -62,10 +63,10 @@ void initialize() {
 	br.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	br2.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
-	// Enable brake mode for the lift motor
+	// enable brake mode for the lift motor
 	frontLift.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
-	// ring intake
+	// enable brake mode for the ring intake motor
 	ringIntake.set_brake_mode(MOTOR_BRAKE_BRAKE);
 }
 
@@ -88,9 +89,7 @@ Alternatively, this function may be called in initialize or opcontrol for
 non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
-void autonomous() {
-	rightCenter();
-}
+void autonomous() {}
 
 /* Runs the operator control code. This function will be started in its own
 task with the default priority and stack size whenever the robot is enabled

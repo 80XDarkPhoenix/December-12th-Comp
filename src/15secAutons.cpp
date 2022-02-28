@@ -5,6 +5,7 @@ using namespace pros;
 
 // mobile goal
 
+// done
 void rightMobileFast() {
 	frontLift.move_absolute(-5, 50);
 	move(48, 127, true);
@@ -12,6 +13,7 @@ void rightMobileFast() {
 	move(-200, 127);
 }
 
+// done
 void leftMobileFast() {
 	frontLift.move_absolute(-5, 50);
 	move(53, 127, true);
@@ -19,6 +21,7 @@ void leftMobileFast() {
 	move(-200, 127);
 }
 
+// done
 void rightMobileAlliance() {
 	move(48, 127, true); // move to mobile goal
 	delay(200);
@@ -45,7 +48,7 @@ void leftMobileAlliance() {
 	delay(400);
 	move(-16, 80);
 	hookBackClaw();
-	frontLift.move_absolute(500, 100);
+	frontLift.move_absolute(700, 100);
 	delay(400);
 	moveRingIntake(127);
 	move(36, 30);
@@ -57,21 +60,23 @@ void winPoint() {
 	hookBackClaw();
 	delay(200);
 	moveRingIntake(127);
-	delay(3000);
+	delay(2000);
 	moveRingIntake(0);
 	unhookBackClaw();
 	move(10, 80);
 	delay(400);
 	turnTo(90, 80);
 	delay(400);
-	move(24, 80);
-	delay(400);
+	move(22, 80);
+	delay(200);
+	turnTo(90, 80);
+	delay(200);
 	turnTo(0, 80);
 	delay(400);
 	move(-115, 80);
-	delay(400);
+	delay(200);
 	turnTo(0, 80);
-	delay(400);
+	delay(200);
 	hookBackClaw();
 	delay(400);
 	moveRingIntake(127);
@@ -86,3 +91,7 @@ void winPoint() {
 void rightCenter() {
 
 }
+
+void rightMobileCenter() {}
+
+void rigjtMobileCenterAlliance() {}
