@@ -33,7 +33,7 @@ Motor ringIntake(11, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 // controller
 Controller master(E_CONTROLLER_MASTER);
 
-// sensors
+// sensor
 
 /* The inertial sensor is a 3-axis accelerometer and gyroscope. The
 accelerometer measures linear acceleration of the robot, while the gyroscope

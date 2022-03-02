@@ -26,6 +26,8 @@ void skills() {
   turnTo(127, 80);
   delay(200);
   move(24, 80, true);
+  // hooked onto mobile goal
+
   delay(200);
   moveLift(127);
   delay(1500);
@@ -34,7 +36,7 @@ void skills() {
   delay(600);
   turnTo(90, 80);
   delay(200);
-  move(7, 80);
+  move(5, 80);
   moveLift(-127);
   delay(300);
   moveLift(0);
@@ -42,8 +44,9 @@ void skills() {
   frontLift.move_absolute(1450, 127);
   delay(200);
   frontLift.move_absolute(-5, 127);
+  // stack mobile goal
+
   delay(200);
-  delay(100);
   move(-10, 80);
   delay(100);
   turnTo(90, 80);
@@ -56,7 +59,7 @@ void skills() {
   delay(200);
   turnTo(-90, 80);
   delay(200);
-  move(9, 80, true);
+  move(11, 80, true); // hook onto alliance goal
   delay(200);
   turnTo(0, 90);
   delay(200);
@@ -70,6 +73,79 @@ void skills() {
   delay(300);
   moveLift(0);
   unhookFrontClaw();
-//  move(, 80);
+  // stack alliance goal
+
+  frontLift.move_absolute(1450, 127);
+  delay(200);
+  move(-5, 80);
+  frontLift.move_absolute(-5, 127);
+  move(-15, 80);
+  delay(200);
+  turnTo(95, 80);
+  delay(200);
+  move(-20, 80);
+  delay(200);
+  hookBackClaw();
+  delay(200);
+  move(-38, 80);
+  delay(200);
+  turnTo(180, 80);
+  delay(200);
+  unhookBackClaw();
+  move(36, 80);
+  delay(200);
+  turnTo(0, 80);
+  delay(200);
+  move(-15, 80);
+  hookBackClaw();
+  delay(200);
+  move(15, 200);
+  delay(200);
+  turnTo(90, 80);
+  delay(200);
+  move(40, 80, true);
+  delay(200);
+  frontLift.move_absolute(1450, 127);
+  turnTo(45, 80);
+  delay(200);
+  move(55, 80);
+  delay(200);
+  moveLift(-127);
+  delay(300);
+  moveLift(0);
+  unhookFrontClaw();
+  delay(200);
+  frontLift.move_absolute(1450, 127);
+  delay(200);
+  move(-5, 80);
+  frontLift.move_absolute(-5, 127);
+  delay(200);
+  move(-5, 80);
+  delay(200);
+  turnTo(90, 80);
+  delay(200);
+  move(-10, 80);
+  unhookBackClaw();
+  delay(200);
+  move(7, 80);
+  delay(200);
+  turnTo(-90, 80);
+  delay(200);
+  move(8, 80, true);
+
+/*  // turnTo(180, 80);
+  // delay(400);
+  move(-66, 80);
+  delay(200);
+  turnTo(180, 80);
+  delay(400);
+  hookBackClaw(); // hook onto alliance goal
+
+  delay(200);
+  turnTo(205, 80);
+  move(50, 80, true);
+  delay(200);
+  move(80, 80);
+  unhookFrontClaw(); */
 
 }
