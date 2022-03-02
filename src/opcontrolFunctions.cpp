@@ -5,15 +5,9 @@ using namespace pros;
 
 // All the buttons/joysticks used are chosen based off the driver's preference.
 
-/* "move" sets the voltage for the motor from -127 to 127. It is used throughout
-the code, especially opcontrol. */
+// BASE
 
-/* "get_digital" checks if a digital channel "button" on the controller is
-currently pressed. */
-
-// "get_analog" gets the value of an analog channel (joystick) on a controller
-
-// moves the base using left and right joysticks
+// moves the base
 void drive() {
 	float drives = master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y);
 	float turns = master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X);
@@ -26,12 +20,16 @@ void drive() {
 	bl2.move(drives + turns);
 }
 
+// LIFT
+
 // moves the front lift using buttons R1 and R2
 void driveFrontLift() {
 	if(master.get_digital(DIGITAL_R1)) {
+		// move lift up
 		frontLift.move(127);
 	}
 	else if(master.get_digital(DIGITAL_R2)) {
+		// move lift down
 		frontLift.move(-127);
 	}
 	else
@@ -40,33 +38,39 @@ void driveFrontLift() {
 	}
 }
 
-// Claws
+// CLAWS
 
-// moves the front claw up and down using buttons X and Y
+// moves the front claw using buttons X and Y
 void driveFrontClaw() {
 	if(master.get_digital(DIGITAL_X) == 1) {
+		// lifts front claw
 		frontClaw.set_value(1);
 	}
 	else if(master.get_digital(DIGITAL_Y))
-	frontClaw.set_value(0);
+		// hooks front claw
+		frontClaw.set_value(0);
 }
 
-// moves the back claw up and down using buttons L1 and L2
+// moves the back claw using buttons L1 and L2
 void driveBackClaw() {
 	if(master.get_digital(DIGITAL_L1) == 1) {
+		// hooks back claw
 		backClaw.set_value(0);
 	}
 	else if(master.get_digital(DIGITAL_L2))
+		// lifts back claw
 		backClaw.set_value(1);
 }
 
 // moves the ring intake using button A
 void driveRingIntake() {
 	if(master.get_digital(DIGITAL_A) == 1) {
+		// outtakes ring intake
 		ringIntake.move(-127);
 	}
 	else
 	{
+		// runs ring intake unless A is pressed
 		ringIntake.move(127);
 	}
 }

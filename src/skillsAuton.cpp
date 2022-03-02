@@ -3,8 +3,6 @@
 
 using namespace pros;
 
-// CHANGE AND CHANGE PNEUMATICS DELAY
-
 void skills() {
   unhookBackClaw();
   unhookFrontClaw();
@@ -29,83 +27,49 @@ void skills() {
   delay(200);
   move(24, 80, true);
   delay(200);
-  frontLift.move_absolute(500, 100);
-  move(, 80);
-  delay(400);
+  moveLift(127);
+  delay(1500);
+  moveLift(0);
+  move(63, 80);
+  delay(600);
   turnTo(90, 80);
-  move(, 80);
-  moveLift(-100);
-  delay(50);
-  moveLift(0);
-  unhookFrontClaw();
   delay(200);
-  
-}
-
-void skillsAuton1() {
-
-  // start 90 degrees left
-
-  // make sure claws start up
+  move(7, 80);
+  moveLift(-127);
+  delay(300);
+  moveLift(0);
   unhookFrontClaw();
-  unhookBackClaw();
-
-  // hook on to alliance goal
-  moveLift(127);
-  move(-22, 110); // move back to alliance goal
-  moveLift(0);
-  hookBackClaw();
-  delay(500);
-  moveRingIntake(100);
-
-  // in between alliance goal and mobile goal
-  move(12, 110);
-  delay(50);
-  turn(45, 110);
-  moveRingIntake(0);
-  delay(50);
-  move(10, 110);
-  delay(50);
-  turn(58, 110);
-  delay(50);
-  moveLift(-127);
-  move(34, 110);
-  moveLift(0);
-  delay(50);
-  turn(45, 110);
-  delay(50);
-
-  // claw on mobile goal
-  move(14, 110);
-  hookFrontClaw();
-  delay(500);
-
-  moveLift(127);
-  moveRingIntake(100);
-  move(65, 110);
-  moveLift(0);
-  moveRingIntake(0);
-  delay(50);
-  turn(-45, 100);
-  delay(50);
-  move(10, 120);
-  moveLift(-127);
+  frontLift.move_absolute(1450, 127);
   delay(200);
-  moveLift(0);
-  unhookFrontClaw();
-  move(-9, 120);
-  delay(50);
-  turn(-95, 110);
-  delay(50);
+  frontLift.move_absolute(-5, 127);
+  delay(200);
+  delay(100);
+  move(-10, 80);
+  delay(100);
+  turnTo(90, 80);
+  delay(100);
   unhookBackClaw();
   delay(200);
+  move(-10, 80);
+  delay(200);
+  move(7, 80);
+  delay(200);
+  turnTo(-90, 80);
+  delay(200);
+  move(9, 80, true);
+  delay(200);
+  turnTo(0, 90);
+  delay(200);
+  move(-13, 80);
+  frontLift.move_absolute(1450, 127);
+  delay(200);
+  turn(90, 80);
+  delay(200);
+  move(20, 80);
   moveLift(-127);
-  move(52, 120);
+  delay(300);
   moveLift(0);
-  hookFrontClaw();
-  delay(250);
-  move(-20, 110);
-  turn(62,100);
-  delay(50);
-  move(-100, 120);
+  unhookFrontClaw();
+//  move(, 80);
+
 }

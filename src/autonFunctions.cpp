@@ -3,15 +3,6 @@
 
 using namespace pros;
 
-// move and turn
-
-/* PROS Functions Used in Move and Turn Functions
-- "tare_position" sets the “absolute” zero position of the motor to its
-current position.
-- "fabs" gets the absolute value.
-- "mills" gets the number of milliseconds since PROS initialized.
-- "get_actual_velocity" gets the actual velocity of the motor */
-
 // encoders
 /* Throughout the code the built-in encoders are used. They track the robot's
 rotational position and velocity. */
@@ -48,7 +39,8 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 	br.tare_position();
 	br2.tare_position();
 
-	// The start angle equals the heading the inertial sensor gets relative to its initial direction to its x-axis.
+	/* The start angle equals the heading the inertial sensor gets relative to its 
+	initial direction to its x-axis. */
 	double startAngle = getAngle();
 
 	int startTime = millis();
@@ -242,14 +234,14 @@ void turnTo(double angle, int speedLimit) {
 // lifts the front lift completely
 void liftLift() {
 	frontLift.move(127);
-	delay(1100); // CHANGE
+	delay(1100);
 	frontLift.move(0);
 }
 
 // lowers the front lift completely
 void lowerLift() {
 	frontLift.move(-127);
-	delay(1100); // CHANGE
+	delay(1100);
 	frontLift.move(0);
 }
 
