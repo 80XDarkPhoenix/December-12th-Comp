@@ -39,7 +39,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 	br.tare_position();
 	br2.tare_position();
 
-	/* The start angle equals the heading the inertial sensor gets relative to its 
+	/* The start angle equals the heading the inertial sensor gets relative to its
 	initial direction to its x-axis. */
 	double startAngle = getAngle();
 
@@ -226,7 +226,7 @@ degrees. */
 void turnTo(double angle, int speedLimit) {
 	double currentAngle = getAngle();
 	double turnAngle = angle - currentAngle;
-	turn(turnAngle, 80);
+	turn(turnAngle, speedLimit);
 }
 
 // LIFT

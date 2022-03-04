@@ -32,7 +32,7 @@ void skills() {
   moveLift(127);
   delay(1500);
   moveLift(0);
-  move(63, 80);
+  move(63, 60);
   delay(600);
   turnTo(90, 80);
   delay(200);
@@ -43,11 +43,10 @@ void skills() {
   unhookFrontClaw();
   frontLift.move_absolute(1450, 127);
   delay(200);
-  frontLift.move_absolute(-5, 127);
   // stack mobile goal
 
-  delay(200);
   move(-10, 80);
+  frontLift.move_absolute(-5, 127);
   delay(100);
   turnTo(90, 80);
   delay(100);
@@ -61,12 +60,12 @@ void skills() {
   delay(200);
   move(11, 80, true); // hook onto alliance goal
   delay(200);
-  turnTo(0, 90);
+  turnTo(0, 40);
   delay(200);
   move(-13, 80);
   frontLift.move_absolute(1450, 127);
   delay(200);
-  turn(90, 80);
+  turnTo(90, 40);
   delay(200);
   move(20, 80);
   moveLift(-127);
@@ -81,39 +80,53 @@ void skills() {
   frontLift.move_absolute(-5, 127);
   move(-15, 80);
   delay(200);
-  turnTo(95, 80);
+  turnTo(100, 60);
   delay(200);
   move(-20, 80);
   delay(200);
-  hookBackClaw();
+  hookBackClaw(); // hook onto center goal
   delay(200);
-  move(-38, 80);
+
+  move(-30, 80); // move center to alliance zone
   delay(200);
   turnTo(180, 80);
   delay(200);
-  unhookBackClaw();
-  move(36, 80);
+  unhookBackClaw(); // let go of center goal
+  move(33, 80);
+  delay(400);
+  turnTo(0, 40);
+  delay(400);
+  turnTo(0, 40);
+  delay(400);
+  move(-20, 80);
   delay(200);
-  turnTo(0, 80);
-  delay(200);
-  move(-15, 80);
-  hookBackClaw();
+  hookBackClaw(); // hook onto alliance goal
+
   delay(200);
   move(15, 200);
   delay(200);
   turnTo(90, 80);
   delay(200);
-  move(40, 80, true);
+  move(40, 80, true); // hook onto mobile goal
   delay(200);
   frontLift.move_absolute(1450, 127);
   turnTo(45, 80);
   delay(200);
-  move(55, 80);
+  move(40, 80); // move to platform
+  delay(200);
+  turnTo(0, 80);
+  delay(200);
+  move(10, 80);
+  delay(200);
+  turnTo(90, 80);
+  delay(200);
+  move(12, 80);
   delay(200);
   moveLift(-127);
   delay(300);
   moveLift(0);
-  unhookFrontClaw();
+  unhookFrontClaw(); // stack mobile goal
+
   delay(200);
   frontLift.move_absolute(1450, 127);
   delay(200);
@@ -131,7 +144,41 @@ void skills() {
   delay(200);
   turnTo(-90, 80);
   delay(200);
-  move(8, 80, true);
+  turnTo(-90, 80);
+  delay(200);
+  move(12, 80, true); // hook onto alliance goal
+  delay(200);
+  frontLift.move_absolute(1450, 127);
+  turnTo(90, 80);
+  delay(200);
+  move(20, 80);
+  delay(200);
+
+  move(12, 80);
+  delay(200);
+  moveLift(-127);
+  delay(300);
+  moveLift(0);
+  delay(200);
+  move(5, 80);
+  delay(200);
+  unhookFrontClaw(); // stack alliance goal
+
+  delay(200);
+  move(-8, 80);
+  frontLift.move_absolute(-5, 127);
+  delay(200);
+  turnTo(180, 80);
+  delay(200);
+  turnTo(180, 80);
+  delay(200);
+  move(-65, 80);
+  delay(200);
+  hookBackClaw();
+  delay(400);
+  move(120, 80);
+
+
 
 /*  // turnTo(180, 80);
   // delay(400);
