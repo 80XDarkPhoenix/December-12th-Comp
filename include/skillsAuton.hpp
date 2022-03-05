@@ -2,6 +2,6 @@
 #define SKILLSAUTON
 
 extern void skills();
-extern void skillsAuton();
+extern void riskSkills();
 
 #endif

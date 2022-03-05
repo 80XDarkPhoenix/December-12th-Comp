@@ -3,8 +3,6 @@
 
 using namespace pros;
 
-// mobile goal
-
 void rightMobileFast() {
 	frontLift.move_absolute(-5, 50); // checks to make sure lift is down
 	move(48, 127, true); // moves to mobile goal while hooking front claw
@@ -47,13 +45,13 @@ void leftMobileAlliance() {
 	frontLift.move_absolute(-5, 50); // checks to make sure lift is down
 	move(53, 127, true); // moves to mobile goal while hooking front claw
 	delay(200); // wait for the front claw to hook on the goal
-	move(-54, 127); // reverse to alliance zone
+	move(-40, 127); // reverse to alliance zone
 	delay(400);
-	turnTo(110, 80); // turn facing the alliance goal
+	turnTo(-110, 80); // turn facing the alliance goal
 	delay(400);
 	move(-16, 80); // reverse to alliance goal
 	hookBackClaw(); // hooks back claw on alliance goal
-	frontLift.move_absolute(700, 100); // lifts the lift for the ring intake
+	frontLift.move_absolute(1300, 100); // lifts the lift for the ring intake
 	delay(400);
 	moveRingIntake(127); // starts ring intake
 	move(36, 30); // moves towards drivers box for match loads
@@ -73,16 +71,16 @@ void winPoint() {
 	delay(400);
 	turnTo(90, 80);
 	delay(400);
-	move(22, 80);
+	move(20, 80);
 	delay(200);
 	turnTo(90, 80);
+	delay(200);
+	turnTo(0, 80);
 	delay(200);
 	turnTo(0, 80);
 	delay(400);
 	// back facing the right alliance goal
 	move(-115, 80); // reverses to right alliance goal
-	delay(200);
-	turnTo(0, 80); // checks turn
 	delay(200);
 	hookBackClaw(); // hooks back claw on alliance goal
 	delay(400);
@@ -92,11 +90,13 @@ void winPoint() {
 	delay(400);
 	turnTo(-90, 80); // turns facing drivers box
 	delay(200);
-	move(36, 30); // moves towards drivers box for match loads
+	move(36, 80); // moves towards drivers box for match loads
 }
 
-void rightCenter() {}
-
-void rightMobileCenter() {}
-
-void rigjtMobileCenterAlliance() {}
+void rightCenter() {
+	frontLift.move_absolute(-5, 127);
+	move(74, 127);
+	hookFrontClaw();
+	delay(200);
+	move(-60, 127);
+}
