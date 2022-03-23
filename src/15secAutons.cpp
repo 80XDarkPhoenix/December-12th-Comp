@@ -4,6 +4,9 @@
 using namespace pros;
 
 void rightMobileFast() {
+	unhookFrontClaw();
+	unhookBackClaw();
+
 	frontLift.move_absolute(-5, 50); // checks to make sure lift is down
 	move(48, 127, true); // moves to mobile goal while hooking front claw
 	delay(200); // wait for the front claw to hook on the goal
@@ -13,6 +16,9 @@ void rightMobileFast() {
 }
 
 void leftMobileFast() {
+	unhookFrontClaw();
+	unhookBackClaw();
+
 	// robot starts at slight angle due to the obstructing alliance goal
 	frontLift.move_absolute(-5, 50); // checks to make sure lift is down
 	move(53, 127, true); // moves to mobile goal while hooking front claw
@@ -23,6 +29,9 @@ void leftMobileFast() {
 }
 
 void rightMobileAlliance() {
+	unhookFrontClaw();
+	unhookBackClaw();
+
 	frontLift.move_absolute(-5, 50); // checks to make sure lift is down
 	move(48, 127, true); // moves to mobile goal while hooking front claw
 	delay(200); // wait for the front claw to hook on the goal
@@ -42,6 +51,9 @@ void rightMobileAlliance() {
 }
 
 void leftMobileAlliance() {
+	unhookFrontClaw();
+	unhookBackClaw();
+
 	frontLift.move_absolute(-5, 50); // checks to make sure lift is down
 	move(53, 127, true); // moves to mobile goal while hooking front claw
 	delay(200); // wait for the front claw to hook on the goal
@@ -54,11 +66,14 @@ void leftMobileAlliance() {
 	frontLift.move_absolute(1300, 100); // lifts the lift for the ring intake
 	delay(400);
 	moveRingIntake(127); // starts ring intake
-	move(36, 30); // moves towards drivers box for match loads
+	move(36, 80); // moves towards drivers box for match loads
 	unhookBackClaw(); // let go of alliance goal
 }
 
 void winPoint() {
+	unhookFrontClaw();
+	unhookBackClaw();
+
 	// starts with back facing left alliance goal
 	move(-2.5, 80); // reverses to alliance goal
 	hookBackClaw(); // hooks back claw on alliance goal
@@ -91,9 +106,24 @@ void winPoint() {
 	turnTo(-90, 80); // turns facing drivers box
 	delay(200);
 	move(36, 80); // moves towards drivers box for match loads
+	unhookBackClaw();
 }
 
 void rightCenter() {
+	unhookFrontClaw();
+	unhookBackClaw();
+
+	frontLift.move_absolute(-5, 127);
+	move(74, 127);
+	hookFrontClaw();
+	delay(200);
+	move(-60, 127);
+}
+
+void igneous() {
+	unhookFrontClaw();
+	unhookBackClaw();
+
 	frontLift.move_absolute(-5, 127);
 	move(74, 127);
 	hookFrontClaw();
