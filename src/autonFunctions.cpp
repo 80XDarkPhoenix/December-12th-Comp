@@ -1,8 +1,6 @@
 #include "main.h"
 #include "math.h"
 
-using namespace pros;
-
 // encoders
 /* Throughout the code the built-in encoders are used. They track the robot's
 rotational position and velocity. */
@@ -28,16 +26,28 @@ double maxDeaccelerationSpeed;
 double deaccelFactor = 6.0;
 double turnDeaccelFactor = 3.5;
 
-// move
-void move(double distanceInInches, double speedLimit, bool operateClaw) {
-
-	// reset motors
+void resetBaseMotors() {
 	fl.tare_position();
 	bl.tare_position();
 	bl2.tare_position();
 	fr.tare_position();
 	br.tare_position();
 	br2.tare_position();
+}
+
+void stopBaseMotors() {
+	fl.move(0);
+	fr.move(0);
+	bl.move(0);
+	br.move(0);
+	bl2.move(0);
+	br2.move(0);
+}
+
+// move
+void move(double distanceInInches, double speedLimit, bool operateClaw) {
+
+	resetBaseMotors();
 
 	/* The start angle equals the heading the inertial sensor gets relative to its
 	initial direction to its x-axis. */
@@ -110,15 +120,9 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 		delay(10);
 	}
 
-	// stop base motors
-	fl.move(0);
-	fr.move(0);
-	bl.move(0);
-	br.move(0);
-	bl2.move(0);
-	br2.move(0);
+	stopBaseMotors();
 
-	delay(10);
+	delay(100);
 }
 
 // TURN
@@ -212,6 +216,7 @@ void turn (double angle, int speedLimit) {
 
 			notAtTarget = false;
 			lcd::print(8, "error: %f", error);
+
 		}
 		delay (5);
 	}

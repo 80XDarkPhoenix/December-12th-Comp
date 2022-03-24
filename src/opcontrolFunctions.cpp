@@ -1,8 +1,6 @@
 #include "main.h"
 #include "math.h"
 
-using namespace pros;
-
 // All the buttons/joysticks used are chosen based off the driver's preference.
 
 // BASE
@@ -42,7 +40,7 @@ void driveFrontLift() {
 
 // moves the front claw using buttons X and Y
 void driveFrontClaw() {
-	if(master.get_digital(DIGITAL_X) == 1) {
+	if(master.get_digital(DIGITAL_X)) {
 		// lifts front claw
 		frontClaw.set_value(1);
 	}
@@ -53,7 +51,7 @@ void driveFrontClaw() {
 
 // moves the back claw using buttons L1 and L2
 void driveBackClaw() {
-	if(master.get_digital(DIGITAL_L1) == 1) {
+	if(master.get_digital(DIGITAL_L1)) {
 		// hooks back claw
 		backClaw.set_value(0);
 	}
@@ -64,7 +62,7 @@ void driveBackClaw() {
 
 // moves the ring intake using button A
 void driveRingIntake() {
-	if(master.get_digital(DIGITAL_A) == 1) {
+	if(master.get_digital(DIGITAL_A)) {
 		// outtakes ring intake
 		ringIntake.move(-127);
 	}
@@ -73,4 +71,13 @@ void driveRingIntake() {
 		// runs ring intake unless A is pressed
 		ringIntake.move(127);
 	}
+}
+
+void op() {
+	drive();
+	driveFrontLift();
+	driveFrontClaw();
+	driveBackClaw();
+	driveRingIntake();
+	delay(20);
 }

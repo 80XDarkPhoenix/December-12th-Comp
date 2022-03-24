@@ -19,6 +19,9 @@ extern double maxDeaccelerationSpeed;
 extern double deaccelFactor;
 extern double turnDeaccelFactor;
 
+extern void resetBaseMotors();
+extern void stopBaseMotors();
+
 // move
 extern void move(double distanceInInches, double speedLimit, bool operateClaw = false);
 

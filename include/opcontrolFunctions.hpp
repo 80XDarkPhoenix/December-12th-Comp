@@ -14,4 +14,6 @@ extern void driveBackClaw();
 // ring intake
 extern void driveRingIntake();
 
+extern void op();
+
 #endif

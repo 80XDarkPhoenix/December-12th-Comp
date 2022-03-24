@@ -1,10 +1,12 @@
-/* main. is intended for decalring functions and variables shared between the user code files.
+/* main. is intended for declaring functions and variables shared between the user code files.
 main.h also offers a variety of configuarble options for tailoring PROS to our needs. */
 #include "main.h"
 #include "math.h"
 
 // using namespace pros reduces the length of declarations when using C++.
 using namespace pros;
+// add comment
+using namespace std;
 
 // INITIALIZATION
 
@@ -89,9 +91,7 @@ Alternatively, this function may be called in initialize or opcontrol for
 non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
-void autonomous() {
-	leftMobileAlliance();
-}
+void autonomous() {}
 
 /* Runs the operator control code. This function will be started in its own
 task with the default priority and stack size whenever the robot is enabled
@@ -103,11 +103,6 @@ Re-enabling the robot will restart the task, not resume it from where it
 left off. */
 void opcontrol() {
 	while (true) {
-		drive();
-		driveFrontLift();
-	  driveFrontClaw();
-		driveBackClaw();
-	  driveRingIntake();
-		delay(20);
+		op();
 	}
 }
