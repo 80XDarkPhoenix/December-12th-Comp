@@ -10,12 +10,12 @@ void drive() {
 	float drives = master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y);
 	float turns = master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X);
 
-	fr.move(drives - turns);
-	fl.move(drives + turns);
-	br.move(drives - turns);
-	bl.move(drives + turns);
-	br2.move(drives - turns);
-	bl2.move(drives + turns);
+	r1.move(drives - turns);
+	l1.move(drives + turns);
+	r2.move(drives - turns);
+	l2.move(drives + turns);
+	r3.move(drives - turns);
+	l3.move(drives + turns);
 }
 
 // LIFT

@@ -1,48 +1,58 @@
-/* main. is intended for declaring functions and variables shared between the user code files.
+/* main.h is intended for declaring functions and variables shared between the user code files.
 main.h also offers a variety of configuarble options for tailoring PROS to our needs. */
 #include "main.h"
+// math.h is designed for basic mathematical operations
 #include "math.h"
 
 // using namespace pros reduces the length of declarations when using C++.
 using namespace pros;
-// add comment
+// using namespace standard
 using namespace std;
 
 // INITIALIZATION
 
 // base
-Motor fr(4, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES); // front right
-Motor br(2, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // back right
-Motor br2(3, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES); // elevated back right
+Motor r1(10, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES); // 1st right
+Motor r2(7, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // 2nd right
+Motor r3(8, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES); // 3rd right
 
-Motor fl(7, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // front left
-Motor bl(9, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES); // back left
-Motor bl2(8, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // elevated back left
+Motor l1(15, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // 1st left
+Motor l2(1, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES); // 2nd left
+Motor l3(9, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES); // 3rd left
 
 // lift
-Motor frontLift(1, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+Motor frontLift(0, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
 // claws
 /* The claws are pnuematic, so they are connected to the brain through ADI ports,
 therefore they is initialized as an "ADIDIgitalOut". The second parameter is the
 state of the pneumatics. */
-ADIDigitalOut frontClaw(3, 0);
-ADIDigitalOut backClaw(1, 1);
+ADIDigitalOut frontClaw(0, 0);
+ADIDigitalOut backClaw(0, 1);
 
 // ring intake
-Motor ringIntake(11, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+Motor ringIntake(0, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 
 // controller
 Controller master(E_CONTROLLER_MASTER);
 
-// sensor
+// sensors
 
 /* The inertial sensor is a 3-axis accelerometer and gyroscope. The
 accelerometer measures linear acceleration of the robot, while the gyroscope
 measures the rate of rotation about the inertial sensor 3-axis. We only use the
 gyroscope. The inertial sensor is used in our move function to implement heading
 correction and turn function to turn accurately. */
-Imu inertial(21);
+Imu inertial(0);
+
+/* The optical shaft encoders measure both the position and direction of rotation
+of a VEX shaft. We can calculate the speed of the shaft, as well as the distance
+it has traveled. The encoders give us the ability to measure angular travel,
+determine rotational direction, calculate shaft speed, calculate distance traveled,
+increase navigational control, and ultimately more autonomous functionality. */
+ADIEncoder rEncoder(0, 0);
+ADIEncoder lEncoder(0, 0);
+
 
 /* Runs initialization code. This occurs as soon as the program is started. All
 other competition modes are blocked by initialize. */
@@ -58,12 +68,12 @@ void initialize() {
 	// base
 	/* The base is set to brake mode per the drivers preference and so it is easier
 	for the robot to climb the bridge. */
-	fl.set_brake_mode(MOTOR_BRAKE_BRAKE);
-	bl.set_brake_mode(MOTOR_BRAKE_BRAKE);
-	bl2.set_brake_mode(MOTOR_BRAKE_BRAKE);
-	fr.set_brake_mode(MOTOR_BRAKE_BRAKE);
-	br.set_brake_mode(MOTOR_BRAKE_BRAKE);
-	br2.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	l1.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	l2.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	l3.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	r1.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	r2.set_brake_mode(MOTOR_BRAKE_BRAKE);
+	r3.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
 	// enable brake mode for the lift motor
 	frontLift.set_brake_mode(MOTOR_BRAKE_BRAKE);

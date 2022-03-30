@@ -14,12 +14,12 @@
 using namespace pros;
 
 // base
-extern Motor fr;
-extern Motor br;
-extern Motor br2;
-extern Motor fl;
-extern Motor bl;
-extern Motor bl2;
+extern Motor r1;
+extern Motor r2;
+extern Motor r3;
+extern Motor l1;
+extern Motor l2;
+extern Motor l3;
 
 // lift
 extern Motor frontLift;
@@ -38,6 +38,9 @@ extern Controller master;
 
 // inertial sensor
 extern Imu inertial;
+
+extern ADIEncoder rEncoder;
+extern ADIEncoder lEncoder;
 
 // distance sensors
 //extern Distance frontDistance;
