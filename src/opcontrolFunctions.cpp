@@ -1,7 +1,8 @@
 #include "main.h"
 #include "math.h"
 
-// All the buttons/joysticks used are chosen based off the driver's preference.
+/* All the buttons/joysticks used are chosen based off the driver's preference.
+Throughout */
 
 // BASE
 

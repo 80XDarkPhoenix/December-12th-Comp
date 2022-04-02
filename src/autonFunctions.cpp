@@ -12,7 +12,7 @@ const double encoderPerInch = 35.2589;
 const double encoderPerDegreeTurn = 6.02;
 
 // speed
-// The default speeds are the maximum speed possible.
+// The default speeds are the maximum velocity possible.
 const double defaultSpeed = 127.0;
 const double defaultTurnSpeed = 127.0;
 
@@ -189,38 +189,60 @@ void turn (double angle, int speedLimit) {
 	double current = 0.0;
 	double directionMultiplier = 1;
 
+	// millis() gets the number of milliseconds since PROS initialized/
 	int startTime = millis();
-	int maxTime = startTime + 20.0 * fabs(angle); // CHANGE
+	/* maxTime is the sum of number of milliseconds since PROS initialized and
+	20.0 times the absolute value of the angle. We use 20.0 because we tested
+	using trial and error. */
+	int maxTime = startTime + 20.0 * fabs(angle);
 
+	/* If the target is less than start (0.0), then the directionMultiplier is
+	negative. */
 	if (target < start)
 	directionMultiplier = -1.0;
+	// while the robot is not at the target
 	while(notAtTarget) {
 
-		// current = average position of base motors (to turn)
-		// double current = (-r1.get_position() - r2.get_position() - r3.get_position()
-		// + l1.get_position() + l2.get_position() + l3.get_position()) / 6.0;
-
+		/* get_value() gets the number os ticks recorded by the encoder. There are
+		360 ticks in one revolution. */
+		// current is the ADD COMMENT
 		double current = (-rEncoder.get_value() + rEStartValue + lEncoder.get_value() - lEStartValue)/2;
 
+		// error is the target minus the current.
+		// example: 45 - 0 = 45
 		double error = (target - current);
+		// progress is the current minus the start (0.0)
 		double progress = current - start;
 
-		double speed = turnMinSpeed  + fabs(turnAccelerator * progress * error);
+		/* speed is the sum of the turnMinSpeed (ADD VALUE) and the absolute value
+		of the product of the turnAccelerator (ADD VALUE), progress, and error */
+		double speed = turnMinSpeed + fabs(turnAccelerator * progress * error);
+		// maxDeaccelerationSpeed is the product of the turnDeaccelFactor (ADD VALUE) and the sqaure root of the error
+		// ADD SCHOOL PHYSICS THING
 		double maxDeaccelerationSpeed = turnDeaccelFactor * sqrt(error);
 
-		// get_actual_velocity gets the actual velocity of the motor
+		// get_actual_velocity() gets the actual velocity of the motor
+		/* currentVelocity is average of the absolute value of the sum of the actual
+		velocity of the base motors */
 		double currentVelocity = fabs((l1.get_actual_velocity() +
 		l2.get_actual_velocity() + l3.get_actual_velocity() +
 		r1.get_actual_velocity() + r2.get_actual_velocity() +
 		r3.get_actual_velocity()) / 6.0);
 
+		/* If the currentVelocity is greater than the maxDeaccelerationSpeedn then
+		the speed equals the maxDeaccelerationSpeed. */
 		if (currentVelocity > maxDeaccelerationSpeed)
 		speed = maxDeaccelerationSpeed;
+		/* If the speed is greater than the speed limit, then the speed equals the
+		speed limit. */
 		if (speed > speedLimit)
 		speed = speedLimit;
 
+		/* The speed is the speed times the directMultiplier (changes to positive or
+		negative) */
 		speed = speed * directionMultiplier;
 
+		// move each base motor positively or negatively
 		l1.move(speed);
 		l2.move(speed);
 		l3.move(speed);
@@ -228,14 +250,22 @@ void turn (double angle, int speedLimit) {
 		r2.move(-speed);
 		r3.move(-speed);
 
+		// currentAngle is the angle the intertial sensor gets.
 		double currentAngle = getAngle();
+		// errorAngle is the targetAngle minus the currentAngle.
+		// ADD EXAMPLE
 		double errorAngle = targetAngle - currentAngle;
 
+		/* If the errorAngle is greater than 180, then the errorAngle equals the
+		errorAngle minus 360. */
 		if (errorAngle > 180)
 		errorAngle = errorAngle - 360;
+		/* If the error angle is less than or equal to -180, then the errorAngle is
+		the sum of 360 and the errorAngle. */
 		else if (errorAngle <= -180)
 		errorAngle = 360 + errorAngle;
-		/* if the absolute value of error is less than 15.0 or the error angle is less than 2 or it is timed out
+		/* If the absolute value of error is less than 15.0 or the error angle is
+		less than 2 or it is timed out */
 		if ((fabs (error) < 15.0) || (fabs(errorAngle) < 2.0) || (millis() >
 		maxTime)) {
 
@@ -263,7 +293,9 @@ of the robot. If the robot needs to turn to 90 degrees instead of actually turni
 robot is at 3 degrees it turns to 90 degrees, but it actaully is only turning 87
 degrees. */
 void turnTo(double angle, int speedLimit) {
+	// The currentAngle is the FILLIN
 	double currentAngle = getAngle();
+	// The turnAngle (the angle to robot turns) is the target angle FILLIN
 	double turnAngle = angle - currentAngle;
 	turn(turnAngle, speedLimit);
 }
@@ -290,6 +322,7 @@ void moveLift(double liftSpeed) {
 }
 
 // CLAWS
+// set_value() sets the value for the given ADI port
 
 // lowers the front claw
 void hookFrontClaw() {

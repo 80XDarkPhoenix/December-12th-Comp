@@ -1,5 +1,10 @@
-/* main.h is intended for declaring functions and variables shared between the user code files.
-main.h also offers a variety of configuarble options for tailoring PROS to our needs. */
+// if u come closer youll get another ammo piece thrown at u - sri
+// nuclear cock-asian - sammy
+// ur getting ur ammo pieces stuck on ur sock - sri (talking to sammy)
+
+/* main.h is intended for declaring functions and variables shared between the
+user code files. main.h also offers a variety of configuarble options for
+tailoring PROS to our needs. */
 #include "main.h"
 // math.h is designed for basic mathematical operations
 #include "math.h"
@@ -52,7 +57,6 @@ determine rotational direction, calculate shaft speed, calculate distance travel
 increase navigational control, and ultimately more autonomous functionality. */
 ADIEncoder rEncoder(0, 0);
 ADIEncoder lEncoder(0, 0);
-
 
 /* Runs initialization code. This occurs as soon as the program is started. All
 other competition modes are blocked by initialize. */
