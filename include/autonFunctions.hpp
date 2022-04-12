@@ -31,19 +31,17 @@ extern void turn (double angle, int speedLimit);
 extern void turnTo(double angle, int speedLimit);
 
 // lift
-extern void liftLift();
-extern void lowerLift();
 extern void moveLift(double liftSpeed);
 
 // claws
 
 // front claw
-extern void hookFrontClaw();
-extern void unhookFrontClaw();
+extern void hookClaw();
+extern void unhookClaw();
 
 // back claw
-extern void hookBackClaw();
-extern void unhookBackClaw();
+extern void hookTilter();
+extern void unhookTilter();
 
 // ring intake
 void moveRingIntake(double ringIntakeSpeed);
@@ -56,4 +54,5 @@ double getBackDistance();
 void frontDistanceMove(double goalDistanceFromWall);
 void backDistanceMove(double goalDistanceFromWall);
 */
+
 #endif

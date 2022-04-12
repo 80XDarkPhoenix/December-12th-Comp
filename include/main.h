@@ -25,8 +25,10 @@ extern Motor l3;
 extern Motor frontLift;
 
 // claws
+extern ADIDigitalOut transmission;
 extern ADIDigitalOut frontClaw;
-extern ADIDigitalOut backClaw;
+extern ADIDigitalOut tilterClamp;
+extern ADIDigitalOut tilter;
 
 // ring intake
 extern Motor ringIntake;

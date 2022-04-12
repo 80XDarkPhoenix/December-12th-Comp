@@ -1,24 +1,144 @@
 #include "main.h"
 #include "math.h"
 
-void rMobile() {}
-void lMobile() {}
-void rAlliance() {}
-void lAlliance() {}
-void rAllianceRings() {}
+void rMobile() {
+  // make sure both clamps are up
+  unhookClaw();
+  unhookTilter();
+
+  move(0, 127);
+  hookClaw();
+  move(-0, 127);
+}
+void lMobile() {
+  // starts at a slight angle
+  // make sure both clamps are up
+  unhookClaw();
+  unhookTilter();
+
+  move(0, 127);
+  hookClaw();
+  move(-0, 127);
+}
+
+void rAlliance() {
+  // starts backwards
+  // make sure both clamps are up
+  unhookClaw();
+  unhookTilter();
+
+  move(-0, 80); // reverse towards alliance goal
+  turn(45, 80); // turn with back facing alliance goal
+  move(-0, 80); // reverse to alliance goal
+  hookTilter(); // hook back onto alliance goal
+  delay(0);
+  moveRingIntake(127); // start ring intake to score preloads
+  move(0, 80); // clear alliance goal
+  turn(180, 80);
+  // turn with back facing perimeter preventing teams from getting the goal
+  unhookTilter(); // let go of alliance goal
+  moveRingIntake(0); // stop ring intake
+}
+void lAlliance() {
+  // make sure both clamps are up
+  unhookClaw();
+  unhookTilter();
+
+  move(-0, 80);
+  delay(0);
+  hookTilter();
+  delay(0);
+  moveRingIntake(127);
+  move(0, 100);
+  unhookTilter();
+  moveRingIntake(0);
+}
+
+void rAllianceRings() {
+  // starts backwards
+  // make sure both clamps are up
+  unhookClaw();
+  unhookTilter();
+
+  move(-0, 80); // reverse towards alliance goal
+  turn(45, 80); // turn with back facing alliance goal
+  move(-0, 80); // reverse to alliance goal
+  hookTilter(); // hook back onto alliance goal
+  delay(0);
+  moveRingIntake(127); // start ring intake to score preloads
+  turnTo(135, 80);
+  move(0, 80); // move to white line
+  turnTo(90, 80);
+  move(0, 80);
+  move(-0, 80);
+  turnTo(135, 80);
+  move(-0, 80);
+  unhookTilter();
+  moveRingIntake(0);
+}
 void lAllianceRings() {}
+
+void rMobileAllianceRings() {
+  // make sure both clamps are up
+  unhookClaw();
+  unhookTilter();
+
+  move(0, 127);
+  hookClaw();
+  move(-0, 127);
+  turnTo(-90, 100);
+  move(-0, 100);
+  hookTilter();
+  delay(0);
+  moveRingIntake(127);
+  move(0, 0);
+  moveLift(100);
+  turnTo(0, 100);
+  move(0, 0);
+  turnTo(90, 100);
+  moveLift(0);
+  move(0, 100);
+  move(-0, 100);
+  unhookTilter();
+  moveRingIntake(0);
+}
+void lMobileAllianceRings() {
+  // starts at a slight angle
+  // make sure both clamps are up
+  unhookClaw();
+  unhookTilter();
+
+  move(0, 127);
+  hookClaw();
+  move(-0, 127);
+  turnTo(-45, 80);
+  move(-0, 80);
+  hookTilter();
+  delay(0);
+  moveRingIntake(127);
+  move(0, 80);
+  turnTo(-90, 80);
+  move(0, 80);
+  move(-0, 80);
+  unhookTilter();
+  moveRingIntake(0);
+}
+
 void rCenter() {}
 void lCenter() {}
+
 void rWP() {}
 void lWP() {}
+
 void rMobileCenter() {}
 void lMobileCenter() {}
+
 void rCenterAlliance() {}
 void lCenterAlliance() {}
+
 void rMobileAlliance() {}
 void lMobileAlliance() {}
-void rMobileAllianceRings() {}
-void lMobileAllianceRings() {}
+
 void rMobileAllianceCenter() {}
 void lMobileAllianceCenter() {}
 

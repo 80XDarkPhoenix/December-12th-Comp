@@ -2,11 +2,20 @@
 #include "math.h"
 
 // encoders
-/* WE USE SHAFT ENCODERDS */
-
+/* During the first half of the sesson we used the V5 motors' built in encoders
+for our move and turn functions. Although this worked, when the base skipped,
+the base would not move the correct distance. To solve this problem, we decided
+to use the optical shaft encoders whcih can measure both the position and
+direction of rotation of a VEX shaft. This allows us the ability to calculate
+the speed of the shaft, as well as the distance it has traveled. */
 /* We use the const keyword to make sure the value cannot be changed once the
 variable has been initialized. */
-// 360/circumference of wheels
+/* encoderPerInch = 360/circumference of wheels
+	 360/(2 * pi * (3.25/2))
+	 360/(2 * pi * 1.625)
+	 360/(6.28318530718 * 1625)
+	 360/10.2101761242
+	 encoderPerInch = 35.2589 */
 const double encoderPerInch = 35.2589;
 // encoderPerInch * (2pi*R (center of the turn to the encoder wheel))/ 360
 const double encoderPerDegreeTurn = 6.02;
@@ -18,10 +27,12 @@ const double defaultTurnSpeed = 127.0;
 
 double minSpeed = 40.0;
 double turnMinSpeed = 40.0;
-// 127.0 is the maximum voltage for the motor
+// The maxSpeed is the maximum velocity possible.
 double maxSpeed = 127.0;
 
 // accelerators
+/* These are found through trial and error while testing the move and turn
+functions. */
 double accelerator = 0.1;
 double turnAccelerator = 0.008;
 double maxDeaccelerationSpeed;
@@ -43,7 +54,6 @@ void resetBaseMotors() {
 
 void stopBaseMotors() {
 	// move() sets the voltage for the motor from -127 to 127
-
 	// sets the voltage for the base motors to 0
 	l1.move(0);
 	r1.move(0);
@@ -51,6 +61,7 @@ void stopBaseMotors() {
 	r2.move(0);
 	l3.move(0);
 	r3.move(0);
+	delay(100);
 }
 
 // move
@@ -108,7 +119,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 		than 60.0 */
 		if(operateClaw && (fabs(error) < 60.0))
 			{
-				hookFrontClaw();
+				hookClaw();
 				operateClaw = false;
 			}
 
@@ -157,8 +168,6 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 
 	// The velocity of the base motors is zero.
 	stopBaseMotors();
-
-	delay(100);
 }
 
 // TURN
@@ -272,8 +281,6 @@ void turn (double angle, int speedLimit) {
 			// stop the base motors
 			stopBaseMotors();
 
-      delay(100);
-
 			// used to tune turnEncoders and turnAccelerator
 			pros::lcd::print(3, "a: %f", getAngle());
 			pros::lcd::print(4, "e: %f", error);
@@ -284,7 +291,6 @@ void turn (double angle, int speedLimit) {
 		}
 		delay (5);
 	}
-	delay(100);
 }
 
 /* turnTo uses the turn logic but makes the turn correct based of the currentAngle
@@ -302,20 +308,6 @@ void turnTo(double angle, int speedLimit) {
 
 // LIFT
 
-// lifts the front lift completely
-void liftLift() {
-	frontLift.move(127);
-	delay(1100);
-	frontLift.move(0);
-}
-
-// lowers the front lift completely
-void lowerLift() {
-	frontLift.move(-127);
-	delay(1100);
-	frontLift.move(0);
-}
-
 // moves the lift at a set speed
 void moveLift(double liftSpeed) {
 	frontLift.move(liftSpeed);
@@ -325,23 +317,27 @@ void moveLift(double liftSpeed) {
 // set_value() sets the value for the given ADI port
 
 // lowers the front claw
-void hookFrontClaw() {
+void hookClaw() {
 	frontClaw.set_value(0);
 }
 
 // lifts the front claw
-void unhookFrontClaw() {
+void unhookClaw() {
 	frontClaw.set_value(1);
 }
 
 // lowers the back claw
-void hookBackClaw() {
-	backClaw.set_value(0);
+void hookTilter() {
+	tilterClamp.set_value(0);
+	delay(25);
+	tilter.set_value(0);
 }
 
 // lifts the back claw
-void unhookBackClaw() {
-	backClaw.set_value(1);
+void unhookTilter() {
+	tilter.set_value(1);
+	delay(50);
+	tilterClamp.set_value(1);
 }
 
 // RING INTAKE

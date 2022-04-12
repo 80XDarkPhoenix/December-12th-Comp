@@ -1,10 +1,7 @@
 #include "main.h"
 #include "math.h"
 
-/* All the buttons/joysticks used are chosen based off the driver's preference.
-Throughout */
-
-// BASE
+// All the buttons/joysticks used are chosen based off the driver's preference.
 
 // moves the base
 void drive() {
@@ -19,8 +16,16 @@ void drive() {
 	l3.move(drives + turns);
 }
 
-// LIFT
+void driveTransmission() {
+	if(master.get_digital()) {
+		transmission.set_value(0);
+	}
+	else if(master.get_digital())
+		transmission.set_value(1);
+}
 
+// LIFT
+// hello my name is
 // moves the front lift using buttons R1 and R2
 void driveFrontLift() {
 	if(master.get_digital(DIGITAL_R1)) {
@@ -50,15 +55,21 @@ void driveFrontClaw() {
 		frontClaw.set_value(0);
 }
 
-// moves the back claw using buttons L1 and L2
-void driveBackClaw() {
+// moves the back tilter using buttons L1 and L2
+void driveTilter() {
 	if(master.get_digital(DIGITAL_L1)) {
 		// hooks back claw
-		backClaw.set_value(0);
+		tilterClamp.set_value(0);
+		delay(50);
+		// tilts the goal back
+		tilter.set_value(0);
 	}
 	else if(master.get_digital(DIGITAL_L2))
-		// lifts back claw
-		backClaw.set_value(1);
+		// unhooks clamp
+		tilterClamp.set_value(1);
+		delay(50);
+		// untilts the goal
+		tilter.set_value(1);
 }
 
 // moves the ring intake using button A
@@ -78,7 +89,8 @@ void op() {
 	drive();
 	driveFrontLift();
 	driveFrontClaw();
-	driveBackClaw();
+	driveTilter();
+	driveTransmission();
 	driveRingIntake();
 	delay(20);
 }

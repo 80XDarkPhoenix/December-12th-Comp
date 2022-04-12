@@ -1,7 +1,3 @@
-// if u come closer youll get another ammo piece thrown at u - sri
-// nuclear cock-asian - sammy
-// ur getting ur ammo pieces stuck on ur sock - sri (talking to sammy)
-
 /* main.h is intended for declaring functions and variables shared between the
 user code files. main.h also offers a variety of configuarble options for
 tailoring PROS to our needs. */
@@ -32,8 +28,10 @@ Motor frontLift(0, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 /* The claws are pnuematic, so they are connected to the brain through ADI ports,
 therefore they is initialized as an "ADIDIgitalOut". The second parameter is the
 state of the pneumatics. */
+ADIDigitalOut transmission(0, 0);
 ADIDigitalOut frontClaw(0, 0);
-ADIDigitalOut backClaw(0, 1);
+ADIDigitalOut tilterClamp(0, 0);
+ADIDigitalOut tilter(0, 0);
 
 // ring intake
 Motor ringIntake(0, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
