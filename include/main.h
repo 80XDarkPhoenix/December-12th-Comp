@@ -22,11 +22,11 @@ extern Motor l2;
 extern Motor l3;
 
 // lift
-extern Motor frontLift;
+extern Motor lift;
 
 // claws
 extern ADIDigitalOut transmission;
-extern ADIDigitalOut frontClaw;
+extern ADIDigitalOut claw;
 extern ADIDigitalOut tilterClamp;
 extern ADIDigitalOut tilter;
 

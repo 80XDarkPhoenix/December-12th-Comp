@@ -6,15 +6,13 @@ extern void drive();
 extern void driveTransmission();
 
 // lift
-extern void driveFrontLift();
+extern void driveLift();
 
 // claws
-extern void driveFrontClaw();
+extern void driveClaw();
 extern void driveTilter();
 
 // ring intake
 extern void driveRingIntake();
-
-extern void op();
 
 #endif

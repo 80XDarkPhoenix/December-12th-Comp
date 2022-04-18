@@ -1,7 +1,7 @@
 #ifndef SKILLSAUTON
 #define SKILLSAUTON
 
+extern void newPathSkills();
 extern void skills();
-extern void riskSkills();
 
 #endif

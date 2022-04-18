@@ -187,7 +187,7 @@ void turn (double angle, int speedLimit) {
 
 	resetBaseMotors();
 
-	// gets the nummber of ticks recorded by the encoder
+	// get_value gets the nummber of ticks recorded by the encoder
 	double rEStartValue = rEncoder.get_value();
 	double lEStartValue = lEncoder.get_value();
 
@@ -281,15 +281,17 @@ void turn (double angle, int speedLimit) {
 			// stop the base motors
 			stopBaseMotors();
 
-			// used to tune turnEncoders and turnAccelerator
+		/*	// used to tune turnEncoders and turnAccelerator
 			pros::lcd::print(3, "a: %f", getAngle());
 			pros::lcd::print(4, "e: %f", error);
 
-			notAtTarget = false;
-			lcd::print(8, "error: %f", error);
+
+			lcd::print(8, "error: %f", error); */
+
+notAtTarget = false;
 
 		}
-		delay (5);
+		delay(5);
 	}
 }
 
@@ -310,7 +312,7 @@ void turnTo(double angle, int speedLimit) {
 
 // moves the lift at a set speed
 void moveLift(double liftSpeed) {
-	frontLift.move(liftSpeed);
+	lift.move(liftSpeed);
 }
 
 // CLAWS
@@ -318,12 +320,12 @@ void moveLift(double liftSpeed) {
 
 // lowers the front claw
 void hookClaw() {
-	frontClaw.set_value(0);
+	claw.set_value(0);
 }
 
 // lifts the front claw
 void unhookClaw() {
-	frontClaw.set_value(1);
+	claw.set_value(1);
 }
 
 // lowers the back claw

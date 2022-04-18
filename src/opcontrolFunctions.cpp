@@ -1,7 +1,8 @@
 #include "main.h"
 #include "math.h"
 
-// All the buttons/joysticks used are chosen based off the driver's preference.
+/* All the buttons/joysticks used are chosen based off the driver, Srihith's,
+preference. */
 
 // moves the base
 void drive() {
@@ -16,81 +17,72 @@ void drive() {
 	l3.move(drives + turns);
 }
 
-void driveTransmission() {
-	if(master.get_digital()) {
-		transmission.set_value(0);
-	}
-	else if(master.get_digital())
-		transmission.set_value(1);
-}
-
 // LIFT
-// hello my name is
 // moves the front lift using buttons R1 and R2
-void driveFrontLift() {
+void driveLift() {
 	if(master.get_digital(DIGITAL_R1)) {
 		// move lift up
-		frontLift.move(127);
+		lift.move(127);
 	}
 	else if(master.get_digital(DIGITAL_R2)) {
 		// move lift down
-		frontLift.move(-127);
+		lift.move(-127);
 	}
 	else
 	{
-		frontLift.move(0);
+		lift.move(0);
 	}
 }
 
 // CLAWS
 
 // moves the front claw using buttons X and Y
-void driveFrontClaw() {
-	if(master.get_digital(DIGITAL_X)) {
+void driveClaw() {
+	if(master.get_digital_new_press(DIGITAL_L1)) {
 		// lifts front claw
-		frontClaw.set_value(1);
+		claw.set_value(1);
 	}
-	else if(master.get_digital(DIGITAL_Y))
+	else if(master.get_digital_new_press(DIGITAL_L2))
+	{
 		// hooks front claw
-		frontClaw.set_value(0);
+		claw.set_value(0);
+	}
 }
 
-// moves the back tilter using buttons L1 and L2
-void driveTilter() {
-	if(master.get_digital(DIGITAL_L1)) {
-		// hooks back claw
-		tilterClamp.set_value(0);
-		delay(50);
-		// tilts the goal back
-		tilter.set_value(0);
+void driveTransmission(){
+	if(master.get_digital_new_press(DIGITAL_RIGHT)) {
+		// lifts front claw
+		transmission.set_value(1);
 	}
-	else if(master.get_digital(DIGITAL_L2))
-		// unhooks clamp
+	else if(master.get_digital_new_press(DIGITAL_DOWN))
+		// hooks front claw
+		transmission.set_value(0);
+}
+
+void driveTilter() {
+	if(master.get_digital_new_press(DIGITAL_Y)) {
+		// tilts the goal back
 		tilterClamp.set_value(1);
-		delay(50);
-		// untilts the goal
+	  delay(250);
 		tilter.set_value(1);
+	}
+	else if(master.get_digital_new_press(DIGITAL_X))
+	{
+		tilter.set_value(0);
+		delay(250);
+	  tilterClamp.set_value(0);
+	}
 }
 
 // moves the ring intake using button A
 void driveRingIntake() {
 	if(master.get_digital(DIGITAL_A)) {
 		// outtakes ring intake
-		ringIntake.move(-127);
+		ringIntake.move(-80);
 	}
 	else
 	{
 		// runs ring intake unless A is pressed
-		ringIntake.move(127);
+		ringIntake.move(115);
 	}
-}
-
-void op() {
-	drive();
-	driveFrontLift();
-	driveFrontClaw();
-	driveTilter();
-	driveTransmission();
-	driveRingIntake();
-	delay(20);
 }

@@ -1,6 +1,8 @@
 #include "main.h"
 #include "math.h"
 
+// OPERATE CLAW
+
 void rMobile() {
   // make sure both clamps are up
   unhookClaw();
@@ -10,6 +12,7 @@ void rMobile() {
   hookClaw();
   move(-0, 127);
 }
+
 void lMobile() {
   // starts at a slight angle
   // make sure both clamps are up
@@ -39,6 +42,7 @@ void rAlliance() {
   unhookTilter(); // let go of alliance goal
   moveRingIntake(0); // stop ring intake
 }
+
 void lAlliance() {
   // make sure both clamps are up
   unhookClaw();
@@ -76,6 +80,7 @@ void rAllianceRings() {
   unhookTilter();
   moveRingIntake(0);
 }
+
 void lAllianceRings() {}
 
 void rMobileAllianceRings() {
@@ -102,6 +107,7 @@ void rMobileAllianceRings() {
   unhookTilter();
   moveRingIntake(0);
 }
+
 void lMobileAllianceRings() {
   // starts at a slight angle
   // make sure both clamps are up
