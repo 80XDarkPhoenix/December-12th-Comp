@@ -83,6 +83,7 @@ void driveRingIntake() {
 	else
 	{
 		// runs ring intake unless A is pressed
-		ringIntake.move(115);
+		// This speed was decided through testing.
+		ringIntake.move(127);
 	}
 }

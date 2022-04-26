@@ -16,17 +16,18 @@ variable has been initialized. */
 	 360/(6.28318530718 * 1625)
 	 360/10.2101761242
 	 encoderPerInch = 35.2589 */
-const double encoderPerInch = 35.2589;
+const double encoderPerInch = 39.0;
 // encoderPerInch * (2pi*R (center of the turn to the encoder wheel))/ 360
-const double encoderPerDegreeTurn = 6.02;
+const double encoderPerDegreeTurn = 10.05;
 
 // speed
 // The default speeds are the maximum velocity possible.
 const double defaultSpeed = 127.0;
 const double defaultTurnSpeed = 127.0;
 
+double minSpeedFast = 110.0;
 double minSpeed = 40.0;
-double turnMinSpeed = 40.0;
+double turnMinSpeed = 50.0;
 // The maxSpeed is the maximum velocity possible.
 double maxSpeed = 127.0;
 
@@ -34,10 +35,11 @@ double maxSpeed = 127.0;
 /* These are found through trial and error while testing the move and turn
 functions. */
 double accelerator = 0.1;
-double turnAccelerator = 0.008;
+double turnAccelerator = 0.07;
 double maxDeaccelerationSpeed;
-double deaccelFactor = 6.0;
-double turnDeaccelFactor = 3.5;
+double deaccelFactor = 3.0;
+double deaccelFactorFast = 9.0;
+double turnDeaccelFactor = 3.2;
 
 void resetBaseMotors() {
 	/* sets the "absolute" zero position of the motor to its current position */
@@ -86,7 +88,7 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 
 	double distanceInEncoders = distanceInInches * encoderPerInch;
 
-	double current = 0.0;
+	double current = (rEStartValue + lEStartValue) / 2.0;
 	double error = distanceInEncoders - current;
 	double progress = current;
 	double speed;
@@ -94,12 +96,14 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 	double changeAngle = 0.0;
 	double headingCorrection = 0.0;
 
+	int stime = millis();
+
 	/* while the absolute value of the error is greater than 15.0 and it is not
 	timed out */
 	while ((fabs(error) > 15.0) && (millis() < maxTime)) {
 		// current = (l1.get_position() + l1.get_position() + l3.get_position() +
 		// r1.get_position() + r2.get_position() + r3.get_position()) / 6.0;
-		current = (rEncoder.get_value() - rEStartValue + lEncoder.get_value() - lEStartValue)/2;
+		current = (rEncoder.get_value() - rEStartValue + lEncoder.get_value() - lEStartValue) / 2.0;
 
 		progress = current;
 
@@ -152,8 +156,11 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 
 		// Speed equals the product of speed and directMultiplier.
 		speed = speed * directMultiplier;
+
 		// headingCorrection equals the product of the changleAngle and 2.
-		headingCorrection = changeAngle * 2.0;
+		headingCorrection = changeAngle * 5;
+	//	speed = 50.0;
+	//	headingCorrection = 0;
 
 		// moves base motors by speed +- headingCorrection
 		l1.move(speed - headingCorrection);
@@ -166,18 +173,140 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 		delay(10);
 	}
 
+	pros::lcd::print(3, "time: %d", millis() - stime);
 	// The velocity of the base motors is zero.
 	stopBaseMotors();
+
 }
 
+// move
+void moveFast(double distanceInInches, double speedLimit, bool operateClaw) {
+
+	resetBaseMotors();
+
+	// get_value gets the number of ticks recorded by the encoder
+	double rEStartValue = rEncoder.get_value();
+	double lEStartValue = lEncoder.get_value();
+
+	/* The start angle equals the heading the inertial sensor gets relative to its
+	initial direction to its x-axis. */
+	double startAngle = getAngle();
+
+	int startTime = millis();
+	int maxTime = startTime + 100.0 + 70.0 * fabs(distanceInInches);
+
+	double directMultiplier = 1.0;
+	if (distanceInInches < 0.0)
+	directMultiplier = -1.0;
+
+	double distanceInEncoders = distanceInInches * encoderPerInch;
+
+	double current = (rEStartValue + lEStartValue) / 2.0;
+	double error = distanceInEncoders - current;
+	double progress = current;
+	double speed;
+	double currentAngle = startAngle;
+	double changeAngle = 0.0;
+	double headingCorrection = 0.0;
+
+	int stime = millis();
+
+	/* while the absolute value of the error is greater than 15.0 and it is not
+	timed out */
+	while ((fabs(error) > 15.0) && (millis() < maxTime)) {
+		// current = (l1.get_position() + l1.get_position() + l3.get_position() +
+		// r1.get_position() + r2.get_position() + r3.get_position()) / 6.0;
+		current = (rEncoder.get_value() - rEStartValue + lEncoder.get_value() - lEStartValue) / 2.0;
+
+		progress = current;
+
+		error = distanceInEncoders - current;
+		currentAngle = getAngle();
+		// The changeAngle equals the current angle minus the start angle.
+		// Example: 2 = 92 - 90
+		changeAngle = currentAngle - startAngle;
+
+		/* This allows for us to save time in our autonomous, and is especially
+		important the "goal rush" in the 15 second autonomous period. Because most
+		teams get to the goal extremely fast, the time it takes to hook the front
+		claw can make or break if we get the goal. This will set the pneumatics
+		during the movement instead of waiting until after the movement is complete,
+		saving time. */
+		/* if the boolean is set to true and the absolute value of the error is less
+		than 60.0 */
+		if(operateClaw && (fabs(error) < 60.0))
+			{
+				hookClaw();
+				operateClaw = false;
+			}
+
+		// "currentVelocity" equals the average/mean of the base motors
+		double currentVelocity = fabs((l1.get_actual_velocity() +
+		+ l2.get_actual_velocity() + l3.get_actual_velocity() +
+		r1.get_actual_velocity() + r2.get_actual_velocity() +
+		r3.get_actual_velocity()) / 6.0);
+
+		speed = currentVelocity + 10;
+
+		/* If the current speed of the robot is greater than the speedLimit, the
+		speed is set to the speedLimit. If the current speed is less than the
+		minSpeed, than it increases by 10 every time it goes through the loop. */
+		if (speed > speedLimit) {
+			speed = speedLimit;
+		}
+		else if (speed < minSpeedFast) {
+			speed = minSpeedFast + 10;
+		}
+
+		// deacceleration
+		/* The maxDeaccelerationSpeed = the product of the deaccelFactor and the
+		square root of error. */
+		maxDeaccelerationSpeed = deaccelFactorFast * sqrt(error);
+		/* If the currentVelocity is greater than the maxDeaccelerationSpeed the
+		speed equals the maxDeaccelerationSpeed. */
+		if (currentVelocity > maxDeaccelerationSpeed)
+			speed = maxDeaccelerationSpeed;
+
+		// Speed equals the product of speed and directMultiplier.
+		speed = speed * directMultiplier;
+
+		// headingCorrection equals the product of the changleAngle and 2.
+		headingCorrection = changeAngle * 10;
+	//	speed = 50.0;
+	//	headingCorrection = 0;
+
+		// moves base motors by speed +- headingCorrection
+		l1.move(speed - headingCorrection);
+		r1.move(speed + headingCorrection);
+		l2.move(speed - headingCorrection);
+		r2.move(speed + headingCorrection);
+		l3.move(speed - headingCorrection);
+		r3.move(speed + headingCorrection);
+
+		delay(10);
+	}
+
+	pros::lcd::print(3, "time: %d", millis() - stime);
+	// The velocity of the base motors is zero.
+	stopBaseMotors();
+
+}
 // TURN
 
+// getAngle gets the robots angle compared to its starting position
 double getAngle() {
+	// starting position is found using the inertial sensor
+	/* get_heading gets the inertial sensor's heading relative to the initial
+	direction of its x-axis */
 	double angle = inertial.get_heading();
-
+	// if the angle is less than 180
 	if (angle > 180)
+	// the angle is the angle minus 360
+	// ex: 2 = 2 - 360 = -358
 	angle = angle - 360;
+	// if the angle is less than or equal to 180
 	else if (angle <= -180)
+	// the angle is the sum of 360 and the angle
 	angle = 360 + angle;
 	return angle;
 }
@@ -186,10 +315,6 @@ void turn (double angle, int speedLimit) {
 	bool notAtTarget = true;
 
 	resetBaseMotors();
-
-	// get_value gets the nummber of ticks recorded by the encoder
-	double rEStartValue = rEncoder.get_value();
-	double lEStartValue = lEncoder.get_value();
 
 	double startAngle = getAngle();
 	double targetAngle = startAngle + angle;
@@ -215,7 +340,8 @@ void turn (double angle, int speedLimit) {
 		/* get_value() gets the number os ticks recorded by the encoder. There are
 		360 ticks in one revolution. */
 		// current is the ADD COMMENT
-		double current = (-rEncoder.get_value() + rEStartValue + lEncoder.get_value() - lEStartValue)/2;
+		double current = (-r1.get_position() - r2.get_position() - r3.get_position()
+				+ l1.get_position() + l2.get_position() + l3.get_position()) / 6.0;
 
 		// error is the target minus the current.
 		// example: 45 - 0 = 45
@@ -275,20 +401,13 @@ void turn (double angle, int speedLimit) {
 		errorAngle = 360 + errorAngle;
 		/* If the absolute value of error is less than 15.0 or the error angle is
 		less than 2 or it is timed out */
-		if ((fabs (error) < 15.0) || (fabs(errorAngle) < 2.0) || (millis() >
+		if ((fabs (error) < 20.0) || (fabs(errorAngle) < 2.0) || (millis() >
 		maxTime)) {
 
 			// stop the base motors
 			stopBaseMotors();
 
-		/*	// used to tune turnEncoders and turnAccelerator
-			pros::lcd::print(3, "a: %f", getAngle());
-			pros::lcd::print(4, "e: %f", error);
-
-
-			lcd::print(8, "error: %f", error); */
-
-notAtTarget = false;
+			notAtTarget = false;
 
 		}
 		delay(5);
@@ -306,6 +425,7 @@ void turnTo(double angle, int speedLimit) {
 	// The turnAngle (the angle to robot turns) is the target angle FILLIN
 	double turnAngle = angle - currentAngle;
 	turn(turnAngle, speedLimit);
+	// pros::lcd::print(6, "a: %d", getAngle());
 }
 
 // LIFT

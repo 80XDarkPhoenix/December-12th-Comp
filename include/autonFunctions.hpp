@@ -9,6 +9,7 @@ extern const double defaultSpeed;
 extern const double defaultTurnSpeed;
 
 extern double minSpeed;
+extern double minSpeedFast;
 extern double turnMinSpeed;
 extern double maxSpeed;
 
@@ -17,6 +18,7 @@ extern double accelerator;
 extern double turnAccelerator;
 extern double maxDeaccelerationSpeed;
 extern double deaccelFactor;
+extern double deaccelFactorFast;
 extern double turnDeaccelFactor;
 
 extern void resetBaseMotors();
@@ -24,6 +26,7 @@ extern void stopBaseMotors();
 
 // move
 extern void move(double distanceInInches, double speedLimit, bool operateClaw = false);
+extern void moveFast(double distanceInInches, double speedLimit, bool operateClaw = false);
 
 // turn
 extern double getAngle();
