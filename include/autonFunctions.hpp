@@ -27,11 +27,17 @@ extern void stopBaseMotors();
 // move
 extern void move(double distanceInInches, double speedLimit, bool operateClaw = false);
 extern void moveFast(double distanceInInches, double speedLimit, bool operateClaw = false);
+extern void moveBack(double distanceInInches, double speedLimit, bool operateClaw = false);
 
 // turn
 extern double getAngle();
+extern double normalizeAngle(double givenAngle);
+extern void turn_old (double angle, int speedLimit);
 extern void turn (double angle, int speedLimit);
 extern void turnTo(double angle, int speedLimit);
+
+extern void speed();
+extern void torque();
 
 // lift
 extern void moveLift(double liftSpeed);

@@ -1,8 +1,7 @@
 #include "main.h"
 #include "math.h"
 
-/* All the buttons/joysticks used are chosen based off the driver, Srihith's,
-preference. */
+// The buttons/joysticks used are chosen based off the driver's preference.
 
 // moves the base
 void drive() {

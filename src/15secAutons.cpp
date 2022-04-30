@@ -1,28 +1,21 @@
 #include "main.h"
 #include "math.h"
 
-// OPERATE CLAW
+void rMobile1() {
+  transmission.set_value(1); // speed mode
 
-void rMobile() {
-  // make sure both clamps are up
-  unhookClaw();
-  unhookTilter();
+  // bring clamps up
+  claw.set_value(1);
 
-  move(0, 127);
-  hookClaw();
-  move(-0, 127);
-}
+  moveFast(39.0, 127, true); // move towards and clamp on mobile goal
+  transmission.set_value(0);
+  moveBack(-30, 100); // reverse to home zone at slow speed to pull
+} // end of rMobile
 
 void lMobile() {
   // starts at a slight angle
-  // make sure both clamps are up
-  unhookClaw();
-  unhookTilter();
 
-  move(0, 127);
-  hookClaw();
-  move(-0, 127);
-}
+} // end of lMobile
 
 void rAlliance() {
   // starts backwards
