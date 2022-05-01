@@ -29,6 +29,7 @@ extern ADIDigitalOut transmission;
 extern ADIDigitalOut claw;
 extern ADIDigitalOut tilterClamp;
 extern ADIDigitalOut tilter;
+extern ADIDigitalOut highRing;
 
 // ring intake
 extern Motor ringIntake;

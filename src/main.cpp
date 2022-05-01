@@ -32,7 +32,7 @@ therefore they is initialized as an "ADIDIgitalOut". The second parameter is the
 state of the pneumatics. */
 
 // The base transmission is preset to 1, speed mode.
-ADIDigitalOut transmission(4, 1);
+ADIDigitalOut transmission(4, 0);
 // The claw is preset to starts down, or else the robot is not in 18 inches.
 ADIDigitalOut claw(6, 0);
 // There are 2 parts of the back claw, the clamp and the tilter.
@@ -40,6 +40,7 @@ ADIDigitalOut claw(6, 0);
 ADIDigitalOut tilterClamp(5, 1);
 // The tilter is preset to start tilted so the robot stays in 18 inches.
 ADIDigitalOut tilter(3, 1);
+
 ADIDigitalOut highRing(2, 0);
 
 // ring intake
@@ -82,9 +83,8 @@ void initialize() {
 	delay(5000); // 5 second delay for IMU to calibrate
 
 	pros::lcd::initialize(); // initializes the LCD screen on the brain
-	pros::lcd::print(1, "Initialize");
 
-	transmission.set_value(1);
+	transmission.set_value(0);
 
 	// reset() sets the encoder valye to zero
 	rEncoder.reset();
@@ -103,6 +103,9 @@ void initialize() {
 
 	// ring intake
 	ringIntake.set_brake_mode(MOTOR_BRAKE_BRAKE);
+
+	pros::lcd::print(1, "initialize, r: %d, l: %d, a: %f", rEncoder.get_value(), lEncoder.get_value(), inertial.get_heading());
+
 
 } // end of initialize
 
@@ -128,8 +131,14 @@ non-competition testing purposes. If the robot is disabled or communications is
 lost, the autonomous task will be stopped. Re-enabling the robot will restart
 the task, not re-start it from where it left off. */
 void autonomous() {
-	pros::lcd::print(3, "autonomous0");
-	rMobile1();
+	pros::lcd::print(2, "autonomous");
+	transmission.set_value(0); // switch to speed mode
+	claw.set_value(1); // bring clamp up
+	moveFast(39.0, 127, true); // move towards and clamp on mobile goal
+	transmission.set_value(1); // switch to torque mode
+	moveBack(-22, 100); // reverse to home zone at slow speed to pull at 0 degrees
+	delay(200);
+	turnTo(-90, 100);
 } // end of autonomous
 
 // OPCONTROL
@@ -153,14 +162,15 @@ void opcontrol() {
 	r3.set_brake_mode(MOTOR_BRAKE_COAST);
 
 	while (true) {
-		pros::lcd::print(3, "r: %d", rEncoder.get_value());
-		pros::lcd::print(4, "l: %d", lEncoder.get_value());
+		pros::lcd::print(3, "opcontrol, r: %d, l: %d, a: %f", rEncoder.get_value(),
+		lEncoder.get_value(), inertial.get_heading());
 		drive();
 		driveTransmission();
-	 	driveRingIntake();
+//	driveRingIntake();
 		driveLift();
 		driveClaw();
 		driveTilter();
+		driveHighRing();
 		delay(10);
 	} // end of while loop
 } // end of opcontrol

@@ -15,4 +15,6 @@ extern void driveTilter();
 // ring intake
 extern void driveRingIntake();
 
+extern void driveHighRing();
+
 #endif

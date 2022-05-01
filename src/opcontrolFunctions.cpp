@@ -50,11 +50,9 @@ void driveClaw() {
 
 void driveTransmission(){
 	if(master.get_digital_new_press(DIGITAL_RIGHT)) {
-		// lifts front claw
 		transmission.set_value(1);
 	}
 	else if(master.get_digital_new_press(DIGITAL_DOWN))
-		// hooks front claw
 		transmission.set_value(0);
 }
 
@@ -65,7 +63,7 @@ void driveTilter() {
 	  delay(250);
 		tilter.set_value(1);
 	}
-	else if(master.get_digital_new_press(DIGITAL_X))
+	else if(master.get_digital_new_press(DIGITAL_B))
 	{
 		tilter.set_value(0);
 		delay(250);
@@ -75,7 +73,7 @@ void driveTilter() {
 
 // moves the ring intake using button A
 void driveRingIntake() {
-	if(master.get_digital(DIGITAL_A)) {
+	if(master.get_digital(DIGITAL_LEFT)) {
 		// outtakes ring intake
 		ringIntake.move(-80);
 	}
@@ -84,5 +82,16 @@ void driveRingIntake() {
 		// runs ring intake unless A is pressed
 		// This speed was decided through testing.
 		ringIntake.move(127);
+	}
+}
+
+void driveHighRing() {
+	if(master.get_digital_new_press(DIGITAL_X)) {
+		// tilts the goal back
+		highRing.set_value(0);
+	}
+	else if(master.get_digital_new_press(DIGITAL_A))
+	{
+		highRing.set_value(1);
 	}
 }

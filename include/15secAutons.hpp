@@ -7,6 +7,7 @@
 using namespace pros;
 
 extern void rMobile1();
+extern void rMobileAlliance();
 extern void rightMobileFast();
 extern void leftMobileFast();
 extern void rightMobileAlliance();

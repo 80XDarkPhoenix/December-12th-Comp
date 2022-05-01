@@ -1,21 +1,37 @@
 #include "main.h"
 #include "math.h"
 
-void rMobile1() {
-  transmission.set_value(1); // speed mode
-
-  // bring clamps up
-  claw.set_value(1);
-
+void rMobileAlliance() {
+  transmission.set_value(0); // switch to speed mode
+  claw.set_value(1); // bring clamp up
   moveFast(39.0, 127, true); // move towards and clamp on mobile goal
-  transmission.set_value(0);
-  moveBack(-30, 100); // reverse to home zone at slow speed to pull
+  transmission.set_value(1); // switch to torque mode
+  moveBack(-30, 100); // reverse to home zone at slow speed to pull at 0 degrees
+  turnTo(-90, 100);
+}
+
+void rMobile1() {
+  transmission.set_value(0); // switch to speed mode
+  claw.set_value(1); // bring clamp up
+  moveFast(39.0, 127, true); // move towards and clamp on mobile goal
+  transmission.set_value(1); // switch to torque mode
+  moveBack(-30, 100); // reverse to home zone at slow speed to pull at 0 degrees
 } // end of rMobile
 
 void lMobile() {
-  // starts at a slight angle
-
+  claw.set_value(1); // bring clamp up
+  moveFast(39.0, 127, true); // move towards and clamp on mobile goal
+  transmission.set_value(0); // switch to torque mode
+  moveBack(-30, 100); // reverse to home zone at slow speed to pull at 0 degrees
 } // end of lMobile
+
+void rCenter() {
+
+} // end of rCenter
+
+void lCenter() {
+
+} // end of lCenter
 
 void rAlliance() {
   // starts backwards
@@ -123,9 +139,6 @@ void lMobileAllianceRings() {
   moveRingIntake(0);
 }
 
-void rCenter() {}
-void lCenter() {}
-
 void rWP() {}
 void lWP() {}
 
@@ -135,7 +148,7 @@ void lMobileCenter() {}
 void rCenterAlliance() {}
 void lCenterAlliance() {}
 
-void rMobileAlliance() {}
+// void rMobileAlliance() {}
 void lMobileAlliance() {}
 
 void rMobileAllianceCenter() {}

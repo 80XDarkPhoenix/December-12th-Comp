@@ -183,9 +183,9 @@ void move(double distanceInInches, double speedLimit, bool operateClaw) {
 		delay(10);
 	}
 
-	pros::lcd::print(3, "time: %d", millis() - stime);
-	pros::lcd::print(4, "r: %d", rEncoder.get_value());
-	pros::lcd::print(5, "l: %d", lEncoder.get_value());
+	pros::lcd::print(4, "t:%d,r:%d,l:%d,a:%f", millis() - stime,
+	rEncoder.get_value(), lEncoder.get_value(), inertial.get_heading());
+
 	// The velocity of the base motors is zero.
 	stopBaseMotors();
 
@@ -223,9 +223,7 @@ void moveFast(double distanceInInches, double speedLimit, bool operateClaw) {
 
 	/* while the absolute value of the error is greater than 15.0 and it is not
 	timed out */
-	int i = 10;
 	while ((fabs(error) > 15.0) && (millis() < maxTime)) {
-		pros::lcd::print(3, "autonomous%d", i++);
 
 		current = (rEncoder.get_value() - rEStartValue + lEncoder.get_value() -
 		lEStartValue) / 2.0;
@@ -271,24 +269,23 @@ void moveFast(double distanceInInches, double speedLimit, bool operateClaw) {
 		speed = speed * directMultiplier;
 
 		// headingCorrection equals the product of the changleAngle and 2.
-		headingCorrection = changeAngle * 12;
+		headingCorrection = changeAngle * 0.1;
+		headingCorrection = 1/(1+headingCorrection);
 
 		// moves base motors by speed +- headingCorrection
-		l1.move(speed - headingCorrection);
-		r1.move(speed + headingCorrection);
-		l2.move(speed - headingCorrection);
-		r2.move(speed + headingCorrection);
-		l3.move(speed - headingCorrection);
-		r3.move(speed + headingCorrection);
+		l1.move(speed * headingCorrection);
+		r1.move(speed / headingCorrection);
+		l2.move(speed * headingCorrection);
+		r2.move(speed / headingCorrection);
+		l3.move(speed * headingCorrection);
+		r3.move(speed / headingCorrection);
 
 		delay(10);
 
 	}
 
-	pros::lcd::print(4, "r: %d", rEncoder.get_value());
-	pros::lcd::print(5, "l: %d", lEncoder.get_value());
-	pros::lcd::print(6, "time: %d", millis() - stime);
-	pros::lcd::print(7, "a: %f", inertial.get_heading());
+	pros::lcd::print(5, "t:%d,r:%d,l:%d,a:%f", millis() - stime,
+	rEncoder.get_value(), lEncoder.get_value(), inertial.get_heading());
 
 	/* This allows for us to save time in our autonomous, and is especially
 	important the "goal rush" in the 15 second autonomous period. Because most
@@ -421,6 +418,9 @@ void moveBack(double distanceInInches, double speedLimit, bool operateClaw) {
 
 		delay(10);
 	}
+
+	pros::lcd::print(6, "t:%d,r:%d,l:%d,a:%f", millis() - stime,
+	rEncoder.get_value(), lEncoder.get_value(), inertial.get_heading());
 
 	// The velocity of the base motors is zero.
 	stopBaseMotors();
@@ -663,8 +663,8 @@ void turn (double angle, int speedLimit) {
 		r2.move(-speed);
 		r3.move(-speed);
 
-		pros::lcd::print(5, "angle: %f", getAngle());
-		pros::lcd::print(6, "error angle: %f", errorAngle);
+		pros::lcd::print(7, "angle: %f", getAngle());
+		pros::lcd::print(8, "error angle: %f", errorAngle);
 
 		/* If the absolute value of error is less than 15.0 or the error angle is
 		less than 2 or it is timed out */
